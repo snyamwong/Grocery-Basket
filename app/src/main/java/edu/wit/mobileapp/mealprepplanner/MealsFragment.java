@@ -46,9 +46,8 @@ public class MealsFragment extends Fragment {
         mealListView = (ListView)  view.findViewById(R.id.mealsListView);
         mMealsList = new ArrayList<>();
         //sample data
-        ImageView image = view.findViewById(R.id.meal_picture);
         for(int i = 0; i < 11; i++){
-            mMealsList.add(new Meal(i, image, "Food Name", i));
+            mMealsList.add(new Meal(i, R.drawable.food , "Food Name", i));
         }
 
 

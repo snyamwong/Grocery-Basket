@@ -44,7 +44,7 @@ public class MealsListAdapter extends BaseAdapter {
         //set
         mealName.setText(mMealsList.get(position).getName());
         mealAmount.setText("x" + Integer.toString(mMealsList.get(position).getAmount()));
-        mealPicture = mMealsList.get(position).getImage();
+        mealPicture.setImageResource(mMealsList.get(position).getImageID());
 
         v.setTag(mMealsList.get(position).getId());
 
