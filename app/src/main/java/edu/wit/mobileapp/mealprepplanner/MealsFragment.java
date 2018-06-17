@@ -1,7 +1,6 @@
 package edu.wit.mobileapp.mealprepplanner;
 
 
-import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -37,7 +36,7 @@ public class MealsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //inflate fragment
-        view = inflater.inflate(R.layout.fragment_meal_list, container, false);
+        view = inflater.inflate(R.layout.fragment_meals, container, false);
         //create toolbar
         Toolbar topBar = (Toolbar) view.findViewById(R.id.mealsTopBar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(topBar);
