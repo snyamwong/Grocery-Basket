@@ -1,12 +1,15 @@
 package edu.wit.mobileapp.mealprepplanner;
 
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -82,12 +85,36 @@ public class MealsFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
+        if(mMealsList.size() == 0){return false;}
         int res_id = item.getItemId();
         if(res_id == R.id.deleteAll){
-            Snackbar.make(view, "All Items Deleted", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-            mMealsList.clear();
-            mealListView.setAdapter(adapter);
+
+            //Are you sure about that?
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which){
+                        case DialogInterface.BUTTON_POSITIVE:
+                            //Yes is pressed
+                            Toast toast = Toast.makeText(getActivity().getApplicationContext(), "All Meals Deleted " , Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+                            //clear meal list
+                            mMealsList.clear();
+                            mealListView.setAdapter(adapter);
+                            break;
+
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            //No button clicked
+                            //do nothing
+                            break;
+                    }
+                }
+            };
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setMessage("Delete All Your Meals?").setPositiveButton("Yes", dialogClickListener)
+                    .setNegativeButton("No", dialogClickListener).show();
 
         }
         return true;
