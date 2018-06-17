@@ -57,6 +57,7 @@ public class MealsFragment extends Fragment {
         //on Item click
         adapter = new MealsListAdapter(getActivity().getApplicationContext(), mMealsList);
         mealListView.setAdapter(adapter);
+        mealListView.setSelection(mealListView.getCount() - 1);
 
         mealListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
@@ -70,7 +71,10 @@ public class MealsFragment extends Fragment {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                mMealsList.add(new Meal(1, R.drawable.food , "Food Name", 1));
+                mealListView.setAdapter(adapter);
+                mealListView.setSelection(mealListView.getCount() - 1);
+                Snackbar.make(view, "Placeholder Action, generic food added", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -102,6 +106,7 @@ public class MealsFragment extends Fragment {
                             //clear meal list
                             mMealsList.clear();
                             mealListView.setAdapter(adapter);
+                            mealListView.setSelection(mealListView.getCount() - 1);
                             break;
 
                         case DialogInterface.BUTTON_NEGATIVE:
