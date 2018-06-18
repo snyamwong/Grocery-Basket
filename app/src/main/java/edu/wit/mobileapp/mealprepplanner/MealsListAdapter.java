@@ -9,8 +9,17 @@ import android.widget.TextView;
 
 import java.util.List;
 
+/**
+ *
+ * RESPONSIBLE FOR UPDATING mMealList FOR MEAL LIST FRAGMENT
+ *
+ * @author: Jason Fagerberg
+ */
+
+
 public class MealsListAdapter extends BaseAdapter {
 
+    //activity and corresponding list
     private Context mContext;
     private List<Meal> mMealsList;
 
@@ -34,20 +43,34 @@ public class MealsListAdapter extends BaseAdapter {
         return position;
     }
 
+    /**
+     * get the new view with the updated List
+     * @param position = List position
+     * @param convertView = not used
+     * @param parent = not used
+     * @return = new view
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        //New view based on the list layout
         View v = View.inflate(mContext, R.layout.meals_list, null);
+        /*
+            PLACEHOLDER MEAL UPDATE
+         */
         TextView mealName = (TextView) v.findViewById(R.id.meal_name);
         TextView mealAmount = (TextView) v.findViewById(R.id.meal_amount);
         ImageView mealPicture = (ImageView) v.findViewById(R.id.meal_picture);
 
-        //set
+        //Change the three objects in the meals_list layout to the variables we just created
         mealName.setText(mMealsList.get(position).getName());
         mealAmount.setText("x" + Integer.toString(mMealsList.get(position).getAmount()));
         mealPicture.setImageResource(mMealsList.get(position).getImageID());
 
+        //set tag to the ID
+        //USED FOR THE TOAST PRINT DEBUGGING TO BE REMOVED LATER?
         v.setTag(mMealsList.get(position).getId());
 
+        //Return new view
         return v;
     }
 }

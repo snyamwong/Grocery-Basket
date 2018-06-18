@@ -1,11 +1,22 @@
 package edu.wit.mobileapp.mealprepplanner;
 
-import android.widget.ImageView;
+/**
+ *
+ *
+ * THIS CLASS JUST HOLDS DATA FOR A MEAL
+ *
+ * @author: Jason Fagerberg
+ */
+
 
 public class Meal {
+    //not really needed
     private int id;
+    //R.id for this meals picture
     private int imageID;
+    //name of meal
     private String name;
+    //# of servings
     private int amount;
 
     public Meal(int id, int image, String name, int amount) {
