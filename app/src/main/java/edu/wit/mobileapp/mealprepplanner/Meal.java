@@ -2,7 +2,6 @@ package edu.wit.mobileapp.mealprepplanner;
 
 /**
  *
- *
  * THIS CLASS JUST HOLDS DATA FOR A MEAL
  *
  * @author: Jason Fagerberg

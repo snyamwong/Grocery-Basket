@@ -57,7 +57,7 @@ public class MealsFragment extends Fragment {
         mMealsList = new ArrayList<>();
 
         //Add Sample Data for display purposes
-        for(int i = 0; i < 11; i++){
+        for(int i = 0; i <= 11; i++){
             mMealsList.add(new Meal(i, R.drawable.food , "Food Name", i));
         }
 
