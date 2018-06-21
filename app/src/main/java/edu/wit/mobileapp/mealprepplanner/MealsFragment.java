@@ -3,11 +3,13 @@ package edu.wit.mobileapp.mealprepplanner;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,7 +22,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -34,10 +35,27 @@ public class MealsFragment extends Fragment {
     //Objects in fragment
     private ListView mealListView;
     private MealsListAdapter adapter;
-    private List<Meal> mMealsList;
+    private ArrayList<Meal> mMealsList;
 
     public MealsFragment() {
         // Required empty public constructor
+    }
+
+    //init data
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        //put this in a bundle
+        Log.v("Meals Fragment", "onCreate called");
+        super.onCreate(savedInstanceState);
+
+        if(mMealsList == null) {
+            mMealsList = new ArrayList<>();
+            adapter = new MealsListAdapter(getActivity().getApplicationContext(), mMealsList); //object to update fragment
+
+            for (int i = 0; i <= 11; i++) {
+                mMealsList.add(new Meal(i, R.drawable.food, "Food Name", i));
+            }
+        }
     }
 
     private View view;
@@ -52,16 +70,10 @@ public class MealsFragment extends Fragment {
         ((AppCompatActivity)getActivity()).setSupportActionBar(topBar);
         setHasOptionsMenu(true);
 
-        //Infinite List View / init arrayList
+        //Infinite List View
         mealListView = (ListView)  view.findViewById(R.id.mealsListView);
-        mMealsList = new ArrayList<>();
 
-        //Add Sample Data for display purposes
-        for(int i = 0; i <= 11; i++){
-            mMealsList.add(new Meal(i, R.drawable.food , "Food Name", i));
-        }
-
-        adapter = new MealsListAdapter(getActivity().getApplicationContext(), mMealsList); //object to update fragment
+        //update list
         mealListView.setAdapter(adapter); //Update display with new list
         mealListView.setSelection(mealListView.getCount() - 1); //Nav to end of list
 
