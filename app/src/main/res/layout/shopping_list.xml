@@ -7,11 +7,11 @@
     android:background="#d1d1d1"
     tools:context=".ShoppingListFragment">
 
-    <android.support.v7.widget.AppCompatCheckBox
+    <CheckBox
         android:id="@+id/ingredient_chk_box"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:checked="true"
+        android:checked="false"
         android:text="Ingredient Name" />
 
     <TextView
