@@ -61,19 +61,17 @@ public class ShoppingListFragment extends Fragment {
             mShoppingList.add("Produce");
             mShoppingList.addAll(mProduceList);
             mShoppingList.add("Bakery");
-            mShoppingList.add(mBakeryList);
+            mShoppingList.addAll(mBakeryList);
             mShoppingList.add("Deli");
-            mShoppingList.add(mDeliList);
+            mShoppingList.addAll(mDeliList);
             mShoppingList.add("Meat");
-            mShoppingList.add(mMeatList);
+            mShoppingList.addAll(mMeatList);
             mShoppingList.add("Seafood");
-            mShoppingList.add(mSeafoodList);
+            mShoppingList.addAll(mSeafoodList);
             mShoppingList.add("Grocery");
-            mShoppingList.add(mGroceryList);
+            mShoppingList.addAll(mGroceryList);
             mShoppingList.add("Dairy");
-            mShoppingList.add(mDairyList);
-
-            Log.v("ShoppingListFragment", "onCreate....DONE");
+            mShoppingList.addAll(mDairyList);
         }
     }
 
@@ -85,7 +83,6 @@ public class ShoppingListFragment extends Fragment {
         mShoppingListView = (ListView) view.findViewById(R.id.shoppingListView);
         mShoppingListView.setAdapter(adapter);
         // Inflate the layout for this fragment
-        Log.v("ShoppingListFragment", "onCreateView....DONE");
         return view;
     }
 
