@@ -44,10 +44,10 @@ public class MealsFragment extends Fragment {
     //init data
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        //put this in a bundle
-        Log.v("Meals Fragment", "onCreate called");
+        //Log.v("Meals Fragment", "onCreate called");
         super.onCreate(savedInstanceState);
 
+        //if list isn't initialized
         if(mMealsList == null) {
             mMealsList = new ArrayList<>();
             adapter = new MealsListAdapter(getActivity().getApplicationContext(), mMealsList); //object to update fragment
