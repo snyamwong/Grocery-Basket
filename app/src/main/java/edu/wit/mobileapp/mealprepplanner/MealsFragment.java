@@ -44,7 +44,7 @@ public class MealsFragment extends Fragment {
     //init data
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        //Log.v("Meals Fragment", "onCreate called");
+        
         super.onCreate(savedInstanceState);
 
         //if list isn't initialized
