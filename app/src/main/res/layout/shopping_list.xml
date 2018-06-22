@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorWhite"
     tools:context=".ShoppingListFragment">
 
@@ -11,18 +10,33 @@
         android:id="@+id/ingredient_chk_box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:checked="false"
-        android:text="Ingredient Name"
-        android:textSize="15sp"/>
+        android:textSize="17sp"
+        android:paddingTop="13dp"
+        android:paddingBottom="13dp" />
+
+    <TextView
+        android:id="@+id/ingredient_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/ingredient_chk_box"
+        android:text="No Ingredient Name"
+        android:textSize="17sp"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="13dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginBottom="10dp"/>
 
     <TextView
         android:id="@+id/ingredient_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignEnd="@id/ingredient_amount"
-        android:text="8oz"
-        android:textSize="20sp"/>
+        android:layout_alignEnd="@id/ingredient_chk_box"
+        android:text="No Ingredient Amount"
+        android:textSize="17sp"
+        android:layout_marginEnd="13dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginBottom="10dp"/>
 
 
 </RelativeLayout>

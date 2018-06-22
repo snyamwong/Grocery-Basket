@@ -66,11 +66,19 @@ public class ShoppingListAdapter extends BaseAdapter {
                     view = inflater.inflate(R.layout.shopping_list_section_headers, null);
                     break;
             }
+            return view;
         }
+
         switch (getItemViewType(i)){
             case INGREDIENT:
-                CheckBox ingredient_chk_box = view.findViewById(R.id.ingredient_chk_box);
-                ingredient_chk_box.setText(((Ingredient) mShoppingList.get(i)).getName());
+                TextView ingredient_amount = view.findViewById(R.id.ingredient_amount);
+                TextView ingredient_name = view.findViewById(R.id.ingredient_name);
+
+
+                Ingredient ingredient = ((Ingredient) mShoppingList.get(i));
+                String measurement = Integer.toString(ingredient.getAmount()) + " " + ingredient.getMeasurement();
+                ingredient_amount.setText(measurement);
+                ingredient_name.setText(ingredient.getName());
                 break;
             case HEADER:
                 TextView ingredient_type_header = view.findViewById(R.id.ingredient_type_header);

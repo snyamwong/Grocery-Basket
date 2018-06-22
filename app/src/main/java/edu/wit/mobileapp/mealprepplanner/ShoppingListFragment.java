@@ -1,6 +1,7 @@
 package edu.wit.mobileapp.mealprepplanner;
 
 
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,7 +9,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -46,14 +52,14 @@ public class ShoppingListFragment extends Fragment {
             mGroceryList = new ArrayList<>();
             mDairyList = new ArrayList<>();
 
-            for (int i = 0; i <= 11; i++) {
-                mProduceList.add(new Ingredient("Ingredient " + Integer.toString(i), Integer.toString(i) + "oz"));
-                mBakeryList.add(new Ingredient("Ingredient " + Integer.toString(i), Integer.toString(i) + "oz"));
-                mDeliList.add(new Ingredient("Ingredient " + Integer.toString(i), Integer.toString(i) + "oz"));
-                mMeatList.add(new Ingredient("Ingredient " + Integer.toString(i), Integer.toString(i) + "oz"));
-                mSeafoodList.add(new Ingredient("Ingredient " + Integer.toString(i), Integer.toString(i) + "oz"));
-                mGroceryList.add(new Ingredient("Ingredient " + Integer.toString(i), Integer.toString(i) + "oz"));
-                mDairyList.add(new Ingredient("Ingredient " + Integer.toString(i), Integer.toString(i) + "oz"));
+            for (int i = 0; i <= 5; i++) {
+                mProduceList.add(new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
+                mBakeryList.add(new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
+                mDeliList.add(new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
+                mMeatList.add(new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
+                mSeafoodList.add(new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
+                mGroceryList.add(new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
+                mDairyList.add(new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
             }
 
             adapter = new ShoppingListAdapter(getActivity().getApplicationContext(), mShoppingList); //object to update fragment
@@ -85,5 +91,4 @@ public class ShoppingListFragment extends Fragment {
         // Inflate the layout for this fragment
         return view;
     }
-
 }

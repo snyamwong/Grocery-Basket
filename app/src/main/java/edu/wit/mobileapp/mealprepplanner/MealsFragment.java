@@ -24,7 +24,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 /**
- *
  * MEALS FRAGMENT
  *
  *@author: Jason Fagerberg
