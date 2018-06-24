@@ -63,7 +63,7 @@ public class MealsFragment extends Fragment
         // Add Sample Data for display purposes
         for (int i = 0; i <= 11; i++)
         {
-            // mMealsList.add(new Meal(i, R.drawable.food, "Food Name", i));
+            mMealsList.add(new Meal(i, R.drawable.food, "Food Name", i));
         }
 
         adapter = new MealsListAdapter(getActivity().getApplicationContext(), mMealsList); //object to update fragment
@@ -92,7 +92,7 @@ public class MealsFragment extends Fragment
             {
                 // Placeholder Action to add placeholder meal
                 // FIXME
-                // mMealsList.add(new Meal(1, R.drawable.food, "Food Name", 1));
+                mMealsList.add(new Meal(1, R.drawable.food, "Food Name", 1));
                 mealListView.setAdapter(adapter);
                 mealListView.setSelection(mealListView.getCount() - 1);
 

@@ -2,7 +2,6 @@ package edu.wit.mobileapp.mealprepplanner;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
 
 /**
  * Define model class by extending RealmObject
@@ -15,28 +14,30 @@ import io.realm.annotations.PrimaryKey;
 
 public class Meal extends RealmObject
 {
-    @PrimaryKey
-    private long id;
+    private int id;
 
-    //R.id for this meals picture
-    private int imageID;
+    // R.id for this meals picture
+    private int image;
 
-    //name of meal
+    // name of meal
     private String name;
 
-    //# of servings
+    // # of servings
     private int amount;
 
-    // Declaring a one to many relationship with Ingredient
-    private RealmList<Ingredient> ingredients;
+    // Public no args constructor
+    public Meal()
+    {
 
-    Meal (int id, int imageID, String name, int amount, RealmList<Ingredient> ingredients)
+    }
+
+    // Public custom constructor
+    public Meal (int id, int image, String name, int amount)
     {
         setId(id);
-        setImageID(imageID);
+        setImage(image);
         setName(name);
         setAmount(amount);
-        setIngredients(ingredients);
     }
 
     public void setId (int id)
@@ -44,9 +45,9 @@ public class Meal extends RealmObject
         this.id = id;
     }
 
-    public void setImageID (int image)
+    public void setImage (int image)
     {
-        this.imageID = image;
+        this.image = image;
     }
 
     public void setName (String name)
@@ -59,13 +60,11 @@ public class Meal extends RealmObject
         this.amount = amount;
     }
 
-    public void setIngredients (RealmList<Ingredient> ingredients) { this.ingredients = ingredients; }
+    public int getId () { return id; }
 
-    public long getId () { return id; }
-
-    public int getImageID ()
+    public int getImage ()
     {
-        return imageID;
+        return image;
     }
 
     public String getName ()
@@ -77,6 +76,4 @@ public class Meal extends RealmObject
     {
         return amount;
     }
-
-    public RealmList<Ingredient> getIngredients () { return ingredients; }
 }
