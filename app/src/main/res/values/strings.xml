@@ -3,8 +3,6 @@
     <string name="action_settings">Settings</string>
     <string name="meals">Meals</string>
     <string name="shopping_list">Shopping List</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_search">SearchActivity</string>
 </resources>

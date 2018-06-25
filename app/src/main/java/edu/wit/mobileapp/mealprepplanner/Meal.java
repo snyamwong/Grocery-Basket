@@ -19,6 +19,7 @@ public class Meal {
     private int amount;
 
     public Meal(int id, int image, String name, int amount) {
+        //TODO: Add Ingredients Array List to hold ingredients in meal
         this.id = id;
         this.imageID = image;
         this.name = name;

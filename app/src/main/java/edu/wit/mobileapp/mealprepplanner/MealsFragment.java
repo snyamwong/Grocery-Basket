@@ -87,6 +87,7 @@ public class MealsFragment extends Fragment {
         });
 
         //Add button Setup
+        //TODO: make button navigate to search activity
         FloatingActionButton btnAdd = (FloatingActionButton) view.findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override

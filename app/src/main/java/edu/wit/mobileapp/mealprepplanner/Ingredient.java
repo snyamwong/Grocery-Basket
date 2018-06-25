@@ -11,6 +11,15 @@ public class Ingredient {
         this.measurement = measurement;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if(((Ingredient)o).getName().equals(this.getName())){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public String getName() {
         return name;
     }

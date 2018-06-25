@@ -53,29 +53,25 @@ public class ShoppingListFragment extends Fragment {
             mDairyList = new ArrayList<>();
 
             for (int i = 0; i <= 5; i++) {
-                mProduceList.add(new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
-                mBakeryList.add(new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
-                mDeliList.add(new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
-                mMeatList.add(new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
-                mSeafoodList.add(new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
-                mGroceryList.add(new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
-                mDairyList.add(new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
+                addIngredientToSubList(mProduceList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
+                addIngredientToSubList(mBakeryList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
+                addIngredientToSubList(mDeliList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
+                addIngredientToSubList(mMeatList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
+                addIngredientToSubList(mSeafoodList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
+                addIngredientToSubList(mGroceryList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
+                addIngredientToSubList(mDairyList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
+
+
+                addIngredientToSubList(mProduceList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
+                addIngredientToSubList(mBakeryList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
+                addIngredientToSubList(mDeliList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
+                addIngredientToSubList(mMeatList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
+                addIngredientToSubList(mSeafoodList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
+                addIngredientToSubList(mGroceryList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
+                addIngredientToSubList(mDairyList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
             }
 
-            mShoppingList.add("Produce");
-            mShoppingList.addAll(mProduceList);
-            mShoppingList.add("Bakery");
-            mShoppingList.addAll(mBakeryList);
-            mShoppingList.add("Deli");
-            mShoppingList.addAll(mDeliList);
-            mShoppingList.add("Meat");
-            mShoppingList.addAll(mMeatList);
-            mShoppingList.add("Seafood");
-            mShoppingList.addAll(mSeafoodList);
-            mShoppingList.add("Grocery");
-            mShoppingList.addAll(mGroceryList);
-            mShoppingList.add("Dairy");
-            mShoppingList.addAll(mDairyList);
+            buildShoppingList();
         }
     }
 
@@ -89,5 +85,32 @@ public class ShoppingListFragment extends Fragment {
         mShoppingListView.setAdapter(adapter);
         // Inflate the layout for this fragment
         return view;
+    }
+
+    //TODO: convert measurements to be the same as well
+    private void addIngredientToSubList(ArrayList<Ingredient> list, Ingredient ingredient){
+        if(list.contains(ingredient)){
+            Ingredient f = list.get(list.indexOf(ingredient));
+            f.setAmount(f.getAmount() + ingredient.getAmount());
+        }else {
+            list.add(ingredient);
+        }
+    }
+
+    private void buildShoppingList(){
+        mShoppingList.add("Produce");
+        mShoppingList.addAll(mProduceList);
+        mShoppingList.add("Bakery");
+        mShoppingList.addAll(mBakeryList);
+        mShoppingList.add("Deli");
+        mShoppingList.addAll(mDeliList);
+        mShoppingList.add("Meat");
+        mShoppingList.addAll(mMeatList);
+        mShoppingList.add("Seafood");
+        mShoppingList.addAll(mSeafoodList);
+        mShoppingList.add("Grocery");
+        mShoppingList.addAll(mGroceryList);
+        mShoppingList.add("Dairy");
+        mShoppingList.addAll(mDairyList);
     }
 }
