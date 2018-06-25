@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    tools:context=".ShoppingListFragment">
+
+    <CheckBox
+        android:id="@+id/ingredient_chk_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:paddingTop="13dp"
+        android:paddingBottom="13dp" />
+
+    <TextView
+        android:id="@+id/ingredient_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/ingredient_chk_box"
+        android:text="No Ingredient Name"
+        android:textSize="17sp"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="13dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:id="@+id/ingredient_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignEnd="@id/ingredient_chk_box"
+        android:text="No Ingredient Amount"
+        android:textSize="17sp"
+        android:layout_marginEnd="13dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginBottom="10dp"/>
+
+
+</RelativeLayout>
