@@ -16,7 +16,7 @@
         android:layout_width="125dp"
         android:layout_height="70dp"
         android:layout_alignParentStart="true"
-        android:contentDescription="Food Pictur"
+        android:contentDescription="Food Picture"
         app:srcCompat="@drawable/food" />
 
     <TextView
