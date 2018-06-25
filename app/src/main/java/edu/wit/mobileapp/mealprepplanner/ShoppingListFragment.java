@@ -87,14 +87,18 @@ public class ShoppingListFragment extends Fragment {
         return view;
     }
 
-    //TODO: convert measurements to be the same as well
     private void addIngredientToSubList(ArrayList<Ingredient> list, Ingredient ingredient){
         if(list.contains(ingredient)){
             Ingredient f = list.get(list.indexOf(ingredient));
-            f.setAmount(f.getAmount() + ingredient.getAmount());
+            f.setAmount(combineAmounts(f, ingredient));
         }else {
             list.add(ingredient);
         }
+    }
+
+    //TODO: convert measurements to be the same as well
+    private int combineAmounts(Ingredient i1, Ingredient i2){
+        return  i1.getAmount() + i2.getAmount();
     }
 
     private void buildShoppingList(){
