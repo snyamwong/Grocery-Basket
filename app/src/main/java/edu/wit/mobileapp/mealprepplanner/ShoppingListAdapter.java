@@ -1,11 +1,14 @@
 package edu.wit.mobileapp.mealprepplanner;
 
 import android.content.Context;
+import android.graphics.Paint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -57,8 +60,10 @@ public class ShoppingListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
+
         if(view == null){
             switch (getItemViewType(i)){
+
                 case INGREDIENT:
                     view = inflater.inflate(R.layout.shopping_list, null);
                     break;
@@ -70,9 +75,25 @@ public class ShoppingListAdapter extends BaseAdapter {
 
         switch (getItemViewType(i)){
             case INGREDIENT:
-                TextView ingredient_amount = view.findViewById(R.id.ingredient_amount);
-                TextView ingredient_name = view.findViewById(R.id.ingredient_name);
+                final CheckBox cb = view.findViewById(R.id.ingredient_chk_box);
+                final TextView ingredient_amount = view.findViewById(R.id.ingredient_amount);
+                final TextView ingredient_name = view.findViewById(R.id.ingredient_name);
 
+                cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+                {
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+                    {
+                        if(cb.isChecked()){
+                            ingredient_amount.setPaintFlags(ingredient_amount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                            ingredient_name.setPaintFlags(ingredient_name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+                        }else{
+                            ingredient_amount.setPaintFlags(ingredient_amount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                            ingredient_name.setPaintFlags(ingredient_name.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                        }
+
+                    }
+                });
 
                 Ingredient ingredient = ((Ingredient) mShoppingList.get(i));
                 String measurement = Integer.toString(ingredient.getAmount()) + " " + ingredient.getMeasurement();

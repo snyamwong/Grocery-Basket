@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,21 +53,21 @@ public class ShoppingListFragment extends Fragment {
 
             for (int i = 0; i <= 5; i++) {
                 addIngredientToSubList(mProduceList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
-                addIngredientToSubList(mBakeryList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
-                addIngredientToSubList(mDeliList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
-                addIngredientToSubList(mMeatList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
-                addIngredientToSubList(mSeafoodList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
-                addIngredientToSubList(mGroceryList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
-                addIngredientToSubList(mDairyList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
+                addIngredientToSubList(mBakeryList, new Ingredient("Ingredient " + Integer.toString(i+6), i, "OZ"));
+                addIngredientToSubList(mDeliList, new Ingredient("Ingredient " + Integer.toString(i+12), i, "OZ"));
+                addIngredientToSubList(mMeatList, new Ingredient("Ingredient " + Integer.toString(i+18), i, "OZ"));
+                addIngredientToSubList(mSeafoodList, new Ingredient("Ingredient " + Integer.toString(i+24), i, "OZ"));
+                addIngredientToSubList(mGroceryList, new Ingredient("Ingredient " + Integer.toString(i+30), i, "OZ"));
+                addIngredientToSubList(mDairyList, new Ingredient("Ingredient " + Integer.toString(i+36), i, "OZ"));
 
-
+                //Add dup items to test combination
                 addIngredientToSubList(mProduceList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
-                addIngredientToSubList(mBakeryList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
-                addIngredientToSubList(mDeliList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
-                addIngredientToSubList(mMeatList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
-                addIngredientToSubList(mSeafoodList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
-                addIngredientToSubList(mGroceryList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
-                addIngredientToSubList(mDairyList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
+                addIngredientToSubList(mBakeryList, new Ingredient("Ingredient " + Integer.toString(i+6), i, "OZ"));
+                addIngredientToSubList(mDeliList, new Ingredient("Ingredient " + Integer.toString(i+12), i, "OZ"));
+                addIngredientToSubList(mMeatList, new Ingredient("Ingredient " + Integer.toString(i+18), i, "OZ"));
+                addIngredientToSubList(mSeafoodList, new Ingredient("Ingredient " + Integer.toString(i+24), i, "OZ"));
+                addIngredientToSubList(mGroceryList, new Ingredient("Ingredient " + Integer.toString(i+30), i, "OZ"));
+                addIngredientToSubList(mDairyList, new Ingredient("Ingredient " + Integer.toString(i+36), i, "OZ"));
             }
 
             buildShoppingList();
@@ -83,14 +82,13 @@ public class ShoppingListFragment extends Fragment {
         adapter = new ShoppingListAdapter(getActivity().getApplicationContext(), mShoppingList); //object to update fragment
         mShoppingListView = (ListView) view.findViewById(R.id.shoppingListView);
         mShoppingListView.setAdapter(adapter);
-        // Inflate the layout for this fragment
         return view;
     }
 
     private void addIngredientToSubList(ArrayList<Ingredient> list, Ingredient ingredient){
         if(list.contains(ingredient)){
-            Ingredient f = list.get(list.indexOf(ingredient));
-            f.setAmount(combineAmounts(f, ingredient));
+            Ingredient found = list.get(list.indexOf(ingredient));
+            found.setAmount(combineAmounts(found, ingredient));
         }else {
             list.add(ingredient);
         }

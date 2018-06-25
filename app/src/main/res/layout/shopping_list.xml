@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         android:textSize="17sp"
         android:paddingTop="13dp"
-        android:paddingBottom="13dp" />
+        android:paddingBottom="13dp"
+        android:checked="false"/>
 
     <TextView
         android:id="@+id/ingredient_name"
