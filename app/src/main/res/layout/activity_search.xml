@@ -27,7 +27,7 @@
         android:layout_alignParentStart="true">
 
         <ImageView
-            android:id="@+id/meal_picture"
+            android:id="@+id/search_meal_picture"
             android:layout_width="125dp"
             android:layout_height="70dp"
             android:layout_alignParentStart="true"
@@ -35,7 +35,7 @@
             app:srcCompat="@drawable/food" />
 
         <TextView
-            android:id="@+id/meal_name"
+            android:id="@+id/search_meal_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -46,7 +46,7 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/meal_amount"
+            android:id="@+id/search_meal_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -58,9 +58,5 @@
             android:textSize="20sp" />
 
     </ListView>
-
-
-
-
 
 </RelativeLayout>

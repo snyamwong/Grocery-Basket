@@ -57,20 +57,10 @@ public class ShoppingListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        if(view == null){
-            switch (getItemViewType(i)){
-                case INGREDIENT:
-                    view = inflater.inflate(R.layout.shopping_list, null);
-                    break;
-                case HEADER:
-                    view = inflater.inflate(R.layout.shopping_list_section_headers, null);
-                    break;
-            }
-            return view;
-        }
 
         switch (getItemViewType(i)){
             case INGREDIENT:
+                view = inflater.inflate(R.layout.shopping_list, null);
                 TextView ingredient_amount = view.findViewById(R.id.ingredient_amount);
                 TextView ingredient_name = view.findViewById(R.id.ingredient_name);
 
@@ -81,6 +71,7 @@ public class ShoppingListAdapter extends BaseAdapter {
                 ingredient_name.setText(ingredient.getName());
                 break;
             case HEADER:
+                view = inflater.inflate(R.layout.shopping_list_section_headers, null);
                 TextView ingredient_type_header = view.findViewById(R.id.ingredient_type_header);
                 ingredient_type_header.setText(mShoppingList.get(i).toString());
                 break;

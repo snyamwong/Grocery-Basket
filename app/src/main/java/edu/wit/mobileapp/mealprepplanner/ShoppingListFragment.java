@@ -62,8 +62,6 @@ public class ShoppingListFragment extends Fragment {
                 mDairyList.add(new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
             }
 
-            adapter = new ShoppingListAdapter(getActivity().getApplicationContext(), mShoppingList); //object to update fragment
-
             mShoppingList.add("Produce");
             mShoppingList.addAll(mProduceList);
             mShoppingList.add("Bakery");
@@ -86,6 +84,7 @@ public class ShoppingListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_shopping_list, container, false);
+        adapter = new ShoppingListAdapter(getActivity().getApplicationContext(), mShoppingList); //object to update fragment
         mShoppingListView = (ListView) view.findViewById(R.id.shoppingListView);
         mShoppingListView.setAdapter(adapter);
         // Inflate the layout for this fragment
