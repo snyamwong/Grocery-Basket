@@ -1,59 +1,79 @@
 package edu.wit.mobileapp.mealprepplanner;
 
+import io.realm.RealmList;
+import io.realm.RealmObject;
+
 /**
+ * Define model class by extending RealmObject
  *
- * THIS CLASS JUST HOLDS DATA FOR A MEAL
+ * NOTE: Meal has a one to many relationship to Ingredient
  *
- * @author: Jason Fagerberg
+ * @author Jason Fagerberg
  */
 
 
-public class Meal {
-    //not really needed
+public class Meal extends RealmObject
+{
     private int id;
-    //R.id for this meals picture
-    private int imageID;
-    //name of meal
+
+    // R.id for this meals picture
+    private int image;
+
+    // name of meal
     private String name;
-    //# of servings
+
+    // # of servings
     private int amount;
 
-    public Meal(int id, int image, String name, int amount) {
+    // Public no args constructor
+    public Meal()
+    {
+
+    }
+
+    // Public custom constructor
+    public Meal (int id, int image, String name, int amount)
+    {
+        setId(id);
+        setImage(image);
+        setName(name);
+        setAmount(amount);
+    }
+
+    public void setId (int id)
+    {
         this.id = id;
-        this.imageID = image;
+    }
+
+    public void setImage (int image)
+    {
+        this.image = image;
+    }
+
+    public void setName (String name)
+    {
         this.name = name;
+    }
+
+    public void setAmount (int amount)
+    {
         this.amount = amount;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public int getId () { return id; }
+
+    public int getImage ()
+    {
+        return image;
     }
 
-    public void setImageID(int image) {
-        this.imageID = image;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
-    public int getId(){
-        return id;
-    }
-
-    public int getImageID() {
-        return imageID;
-    }
-
-    public String getName() {
+    public String getName ()
+    {
         return name;
     }
 
-    public int getAmount() {
+    public int getAmount ()
+    {
         return amount;
     }
 }
