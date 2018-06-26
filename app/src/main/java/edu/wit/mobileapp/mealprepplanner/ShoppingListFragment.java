@@ -82,6 +82,17 @@ public class ShoppingListFragment extends Fragment {
         adapter = new ShoppingListAdapter(getActivity().getApplicationContext(), mShoppingList); //object to update fragment
         mShoppingListView = (ListView) view.findViewById(R.id.shoppingListView);
         mShoppingListView.setAdapter(adapter);
+
+        mShoppingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (parent.getItemAtPosition(position) instanceof Ingredient) {
+                    Ingredient ingredient = (Ingredient) parent.getItemAtPosition(position);
+                    Toast.makeText(getActivity().getApplicationContext(), "Clicked on row: " + ingredient.getName(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        });
         return view;
     }
 

@@ -4,21 +4,24 @@ public class Ingredient {
     private String name;
     private int amount;
     private String measurement;
+    private boolean selected;
 
     public Ingredient(String name, int amount, String measurement) {
         this.name = name;
         this.amount = amount;
         this.measurement = measurement;
+        this.selected = false;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if(((Ingredient)o).getName().equals(this.getName())){
-            return true;
-        }else{
-            return false;
-        }
-    }
+    public boolean equals(Object o) { return ((Ingredient)o).getName().equals(this.getName()); }
+
+    @Override
+    public String toString(){return name;}
+
+    public boolean isSelected(){return selected;}
+
+    public void setSelected(boolean selected){this.selected = selected;}
 
     public String getName() {
         return name;
