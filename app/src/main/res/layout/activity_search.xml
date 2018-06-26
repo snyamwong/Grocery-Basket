@@ -1,62 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp"
-    android:paddingBottom="5dp"
-    android:paddingTop="5dp"
-    android:background="@color/colorWhite"
-    android:orientation="horizontal">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#d1d1d1"
+    tools:context=".SearchActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/searchTopBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:title="Search"
+        app:titleTextColor="@color/colorWhite"
+        />
 
     <SearchView
         android:id="@+id/search_badge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/searchTopBar"
         android:background="@color/colorWhite"/>
 
 
     <ListView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true">
-
-        <ImageView
-            android:id="@+id/search_meal_picture"
-            android:layout_width="125dp"
-            android:layout_height="70dp"
-            android:layout_alignParentStart="true"
-            android:contentDescription="Food Picture"
-            app:srcCompat="@drawable/food" />
-
-        <TextView
-            android:id="@+id/search_meal_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignTop="@+id/meal_picture"
-            android:layout_marginStart="130dp"
-            android:layout_marginTop="20dp"
-            android:text="Food Name"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/search_meal_amount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginEnd="12dp"
-            android:layout_marginTop="61dp"
-            android:text="x1"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="20sp" />
-
-    </ListView>
+        android:id="@+id/searchListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/search_badge"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:dividerHeight="10dp"
+        android:divider="#d1d1d1"/>
 
 </RelativeLayout>
