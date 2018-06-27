@@ -3,63 +3,78 @@ package edu.wit.mobileapp.mealprepplanner;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.FrameLayout;
+import android.util.Log;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+{
+    private final String LOGTAG = "MYAPP";
 
     //class vars for nav bar and frame
-    private BottomNavigationView mMainNav;
-    private FrameLayout mMainFrame;
+    private BottomNavigationView navigationView;
 
-    //both fragments
-    private MealsFragment mealsFragment;
+    // Both fragments (MealListFragment,
+    private MealListFragment mealListFragment;
     private ShoppingListFragment shoppingListFragment;
 
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         //init nav bar and frame
-        mMainFrame = (FrameLayout) findViewById(R.id.main_frame);
-        mMainNav = (BottomNavigationView) findViewById(R.id.main_nav);
+        navigationView = findViewById(R.id.main_nav);
 
         //init both fragments
-        mealsFragment = new MealsFragment();
+        mealListFragment = new MealListFragment();
         shoppingListFragment = new ShoppingListFragment();
 
-        //set init fragment
-        setFragment(mealsFragment);
-        //event listener, on nav bar click
-        mMainNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        // Set init fragment (if-else statement required as changing the portrait orientation changes onCreate / onDestroy)
+        // Default fragment is the MealList (if it is null)
+        if (MealPrepPlannerApplication.getMainActivityFragment() == null)
+        {
+            Log.v(LOGTAG, "NULL");
+            setFragment(mealListFragment);
+        }
+        if (MealPrepPlannerApplication.getMainActivityFragment().getId() == R.id.nav_meals)
+        {
+            Log.v(LOGTAG, "MEAL");
+            setFragment(mealListFragment);
+        }
+        else if (MealPrepPlannerApplication.getMainActivityFragment().getId() == R.id.nav_shopping_list)
+        {
+            Log.v(LOGTAG, "SHOPPING LIST");
+            setFragment(shoppingListFragment);
+        }
 
-                switch(item.getItemId()){
+        // Event listener on nav bar click (either MealsList, or ShoppingList)
+        navigationView.setOnNavigationItemSelectedListener(listener ->
+        {
 
-                    case R.id.nav_meals:
-                        setFragment(mealsFragment);
-                        return true;
+            switch (listener.getItemId())
+            {
+                case R.id.nav_meals:
+                    setFragment(mealListFragment);
+                    return true;
 
-                    case R.id.nav_shopping_list:
-                        setFragment(shoppingListFragment);
-                        return true;
+                case R.id.nav_shopping_list:
+                    setFragment(shoppingListFragment);
+                    return true;
 
-                        default:
-                            return false;
-                }
-
+                default:
+                    return false;
             }
+
         });
     }
 
-    private void setFragment(Fragment fragment) {
+    // Sets fragment
+    private void setFragment(Fragment fragment)
+    {
+        MealPrepPlannerApplication.setMainActivityFragment(fragment);
+
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_frame, fragment);
         fragmentTransaction.commit();

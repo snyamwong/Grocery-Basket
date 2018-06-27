@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,14 +29,14 @@ import java.util.ArrayList;
  *@author: Jason Fagerberg
  */
 
-public class MealsFragment extends Fragment {
+public class MealListFragment extends Fragment {
 
     //Objects in fragment
     private ListView mealListView;
-    private MealsListAdapter adapter;
+    private MealListAdapter adapter;
     private ArrayList<Meal> mMealsList;
 
-    public MealsFragment() {
+    public MealListFragment() {
         // Required empty public constructor
     }
 
@@ -50,7 +49,7 @@ public class MealsFragment extends Fragment {
         //if list isn't initialized
         if(mMealsList == null) {
             mMealsList = new ArrayList<>();
-            adapter = new MealsListAdapter(getActivity().getApplicationContext(), mMealsList); //object to update fragment
+            adapter = new MealListAdapter(getActivity().getApplicationContext(), mMealsList); //object to update fragment
 
             //TODO: Change to include ingredient list
             for (int i = 0; i <= 11; i++) {
