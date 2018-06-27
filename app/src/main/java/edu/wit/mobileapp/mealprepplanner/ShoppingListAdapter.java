@@ -2,11 +2,13 @@ package edu.wit.mobileapp.mealprepplanner;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,12 +22,14 @@ public class ShoppingListAdapter extends BaseAdapter {
     private static final int HEADER =1;
     private LayoutInflater inflater;
 
+    //Sets context, Shopping List, & inflater
     public ShoppingListAdapter(Context mContext, ArrayList<Object> mIngredientList) {
         this.mContext = mContext;
         this.mShoppingList = mIngredientList;
         inflater = (LayoutInflater) mContext.getSystemService(mContext.LAYOUT_INFLATER_SERVICE);
     }
 
+    //get if view is header or ingredient
     @Override
     public int getItemViewType(int position){
         if(mShoppingList.get(position) instanceof Ingredient){
@@ -37,78 +41,76 @@ public class ShoppingListAdapter extends BaseAdapter {
         }
     }
 
-    private class ViewHolder{
-        CheckBox cb;
-        TextView sName;
-        TextView sAmount;
+    //strike through a text view if true un-strike through if false
+    private void setStrikeThrough(TextView text, boolean doStrike){
+        if(doStrike){
+            text.setPaintFlags(text.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }else{
+            text.setPaintFlags(text.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+        }
+
     }
 
+    //render view
     @Override
     public View getView(int i, View convertView, ViewGroup viewGroup) {
 
-        ViewHolder holder;
-
-        if(convertView == null){
-            holder = new ViewHolder();
-            switch (getItemViewType(i)){
-
-                case INGREDIENT:
-                    convertView = inflater.inflate(R.layout.shopping_list, null);
-                    holder.cb = convertView.findViewById(R.id.ingredient_chk_box);
-                    holder.sName = convertView.findViewById(R.id.ingredient_name);
-                    holder.sAmount = convertView.findViewById(R.id.ingredient_amount);
-
-                    holder.cb.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            CheckBox cb = (CheckBox) v;
-                            Ingredient ingredient = (Ingredient)cb.getTag();
-                            Toast.makeText(mContext, "cb clicked: " + ingredient.toString(), Toast.LENGTH_SHORT).show();
-                            ingredient.setSelected(cb.isChecked());
-                        }
-                    });
-                    break;
-                case HEADER:
-                    convertView = inflater.inflate(R.layout.shopping_list_section_headers, null);
-                    break;
-            }
-        }else {
-            holder = (ViewHolder)convertView.getTag();
-        }
-
+        //if header or ingredient
         switch (getItemViewType(i)){
             case INGREDIENT:
+                //attach shopping list layout
+                convertView = inflater.inflate(R.layout.shopping_list, null);
+
+                //Vars: base ingredient, cb & text views in row, amount string
                 Ingredient ingredient = (Ingredient) mShoppingList.get(i);
-                //initial 9 or so rows
-                if(holder != null){
-                    holder.sName.setText(ingredient.getName());
-                    String measurement = Integer.toString(ingredient.getAmount()) + " " + ingredient.getMeasurement();
-                    holder.sAmount.setText(measurement);
-                    holder.cb.setChecked(ingredient.isSelected());
+                CheckBox cb = convertView.findViewById(R.id.ingredient_chk_box);
+                TextView name = convertView.findViewById(R.id.ingredient_name);
+                TextView amount = convertView.findViewById(R.id.ingredient_amount);
+                String measurement = Integer.toString(ingredient.getAmount()) + " " + ingredient.getMeasurement();
 
-                    holder.cb.setTag(ingredient);
-                //when rows start to be reused
-                }else{
-                    //new holder
-                    holder = new ViewHolder();
-                    holder.cb = convertView.findViewById(R.id.ingredient_chk_box);
-                    holder.sName = convertView.findViewById(R.id.ingredient_name);
-                    holder.sAmount = convertView.findViewById(R.id.ingredient_amount);
+                //render info based on ingredient stored values
+                name.setText(ingredient.getName());
+                amount.setText(measurement);
+                //needed because views are recycled after first 10
+                //basically restoring checked state
+                cb.setChecked(ingredient.isSelected());
+                setStrikeThrough(name, ingredient.isSelected());
+                setStrikeThrough(amount, ingredient.isSelected());
+                //attach ingredient to cb for onClick action
+                cb.setTag(ingredient);
 
-                    holder.sName.setText(ingredient.getName());
-                    String measurement = Integer.toString(ingredient.getAmount()) + " " + ingredient.getMeasurement();
-                    holder.sAmount.setText(measurement);
-                    holder.cb.setChecked(ingredient.isSelected());
+                //On checkbox click
+                cb.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //passed checkbox
+                        CheckBox cb = (CheckBox) v;
+                        //get the layout
+                        RelativeLayout r = (RelativeLayout) v.getParent();
+                        //get the two text views
+                        TextView name = r.findViewById(R.id.ingredient_name);
+                        TextView amount = r.findViewById(R.id.ingredient_amount);
 
-                    holder.cb.setTag(ingredient);
-                }
+                        //Ingredient is attached to cb so that ingredient cant store if it is checked
+                        Ingredient ingredient = (Ingredient)cb.getTag();
+                        Toast.makeText(mContext, "cb clicked: " + ingredient.toString(), Toast.LENGTH_SHORT).show();
+                        //change ingredient set value and change text views accordingly
+                        ingredient.setSelected(cb.isChecked());
+                        setStrikeThrough(name, ingredient.isSelected());
+                        setStrikeThrough(amount, ingredient.isSelected());
+                    }
+                });
 
                 break;
             case HEADER:
+                //attach header layout
+                convertView = inflater.inflate(R.layout.shopping_list_section_headers, null);
+                //header text init
                 TextView ingredient_type_header = convertView.findViewById(R.id.ingredient_type_header);
                 ingredient_type_header.setText(mShoppingList.get(i).toString());
                 break;
         }
+        //return newly rendered view
         return convertView;
     }
 
