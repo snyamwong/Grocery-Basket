@@ -3,6 +3,7 @@ package edu.wit.mobileapp.mealprepplanner;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -20,7 +21,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * MEALS FRAGMENT
@@ -28,20 +28,50 @@ import java.util.List;
  * @author Jason Fagerberg
  */
 
+<<<<<<< HEAD:app/src/main/java/edu/wit/mobileapp/mealprepplanner/MealsFragment.java
 public class MealsFragment extends Fragment
 {
+=======
+public class MealListFragment extends Fragment {
+>>>>>>> shopping-cart-activity:app/src/main/java/edu/wit/mobileapp/mealprepplanner/MealListFragment.java
 
     //Objects in fragment
     private ListView mealListView;
-    private MealsListAdapter adapter;
-    private List<Meal> mMealsList;
+    private MealListAdapter adapter;
+    private ArrayList<Meal> mMealsList;
 
+<<<<<<< HEAD:app/src/main/java/edu/wit/mobileapp/mealprepplanner/MealsFragment.java
     // Required empty public constructor
     public MealsFragment ()
     {
 
     }
 
+=======
+    public MealListFragment() {
+        // Required empty public constructor
+    }
+
+    //init data
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        //if list isn't initialized
+        if(mMealsList == null) {
+            mMealsList = new ArrayList<>();
+            adapter = new MealListAdapter(getActivity().getApplicationContext(), mMealsList); //object to update fragment
+
+            //TODO: Change to include ingredient list
+            for (int i = 0; i <= 11; i++) {
+                mMealsList.add(new Meal(i, R.drawable.food, "Food Name", i));
+            }
+        }
+    }
+
+    private View view;
+>>>>>>> shopping-cart-activity:app/src/main/java/edu/wit/mobileapp/mealprepplanner/MealListFragment.java
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -55,6 +85,7 @@ public class MealsFragment extends Fragment
         ((AppCompatActivity) getActivity()).setSupportActionBar(topBar);
         setHasOptionsMenu(true);
 
+<<<<<<< HEAD:app/src/main/java/edu/wit/mobileapp/mealprepplanner/MealsFragment.java
         // Infinite List View / init arrayList
         mealListView = view.findViewById(R.id.mealsListView);
         mMealsList = new ArrayList<>();
@@ -65,8 +96,12 @@ public class MealsFragment extends Fragment
         {
             mMealsList.add(new Meal(i, R.drawable.food, "Food Name", i));
         }
+=======
+        //Infinite List View
+        mealListView = (ListView)  view.findViewById(R.id.mealsListView);
+>>>>>>> shopping-cart-activity:app/src/main/java/edu/wit/mobileapp/mealprepplanner/MealListFragment.java
 
-        adapter = new MealsListAdapter(getActivity().getApplicationContext(), mMealsList); //object to update fragment
+        //update list
         mealListView.setAdapter(adapter); //Update display with new list
         mealListView.setSelection(mealListView.getCount() - 1); //Nav to end of list
 
@@ -83,10 +118,17 @@ public class MealsFragment extends Fragment
             }
         });
 
+<<<<<<< HEAD:app/src/main/java/edu/wit/mobileapp/mealprepplanner/MealsFragment.java
         // Add button Setup
         FloatingActionButton btnAdd = view.findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(new View.OnClickListener()
         {
+=======
+        //Add button Setup
+        //TODO: make button navigate to search activity
+        FloatingActionButton btnAdd = (FloatingActionButton) view.findViewById(R.id.btnAdd);
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+>>>>>>> shopping-cart-activity:app/src/main/java/edu/wit/mobileapp/mealprepplanner/MealListFragment.java
             @Override
             public void onClick (View view)
             {

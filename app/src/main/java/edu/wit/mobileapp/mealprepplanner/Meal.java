@@ -25,10 +25,19 @@ public class Meal extends RealmObject
     // # of servings
     private int amount;
 
+<<<<<<< HEAD
     // Public no args constructor
     public Meal()
     {
 
+=======
+    public Meal(int id, int image, String name, int amount) {
+        //TODO: Add Ingredients Array List to hold ingredients in meal
+        this.id = id;
+        this.imageID = image;
+        this.name = name;
+        this.amount = amount;
+>>>>>>> shopping-cart-activity
     }
 
     // Public custom constructor

@@ -7,7 +7,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
@@ -17,13 +17,13 @@ import java.util.List;
  */
 
 
-public class MealsListAdapter extends BaseAdapter {
+public class MealListAdapter extends BaseAdapter {
 
     //activity and corresponding list
     private Context mContext;
-    private List<Meal> mMealsList;
+    private ArrayList<Meal> mMealsList;
 
-    public MealsListAdapter(Context mContext, List<Meal> mMeals) {
+    public MealListAdapter(Context mContext, ArrayList<Meal> mMeals) {
         this.mContext = mContext;
         this.mMealsList = mMeals;
     }
