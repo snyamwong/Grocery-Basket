@@ -17,13 +17,13 @@ import java.util.ArrayList;
  */
 
 
-public class MealsListAdapter extends BaseAdapter {
+public class MealListAdapter extends BaseAdapter {
 
     //activity and corresponding list
     private Context mContext;
     private ArrayList<Meal> mMealsList;
 
-    public MealsListAdapter(Context mContext, ArrayList<Meal> mMeals) {
+    public MealListAdapter(Context mContext, ArrayList<Meal> mMeals) {
         this.mContext = mContext;
         this.mMealsList = mMeals;
     }
