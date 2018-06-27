@@ -1,10 +1,7 @@
 package edu.wit.mobileapp.mealprepplanner;
 
-import io.realm.annotations.PrimaryKey;
-
 public class RecipeIngredients
 {
-    @PrimaryKey
     private int recipeIngredientsID;
 
     private int recipeID;
@@ -15,9 +12,9 @@ public class RecipeIngredients
 
     private String unit;
 
-    public RecipeIngredients () {}
+    public RecipeIngredients() {}
 
-    public RecipeIngredients (int recipeIngredientsID, int recipeID, int ingredientID, double quantity, String unit)
+    public RecipeIngredients(int recipeIngredientsID, int recipeID, int ingredientID, double quantity, String unit)
     {
         this.recipeIngredientsID = recipeIngredientsID;
         this.recipeID = recipeID;
@@ -26,52 +23,52 @@ public class RecipeIngredients
         this.unit = unit;
     }
 
-    public int getRecipeIngredientsID ()
+    public int getRecipeIngredientsID()
     {
         return recipeIngredientsID;
     }
 
-    public void setRecipeIngredientsID (int recipeIngredientsID)
+    public void setRecipeIngredientsID(int recipeIngredientsID)
     {
         this.recipeIngredientsID = recipeIngredientsID;
     }
 
-    public int getRecipeID ()
+    public int getRecipeID()
     {
         return recipeID;
     }
 
-    public void setRecipeID (int recipeID)
+    public void setRecipeID(int recipeID)
     {
         this.recipeID = recipeID;
     }
 
-    public int getIngredientID ()
+    public int getIngredientID()
     {
         return ingredientID;
     }
 
-    public void setIngredientID (int ingredientID)
+    public void setIngredientID(int ingredientID)
     {
         this.ingredientID = ingredientID;
     }
 
-    public double getQuantity ()
+    public double getQuantity()
     {
         return quantity;
     }
 
-    public void setQuantity (double quantity)
+    public void setQuantity(double quantity)
     {
         this.quantity = quantity;
     }
 
-    public String getUnit ()
+    public String getUnit()
     {
         return unit;
     }
 
-    public void setUnit (String unit)
+    public void setUnit(String unit)
     {
         this.unit = unit;
     }

@@ -1,28 +1,15 @@
 package edu.wit.mobileapp.mealprepplanner;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-<<<<<<< HEAD
-import android.view.MenuItem;
-import android.widget.FrameLayout;
-
-import io.realm.Realm;
-
-public class MainActivity extends AppCompatActivity {
-=======
 
 public class MainActivity extends AppCompatActivity
 {
     private final String LOGTAG = "MYAPP";
->>>>>>> shopping-cart-activity
-
-    // NOTE - realm.getPath() = /data/data/edu.wit.mobileapp.mealprepplanner/files/default.realm
-
-    private final String LOGTAG = "myApp";
 
     //class vars for nav bar and frame
     private BottomNavigationView navigationView;
@@ -35,11 +22,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
-        // Setting up Realm database
-        Realm realm = Realm.getDefaultInstance();
-
-        // set up view
         setContentView(R.layout.activity_main);
 
         //init nav bar and frame

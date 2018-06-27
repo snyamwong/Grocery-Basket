@@ -28,7 +28,6 @@ import java.util.ArrayList;
  * @author Jason Fagerberg
  */
 
-
 public class MealListFragment extends Fragment
 {
     //Objects in fragment

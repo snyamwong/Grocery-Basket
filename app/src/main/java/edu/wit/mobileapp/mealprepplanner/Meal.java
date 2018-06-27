@@ -1,18 +1,13 @@
 package edu.wit.mobileapp.mealprepplanner;
 
 /**
- * Define model class by extending RealmObject
- * <p>
- * NOTE: Meal has a one to many relationship to Ingredient
- *
- * @author Jason Fagerberg
+ * Class to represent a Meal in MealListFragment
  */
-
-
 public class Meal
 {
     private int id;
 
+    // TODO switch image to BitMap or byte[] to store image in SQL
     // R.id for this meals picture
     private int image;
 
@@ -25,9 +20,10 @@ public class Meal
     // Public no args constructor
     public Meal() {}
 
+    // TODO switch image to BitMap or byte[] to store image in SQL
+    // Customer constructor
     public Meal(int id, int image, String name, int amount)
     {
-        //TODO: Add Ingredients Array List to hold ingredients in meal
         this.id = id;
         this.image = image;
         this.name = name;
