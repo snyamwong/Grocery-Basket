@@ -28,52 +28,41 @@ import java.util.ArrayList;
  * @author Jason Fagerberg
  */
 
-<<<<<<< HEAD:app/src/main/java/edu/wit/mobileapp/mealprepplanner/MealsFragment.java
-public class MealsFragment extends Fragment
-{
-=======
-public class MealListFragment extends Fragment {
->>>>>>> shopping-cart-activity:app/src/main/java/edu/wit/mobileapp/mealprepplanner/MealListFragment.java
 
+public class MealListFragment extends Fragment
+{
     //Objects in fragment
     private ListView mealListView;
     private MealListAdapter adapter;
     private ArrayList<Meal> mMealsList;
 
-<<<<<<< HEAD:app/src/main/java/edu/wit/mobileapp/mealprepplanner/MealsFragment.java
-    // Required empty public constructor
-    public MealsFragment ()
+    public MealListFragment()
     {
-
-    }
-
-=======
-    public MealListFragment() {
         // Required empty public constructor
     }
 
     //init data
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-
+    public void onCreate(@Nullable Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
         //if list isn't initialized
-        if(mMealsList == null) {
+        if (mMealsList == null)
+        {
             mMealsList = new ArrayList<>();
             adapter = new MealListAdapter(getActivity().getApplicationContext(), mMealsList); //object to update fragment
 
             //TODO: Change to include ingredient list
-            for (int i = 0; i <= 11; i++) {
+            for (int i = 0; i <= 11; i++)
+            {
                 mMealsList.add(new Meal(i, R.drawable.food, "Food Name", i));
             }
         }
     }
 
-    private View view;
->>>>>>> shopping-cart-activity:app/src/main/java/edu/wit/mobileapp/mealprepplanner/MealListFragment.java
     @Override
-    public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         // inflate fragment
         View view = inflater.inflate(R.layout.fragment_meals, container, false);
@@ -85,7 +74,6 @@ public class MealListFragment extends Fragment {
         ((AppCompatActivity) getActivity()).setSupportActionBar(topBar);
         setHasOptionsMenu(true);
 
-<<<<<<< HEAD:app/src/main/java/edu/wit/mobileapp/mealprepplanner/MealsFragment.java
         // Infinite List View / init arrayList
         mealListView = view.findViewById(R.id.mealsListView);
         mMealsList = new ArrayList<>();
@@ -96,10 +84,9 @@ public class MealListFragment extends Fragment {
         {
             mMealsList.add(new Meal(i, R.drawable.food, "Food Name", i));
         }
-=======
+
         //Infinite List View
-        mealListView = (ListView)  view.findViewById(R.id.mealsListView);
->>>>>>> shopping-cart-activity:app/src/main/java/edu/wit/mobileapp/mealprepplanner/MealListFragment.java
+        mealListView = (ListView) view.findViewById(R.id.mealsListView);
 
         //update list
         mealListView.setAdapter(adapter); //Update display with new list
@@ -109,7 +96,7 @@ public class MealListFragment extends Fragment {
         mealListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
-            public void onItemClick (AdapterView<?> parent, View v, int position, long id)
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id)
             {
                 // Debugging message
                 Toast.makeText(getActivity()
@@ -118,47 +105,40 @@ public class MealListFragment extends Fragment {
             }
         });
 
-<<<<<<< HEAD:app/src/main/java/edu/wit/mobileapp/mealprepplanner/MealsFragment.java
+
         // Add button Setup
         FloatingActionButton btnAdd = view.findViewById(R.id.btnAdd);
-        btnAdd.setOnClickListener(new View.OnClickListener()
+        btnAdd.setOnClickListener((View v) ->
         {
-=======
-        //Add button Setup
-        //TODO: make button navigate to search activity
-        FloatingActionButton btnAdd = (FloatingActionButton) view.findViewById(R.id.btnAdd);
-        btnAdd.setOnClickListener(new View.OnClickListener() {
->>>>>>> shopping-cart-activity:app/src/main/java/edu/wit/mobileapp/mealprepplanner/MealListFragment.java
-            @Override
-            public void onClick (View view)
-            {
-                // Placeholder Action to add placeholder meal
-                // FIXME
-                mMealsList.add(new Meal(1, R.drawable.food, "Food Name", 1));
-                mealListView.setAdapter(adapter);
-                mealListView.setSelection(mealListView.getCount() - 1);
 
-                Toast.makeText(getActivity().getApplicationContext(), "Placeholder Food added", Toast.LENGTH_SHORT)
-                        .show();
-            }
+
+            // Placeholder Action to add placeholder meal
+            // FIXME
+            mMealsList.add(new Meal(1, R.drawable.food, "Food Name", 1));
+            mealListView.setAdapter(adapter);
+            mealListView.setSelection(mealListView.getCount() - 1);
+
+            Toast.makeText(getActivity().getApplicationContext(), "Placeholder Food added", Toast.LENGTH_SHORT)
+                    .show();
         });
+
         return view;
     }
 
     // Create menu where delete button sits
     @Override
-    public void onCreateOptionsMenu (Menu menu, MenuInflater inflater)
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
         inflater.inflate(R.menu.menu_meals, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     // On delete button press
-    /*
-        FULLY IMPLEMENTED
-     */
+        /*
+            FULLY IMPLEMENTED
+        */
     @Override
-    public boolean onOptionsItemSelected (MenuItem item)
+    public boolean onOptionsItemSelected(MenuItem item)
     {
         if (mMealsList.size() == 0) {return false;} //No items to delete, do nothing
 
@@ -172,7 +152,7 @@ public class MealListFragment extends Fragment {
             DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener()
             {
                 @Override
-                public void onClick (DialogInterface dialog, int which)
+                public void onClick(DialogInterface dialog, int which)
                 {
                     switch (which)
                     {

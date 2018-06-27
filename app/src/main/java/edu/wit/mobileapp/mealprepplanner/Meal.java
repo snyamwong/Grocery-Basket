@@ -1,18 +1,15 @@
 package edu.wit.mobileapp.mealprepplanner;
 
-import io.realm.RealmList;
-import io.realm.RealmObject;
-
 /**
  * Define model class by extending RealmObject
- *
+ * <p>
  * NOTE: Meal has a one to many relationship to Ingredient
  *
  * @author Jason Fagerberg
  */
 
 
-public class Meal extends RealmObject
+public class Meal
 {
     private int id;
 
@@ -25,63 +22,51 @@ public class Meal extends RealmObject
     // # of servings
     private int amount;
 
-<<<<<<< HEAD
     // Public no args constructor
-    public Meal()
-    {
+    public Meal() {}
 
-=======
-    public Meal(int id, int image, String name, int amount) {
+    public Meal(int id, int image, String name, int amount)
+    {
         //TODO: Add Ingredients Array List to hold ingredients in meal
         this.id = id;
-        this.imageID = image;
+        this.image = image;
         this.name = name;
         this.amount = amount;
->>>>>>> shopping-cart-activity
     }
 
-    // Public custom constructor
-    public Meal (int id, int image, String name, int amount)
-    {
-        setId(id);
-        setImage(image);
-        setName(name);
-        setAmount(amount);
-    }
-
-    public void setId (int id)
+    public void setId(int id)
     {
         this.id = id;
     }
 
-    public void setImage (int image)
+    public void setImage(int image)
     {
         this.image = image;
     }
 
-    public void setName (String name)
+    public void setName(String name)
     {
         this.name = name;
     }
 
-    public void setAmount (int amount)
+    public void setAmount(int amount)
     {
         this.amount = amount;
     }
 
-    public int getId () { return id; }
+    public int getId() { return id; }
 
-    public int getImage ()
+    public int getImage()
     {
         return image;
     }
 
-    public String getName ()
+    public String getName()
     {
         return name;
     }
 
-    public int getAmount ()
+    public int getAmount()
     {
         return amount;
     }
