@@ -5,6 +5,7 @@ public class Ingredient {
     private int amount;
     private String measurement;
     private boolean selected;
+    //TODO: include category flag
 
     public Ingredient(String name, int amount, String measurement) {
         this.name = name;
