@@ -1,7 +1,9 @@
 package edu.wit.mobileapp.mealprepplanner;
 
 
+import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -30,6 +32,8 @@ import java.util.ArrayList;
  */
 
 public class MealListFragment extends Fragment {
+
+    Activity context;
 
     //Objects in fragment
     private ListView mealListView;
@@ -62,6 +66,9 @@ public class MealListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        context = getActivity();
+
         //inflate fragment
         view = inflater.inflate(R.layout.fragment_meals, container, false);
 
@@ -92,11 +99,16 @@ public class MealListFragment extends Fragment {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Intent intent = new Intent(context, SearchActivity.class);
+
                 //Placeholder Action to add placeholder meal
                 mMealsList.add(new Meal(1, R.drawable.food , "Food Name", 1));
                 mealListView.setAdapter(adapter);
                 mealListView.setSelection(mealListView.getCount() - 1);
                 Toast.makeText(getActivity().getApplicationContext(), "Placeholder Food added", Toast.LENGTH_SHORT).show();
+
+                startActivity(intent);
             }
         });
         return view;
