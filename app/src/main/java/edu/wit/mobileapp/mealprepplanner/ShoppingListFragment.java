@@ -82,28 +82,6 @@ public class ShoppingListFragment extends Fragment {
         adapter = new ShoppingListAdapter(getActivity().getApplicationContext(), mShoppingList); //object to update fragment
         mShoppingListView = (ListView) view.findViewById(R.id.shoppingListView);
         mShoppingListView.setAdapter(adapter);
-
-        mShoppingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (parent.getItemAtPosition(position) instanceof Ingredient) {
-                    parent.findViewById(R.id.ingredient_name);
-                    Ingredient ingredient = (Ingredient) parent.getItemAtPosition(position);
-                    Toast.makeText(getActivity().getApplicationContext(), "Clicked on row: " + ingredient.getName(), Toast.LENGTH_SHORT).show();
-//                    TextView ingredient_name = (TextView) view.findViewById(R.id.ingredient_name);
-//                    TextView ingredient_amount = (TextView) view.findViewById(R.id.ingredient_amount);
-//
-//                    if(ingredient.isSelected()) {
-//                        ingredient_amount.setPaintFlags(ingredient_amount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-//                        ingredient_name.setPaintFlags(ingredient_name.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-//                    }else{
-//                        ingredient_amount.setPaintFlags(ingredient_amount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-//                        ingredient_name.setPaintFlags(ingredient_name.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-//                    }
-                }
-            }
-
-        });
         return view;
     }
 
