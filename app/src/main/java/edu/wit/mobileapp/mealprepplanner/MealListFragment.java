@@ -50,11 +50,6 @@ public class MealListFragment extends Fragment {
         if(mMealsList == null) {
             mMealsList = new ArrayList<>();
             adapter = new MealListAdapter(getActivity().getApplicationContext(), mMealsList); //object to update fragment
-
-            //TODO: Change to include ingredient list
-            for (int i = 0; i <= 11; i++) {
-                mMealsList.add(new Meal(i, R.drawable.food, "Food Name", i));
-            }
         }
     }
 
@@ -86,6 +81,20 @@ public class MealListFragment extends Fragment {
             }
         });
 
+        ArrayList<Ingredient> ingredients = new ArrayList<>();
+        for(int i = 0; i <= 4; i++){
+            ingredients.add(new Ingredient("Produce Ingredient " + i, i, "oz", "Produce"));
+            ingredients.add(new Ingredient("Bakery Ingredient " + i+4, i+4, "oz", "Bakery"));
+            ingredients.add(new Ingredient("Deli Ingredient " + i+8, i+8, "oz", "Deli"));
+            ingredients.add(new Ingredient("Meat Ingredient " + i+12, i+12, "oz", "Meat"));
+            ingredients.add(new Ingredient("Seafood Ingredient " + i+16, i+16, "oz", "Seafood"));
+            ingredients.add(new Ingredient("Grocery Ingredient " + i+20, i+16, "oz", "Grocery"));
+            ingredients.add(new Ingredient("Dairy Ingredient " + i+24, i+16, "oz", "Dairy"));
+        }
+
+        //TODO: build better generic food
+        Meal generic = new Meal(1, R.drawable.food , "Food Name", 1, ingredients);
+
         //Add button Setup
         //TODO: make button navigate to search activity
         FloatingActionButton btnAdd = (FloatingActionButton) view.findViewById(R.id.btnAdd);
@@ -93,7 +102,7 @@ public class MealListFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //Placeholder Action to add placeholder meal
-                mMealsList.add(new Meal(1, R.drawable.food , "Food Name", 1));
+                mMealsList.add(generic);
                 mealListView.setAdapter(adapter);
                 mealListView.setSelection(mealListView.getCount() - 1);
                 Toast.makeText(getActivity().getApplicationContext(), "Placeholder Food added", Toast.LENGTH_SHORT).show();

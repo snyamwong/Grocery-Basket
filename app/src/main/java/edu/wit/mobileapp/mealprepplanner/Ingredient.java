@@ -4,13 +4,14 @@ public class Ingredient {
     private String name;
     private int amount;
     private String measurement;
+    private String category;
     private boolean selected;
-    //TODO: include category flag
 
-    public Ingredient(String name, int amount, String measurement) {
+    public Ingredient(String name, int amount, String measurement, String category) {
         this.name = name;
         this.amount = amount;
         this.measurement = measurement;
+        this.category = category;
         this.selected = false;
     }
 
@@ -47,4 +48,8 @@ public class Ingredient {
     public void setMeasurement(String measurement) {
         this.measurement = measurement;
     }
+
+    public String getCategory() { return category; }
+
+    public void setCategory(String category) { this.category = category; }
 }

@@ -1,5 +1,7 @@
 package edu.wit.mobileapp.mealprepplanner;
 
+import java.util.ArrayList;
+
 /**
  *
  * THIS CLASS JUST HOLDS DATA FOR A MEAL
@@ -17,13 +19,15 @@ public class Meal {
     private String name;
     //# of servings
     private int amount;
+    private ArrayList<Ingredient> ingredients;
 
-    public Meal(int id, int image, String name, int amount) {
+    public Meal(int id, int image, String name, int amount, ArrayList<Ingredient> ingredients) {
         //TODO: Add Ingredients Array List to hold ingredients in meal
         this.id = id;
         this.imageID = image;
         this.name = name;
         this.amount = amount;
+        this.ingredients = ingredients;
     }
 
     public void setId(int id) {
@@ -56,5 +60,11 @@ public class Meal {
 
     public int getAmount() {
         return amount;
+    }
+
+    public void setIngredients(ArrayList<Ingredient> ingredients){this.ingredients = ingredients;}
+
+    public ArrayList<Ingredient> getIngredients() {
+        return ingredients;
     }
 }
