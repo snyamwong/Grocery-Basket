@@ -51,7 +51,6 @@ public class MealListFragment extends Fragment
         {
             mMealsList = new ArrayList<>();
             adapter = new MealListAdapter(getActivity().getApplicationContext(), mMealsList); //object to update fragment
-
             //TODO: Change to include ingredient list
             for (int i = 0; i <= 11; i++)
             {
@@ -104,8 +103,22 @@ public class MealListFragment extends Fragment
             }
         });
 
+        ArrayList<Ingredient> ingredients = new ArrayList<>();
+        for(int i = 0; i <= 4; i++){
+            ingredients.add(new Ingredient("Produce Ingredient " + i, i, "oz", "Produce"));
+            ingredients.add(new Ingredient("Bakery Ingredient " + i+4, i+4, "oz", "Bakery"));
+            ingredients.add(new Ingredient("Deli Ingredient " + i+8, i+8, "oz", "Deli"));
+            ingredients.add(new Ingredient("Meat Ingredient " + i+12, i+12, "oz", "Meat"));
+            ingredients.add(new Ingredient("Seafood Ingredient " + i+16, i+16, "oz", "Seafood"));
+            ingredients.add(new Ingredient("Grocery Ingredient " + i+20, i+16, "oz", "Grocery"));
+            ingredients.add(new Ingredient("Dairy Ingredient " + i+24, i+16, "oz", "Dairy"));
+        }
 
-        // Add button Setup
+        //TODO: build better generic food
+        Meal generic = new Meal(1, R.drawable.food , "Food Name", 1, ingredients);
+
+        //Add button Setup
+        //TODO: make button navigate to search activity
         FloatingActionButton btnAdd = view.findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener((View v) ->
         {

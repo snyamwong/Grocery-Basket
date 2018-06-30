@@ -1,5 +1,7 @@
 package edu.wit.mobileapp.mealprepplanner;
 
+import java.util.ArrayList;
+
 /**
  * Class to represent a Meal in MealListFragment
  */
@@ -16,18 +18,18 @@ public class Meal
 
     // # of servings
     private int amount;
+    private ArrayList<Ingredient> ingredients;
 
     // Public no args constructor
     public Meal() {}
-
+  
+    public Meal(int id, int image, String name, int amount, ArrayList<Ingredient> ingredients) {
     // TODO switch image to BitMap or byte[] to store image in SQL
-    // Customer constructor
-    public Meal(int id, int image, String name, int amount)
-    {
         this.id = id;
         this.image = image;
         this.name = name;
         this.amount = amount;
+        this.ingredients = ingredients;
     }
 
     public void setId(int id)
@@ -65,5 +67,11 @@ public class Meal
     public int getAmount()
     {
         return amount;
+    }
+
+    public void setIngredients(ArrayList<Ingredient> ingredients){this.ingredients = ingredients;}
+
+    public ArrayList<Ingredient> getIngredients() {
+        return ingredients;
     }
 }

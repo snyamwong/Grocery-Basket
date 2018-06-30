@@ -51,24 +51,6 @@ public class ShoppingListFragment extends Fragment {
             mGroceryList = new ArrayList<>();
             mDairyList = new ArrayList<>();
 
-            for (int i = 0; i <= 5; i++) {
-                addIngredientToSubList(mProduceList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
-                addIngredientToSubList(mBakeryList, new Ingredient("Ingredient " + Integer.toString(i+6), i, "OZ"));
-                addIngredientToSubList(mDeliList, new Ingredient("Ingredient " + Integer.toString(i+12), i, "OZ"));
-                addIngredientToSubList(mMeatList, new Ingredient("Ingredient " + Integer.toString(i+18), i, "OZ"));
-                addIngredientToSubList(mSeafoodList, new Ingredient("Ingredient " + Integer.toString(i+24), i, "OZ"));
-                addIngredientToSubList(mGroceryList, new Ingredient("Ingredient " + Integer.toString(i+30), i, "OZ"));
-                addIngredientToSubList(mDairyList, new Ingredient("Ingredient " + Integer.toString(i+36), i, "OZ"));
-
-                //Add dup items to test combination
-                addIngredientToSubList(mProduceList, new Ingredient("Ingredient " + Integer.toString(i), i, "OZ"));
-                addIngredientToSubList(mBakeryList, new Ingredient("Ingredient " + Integer.toString(i+6), i, "OZ"));
-                addIngredientToSubList(mDeliList, new Ingredient("Ingredient " + Integer.toString(i+12), i, "OZ"));
-                addIngredientToSubList(mMeatList, new Ingredient("Ingredient " + Integer.toString(i+18), i, "OZ"));
-                addIngredientToSubList(mSeafoodList, new Ingredient("Ingredient " + Integer.toString(i+24), i, "OZ"));
-                addIngredientToSubList(mGroceryList, new Ingredient("Ingredient " + Integer.toString(i+30), i, "OZ"));
-                addIngredientToSubList(mDairyList, new Ingredient("Ingredient " + Integer.toString(i+36), i, "OZ"));
-            }
 
             buildShoppingList();
         }
@@ -99,6 +81,7 @@ public class ShoppingListFragment extends Fragment {
         return  i1.getAmount() + i2.getAmount();
     }
 
+    //TODO take ingredient list from mealList and build based on that
     private void buildShoppingList(){
         mShoppingList.add("Produce");
         mShoppingList.addAll(mProduceList);
