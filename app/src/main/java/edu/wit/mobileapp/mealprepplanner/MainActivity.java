@@ -45,6 +45,13 @@ public class MainActivity extends AppCompatActivity
             openDatabase (opens system db)
 
             then query as you please!
+
+            also, remember -
+
+            onPause() - db.close
+            onResume() - db.open
+            
+            to prevent memory leak and such
         */
 
         // Set up database
