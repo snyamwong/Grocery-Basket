@@ -31,6 +31,19 @@ public class Database extends SQLiteOpenHelper
         this.context = context;
     }
 
+    /**
+     * Creates database by copying local database to phone database
+     * At the moment, since we're changing local database super often,
+     * the method will assume that the phone never has a database
+     * Thus, it will always overwrite whatever the phone database has
+     * <p>
+     * Eventually, we will want to check if the phone already has a database
+     * This can done by:
+     * <p>
+     * if(!exists())
+     *
+     * @throws IOException
+     */
     public void createDatabase() throws IOException
     {
         try
@@ -43,7 +56,12 @@ public class Database extends SQLiteOpenHelper
         }
     }
 
-    private boolean checkDataBase()
+    /**
+     * Checks if database exists
+     *
+     * @return if database exists
+     */
+    private boolean exists()
     {
         File dbFile = context.getDatabasePath(DB_NAME);
 
@@ -51,18 +69,22 @@ public class Database extends SQLiteOpenHelper
     }
 
     /**
-     * Copies your database from your local assets-folder to the just created empty database in the
-     * system folder, from where it can be accessed and handled
+     * Copies database from local assets folder
+     * to just created empty database in the system/emulator/phone folder
+     *
+     * @throws IOException
      */
     private void copyDataBase() throws IOException
     {
-        //Open your local db as the input stream
+        // opens local db as the input stream
+        // context.getAssets() returns the assets folder placed in the project
         InputStream inputStream = context.getAssets().open(DB_NAME);
 
-        //Open the empty db as the output stream
+        // opens empty db as the output stream
         OutputStream outputStream = new FileOutputStream(DB_PATH + DB_NAME);
 
-        //transfer bytes from the inputfile to the outputfile
+        // transfers bytes from the inputfile to the outputfile
+        // XXX no idea if the buffer still works for images, need to test
         int length;
         byte[] buffer = new byte[1024];
         while ((length = inputStream.read(buffer)) > 0)
@@ -70,20 +92,29 @@ public class Database extends SQLiteOpenHelper
             outputStream.write(buffer, 0, length);
         }
 
-        //Close the streams
+        // closes the streams
         outputStream.flush();
         outputStream.close();
         inputStream.close();
     }
 
+    /**
+     * Opens the database
+     *
+     * @throws SQLException
+     */
     public void openDataBase() throws SQLException
     {
-        //Open the database
+        // opens the database
         String path = DB_PATH + DB_NAME;
 
         db = SQLiteDatabase.openOrCreateDatabase(path, null);
     }
 
+    /**
+     * Closes the database
+     * synchronized is if we want to get fancy and do multithreading (not for this project lmao)
+     */
     @Override
     public synchronized void close()
     {

@@ -34,6 +34,19 @@ public class MainActivity extends AppCompatActivity
         mealListFragment = new MealListFragment();
         shoppingListFragment = new ShoppingListFragment();
 
+        // XXX START - database sample code
+
+        /*
+            this technically should be in SearchActivity - not MainActivity
+            this is again, just a sample
+
+            create a Database object
+            createDatabase (copies local db to system db)
+            openDatabase (opens system db)
+
+            then query as you please!
+        */
+
         // Set up database
         Database database = new Database(this);
 
@@ -46,6 +59,8 @@ public class MainActivity extends AppCompatActivity
         {
             e.printStackTrace();
         }
+
+        // XXX should clean this up by moving all of this code into the Database helper class
 
         // Little Test Query!
         String[] columns = {"name"};
@@ -61,6 +76,8 @@ public class MainActivity extends AppCompatActivity
             String name = cursor.getString(cursor.getColumnIndex("name"));
             Log.v(LOGTAG, String.format("name = %s\n", name));
         }
+
+        // XXX END OF DATABASE SAMPLE CODE
 
         // Set init fragment (if-else statement required as changing the portrait orientation changes onCreate / onDestroy)
         // Default fragment is the MealList (if it is null)
