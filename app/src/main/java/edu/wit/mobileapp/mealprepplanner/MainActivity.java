@@ -1,11 +1,14 @@
 package edu.wit.mobileapp.mealprepplanner;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -31,21 +34,49 @@ public class MainActivity extends AppCompatActivity
         mealListFragment = new MealListFragment();
         shoppingListFragment = new ShoppingListFragment();
 
+        // Set up database
+        Database database = new Database(this);
+
+        try
+        {
+            database.createDatabase();
+            database.openDataBase();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        // Little Test Query!
+        String[] columns = {"name"};
+        String where = "name = ?";
+        String[] where_args = {"BAGEL WITH CHEESE"};
+        String having = null;
+        String group_by = null;
+        String order_by = "name";
+
+        Cursor cursor = database.getDb().query("Recipe", columns, where, where_args, group_by, having, order_by);
+        while (cursor.moveToNext())
+        {
+            String name = cursor.getString(cursor.getColumnIndex("name"));
+            Log.v(LOGTAG, String.format("name = %s\n", name));
+        }
+
         // Set init fragment (if-else statement required as changing the portrait orientation changes onCreate / onDestroy)
         // Default fragment is the MealList (if it is null)
         if (MealPrepPlannerApplication.getMainActivityFragment() == null)
         {
-            Log.v(LOGTAG, "NULL");
+            Log.v(LOGTAG, "Main Activity Fragment - NULL\n");
             setFragment(mealListFragment);
         }
         if (MealPrepPlannerApplication.getMainActivityFragment().getId() == R.id.nav_meals)
         {
-            Log.v(LOGTAG, "MEAL");
+            Log.v(LOGTAG, "Main Activity Fragment - MEAL\n");
             setFragment(mealListFragment);
         }
         else if (MealPrepPlannerApplication.getMainActivityFragment().getId() == R.id.nav_shopping_list)
         {
-            Log.v(LOGTAG, "SHOPPING LIST");
+            Log.v(LOGTAG, "Main Activity Fragment - SHOPPING LIST\n");
             setFragment(shoppingListFragment);
         }
 
