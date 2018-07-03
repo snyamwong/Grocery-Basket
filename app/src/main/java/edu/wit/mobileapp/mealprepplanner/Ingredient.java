@@ -53,14 +53,12 @@ package edu.wit.mobileapp.mealprepplanner;
 //    }
 //}
 
-//TODO: include category flag
 public class Ingredient
 {
     private String name;
     private int amount;
     private String measurement;
     private String category;
-    private boolean selected;
 
     public Ingredient(String name, int amount, String measurement, String category) 
     {
@@ -68,7 +66,6 @@ public class Ingredient
         this.amount = amount;
         this.measurement = measurement;
         this.category = category;
-        this.selected = false;
     }
 
     @Override
@@ -81,16 +78,6 @@ public class Ingredient
     public String toString()
     {
         return name;
-    }
-
-    public boolean isSelected()
-    {
-        return selected;
-    }
-
-    public void setSelected(boolean selected)
-    {
-        this.selected = selected;
     }
 
     public String getName()

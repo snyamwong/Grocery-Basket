@@ -17,6 +17,7 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -32,6 +33,8 @@ public class ShoppingListFragment extends Fragment {
     private ArrayList<Ingredient> mGroceryList;
     private ArrayList<Ingredient> mDairyList;
     private ShoppingListAdapter adapter;
+
+    private ArrayList<Meal> mMealsList;
 
     //Preferences for json storage
     public SharedPreferences mPrefs;
@@ -79,20 +82,48 @@ public class ShoppingListFragment extends Fragment {
         return view;
     }
 
+    //save array list
+    @Override
+    public void onPause() {
+        super.onPause();
+        storeGlobalData();
+        //Log.v(LOGTAG, "onPause.....finished");
+    }
+
+    //array list -> json
+    public void storeGlobalData(){
+        Gson gson = new Gson();
+        //Transform the ArrayLists into JSON Data.
+        String mealsJSON = gson.toJson(mMealsList);
+        String selectedJSON = gson.toJson(adapter.selected);
+        preferenceEditor.putString("mealsJSONData", mealsJSON);
+        preferenceEditor.putString("selectedJSONData", selectedJSON);
+        //Commit the changes.
+        preferenceEditor.commit();
+    }
+
     //json -> array list
     public void retrieveGlobalDataFromStorage(){
+        Gson gson = new Gson();
         if(mPrefs.contains("mealsJSONData")){
-            Gson gson = new Gson();
             String mealsJSON = mPrefs.getString("mealsJSONData", "");
             Type mealType = new TypeToken<Collection<Meal>>() {}.getType();
-            setShoppingList(gson.fromJson(mealsJSON, mealType));
+            mMealsList = gson.fromJson(mealsJSON, mealType);
+            setShoppingList();
+        }
+
+        if(mPrefs.contains("selectedJSONData")){
+            String selectedJSON = mPrefs.getString("selectedJSONData", "");
+            Type selectedType = new TypeToken<HashMap<String, Integer>>() {}.getType();
+            adapter.selected = gson.fromJson(selectedJSON, selectedType);
+        }else{
+            adapter.selected = new HashMap<>();
         }
     }
 
-    public void setShoppingList(ArrayList<Meal> mealsList) {
-        for(Meal meal : mealsList){
+    public void setShoppingList() {
+        for(Meal meal : mMealsList){
             for(Ingredient ingredient : meal.getIngredients()){
-                Log.v(LOGTAG, "Ingredient = " + ingredient + "Category = " + ingredient.getCategory());
                 switch (ingredient.getCategory()){
                     case "Produce":
                         addIngredientToSubList(mProduceList, ingredient);
@@ -164,4 +195,5 @@ public class ShoppingListFragment extends Fragment {
             mShoppingList.add("Dairy");
             mShoppingList.addAll(mDairyList);}
     }
+
 }
