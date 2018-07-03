@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,8 +20,18 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import static android.content.Context.MODE_PRIVATE;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
+
+//object to json packages
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 
 /**
  *
@@ -36,6 +47,13 @@ public class MealListFragment extends Fragment {
     private MealListAdapter adapter;
     private ArrayList<Meal> mMealsList;
 
+    //Preferences for json storage
+    public SharedPreferences mPrefs;
+    public Editor preferenceEditor;
+
+    //Debug log tag
+    private final String LOGTAG = "MealsListFragment";
+
     public MealListFragment() {
         // Required empty public constructor
     }
@@ -46,17 +64,57 @@ public class MealListFragment extends Fragment {
 
         super.onCreate(savedInstanceState);
 
-        //if list isn't initialized
-        if(mMealsList == null) {
+        //set preferences
+        mPrefs = getActivity().getPreferences(MODE_PRIVATE);
+        preferenceEditor = mPrefs.edit();
+
+        //Retrieve saved array list then set adapter
+        retrieveGlobalDataFromStorage();
+        adapter = new MealListAdapter(getActivity().getApplicationContext(), mMealsList); //object to update fragment
+
+        //Log.v(LOGTAG, "onCreate.....finished");
+    }
+
+    //save array list
+    @Override
+    public void onPause() {
+        super.onPause();
+        storeGlobalData();
+        //Log.v(LOGTAG, "onPause.....finished");
+    }
+
+    //array list -> json
+    public void storeGlobalData(){
+        Gson gson = new Gson();
+        //Transform the ArrayLists into JSON Data.
+        String mealsJSON = gson.toJson(mMealsList);
+        preferenceEditor.putString("mealsJSONData", mealsJSON);
+        //Commit the changes.
+        preferenceEditor.commit();
+
+    }
+
+    //json -> array list
+    public void retrieveGlobalDataFromStorage(){
+        if(mPrefs.contains("mealsJSONData")){
+            Gson gson = new Gson();
+            String mealsJSON = mPrefs.getString("mealsJSONData", "");
+            Type mealType = new TypeToken<Collection<Meal>>() {}.getType();
+            setMealsList(gson.fromJson(mealsJSON, mealType));
+        }else {
             mMealsList = new ArrayList<>();
-            adapter = new MealListAdapter(getActivity().getApplicationContext(), mMealsList); //object to update fragment
         }
     }
 
-    private View view;
+    public void setMealsList(ArrayList<Meal> mealsList) {
+        this.mMealsList = mealsList;
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view;
         //inflate fragment
         view = inflater.inflate(R.layout.fragment_meals, container, false);
 
@@ -82,7 +140,7 @@ public class MealListFragment extends Fragment {
         });
 
         ArrayList<Ingredient> ingredients = new ArrayList<>();
-        for(int i = 0; i <= 4; i++){
+        for(int i = 0; i <= 1; i++){
             ingredients.add(new Ingredient("Produce Ingredient " + i, i, "oz", "Produce"));
             ingredients.add(new Ingredient("Bakery Ingredient " + i+4, i+4, "oz", "Bakery"));
             ingredients.add(new Ingredient("Deli Ingredient " + i+8, i+8, "oz", "Deli"));
@@ -160,5 +218,10 @@ public class MealListFragment extends Fragment {
 
         }
         return true;
+    }
+
+
+    public ArrayList<Meal> getmMealsList() {
+        return mMealsList;
     }
 }
