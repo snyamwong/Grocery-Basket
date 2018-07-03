@@ -1,6 +1,5 @@
 package edu.wit.mobileapp.mealprepplanner;
 
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,11 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.CheckBox;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
@@ -70,6 +65,20 @@ public class ShoppingListFragment extends Fragment {
 
     }
 
+    private View view;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_shopping_list, container, false);
+        adapter = new ShoppingListAdapter(getActivity().getApplicationContext(), mShoppingList); //object to update fragment
+        mShoppingListView = (ListView) view.findViewById(R.id.shoppingListView);
+        mShoppingListView.setAdapter(adapter);
+
+        retrieveGlobalDataFromStorage();
+        buildShoppingList();
+        return view;
+    }
+
     //json -> array list
     public void retrieveGlobalDataFromStorage(){
         if(mPrefs.contains("mealsJSONData")){
@@ -109,20 +118,6 @@ public class ShoppingListFragment extends Fragment {
                 }
             }
         }
-    }
-
-    private View view;
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_shopping_list, container, false);
-        adapter = new ShoppingListAdapter(getActivity().getApplicationContext(), mShoppingList); //object to update fragment
-        mShoppingListView = (ListView) view.findViewById(R.id.shoppingListView);
-        mShoppingListView.setAdapter(adapter);
-
-        retrieveGlobalDataFromStorage();
-        buildShoppingList();
-        return view;
     }
 
     private void addIngredientToSubList(ArrayList<Ingredient> list, Ingredient ingredient){
