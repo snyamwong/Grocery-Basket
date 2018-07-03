@@ -3,62 +3,69 @@ package edu.wit.mobileapp.mealprepplanner;
 import java.util.ArrayList;
 
 /**
- *
- * THIS CLASS JUST HOLDS DATA FOR A MEAL
- *
- * @author: Jason Fagerberg
+ * Class to represent a Meal in MealListFragment
  */
-
-
-public class Meal {
-    //not really needed
+public class Meal
+{
     private int id;
-    //R.id for this meals picture
-    private int imageID;
-    //name of meal
+
+    // TODO switch image to BitMap or byte[] to store image in SQL
+    // R.id for this meals picture
+    private int image;
+
+    // name of meal
     private String name;
-    //# of servings
+
+    // # of servings
     private int amount;
     private ArrayList<Ingredient> ingredients;
 
+    // Public no args constructor
+    public Meal() {}
+  
     public Meal(int id, int image, String name, int amount, ArrayList<Ingredient> ingredients) {
-        //TODO: Add Ingredients Array List to hold ingredients in meal
+    // TODO switch image to BitMap or byte[] to store image in SQL
         this.id = id;
-        this.imageID = image;
+        this.image = image;
         this.name = name;
         this.amount = amount;
         this.ingredients = ingredients;
     }
 
-    public void setId(int id) {
+    public void setId(int id)
+    {
         this.id = id;
     }
 
-    public void setImageID(int image) {
-        this.imageID = image;
+    public void setImage(int image)
+    {
+        this.image = image;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(int amount)
+    {
         this.amount = amount;
     }
 
-    public int getId(){
-        return id;
+    public int getId() { return id; }
+
+    public int getImage()
+    {
+        return image;
     }
 
-    public int getImageID() {
-        return imageID;
-    }
-
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public int getAmount() {
+    public int getAmount()
+    {
         return amount;
     }
 

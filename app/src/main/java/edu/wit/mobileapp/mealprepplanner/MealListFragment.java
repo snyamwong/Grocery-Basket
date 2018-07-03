@@ -140,7 +140,7 @@ public class MealListFragment extends Fragment {
         });
 
         ArrayList<Ingredient> ingredients = new ArrayList<>();
-        for(int i = 0; i <= 1; i++){
+        for(int i = 0; i <= 4; i++){
             ingredients.add(new Ingredient("Produce Ingredient " + i, i, "oz", "Produce"));
             ingredients.add(new Ingredient("Bakery Ingredient " + i+4, i+4, "oz", "Bakery"));
             ingredients.add(new Ingredient("Deli Ingredient " + i+8, i+8, "oz", "Deli"));

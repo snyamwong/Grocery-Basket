@@ -64,7 +64,7 @@ public class MealListAdapter extends BaseAdapter {
         //Change the three objects in the meals_list layout to the variables we just created
         mealName.setText(mMealsList.get(position).getName());
         mealAmount.setText("x" + Integer.toString(mMealsList.get(position).getAmount()));
-        mealPicture.setImageResource(mMealsList.get(position).getImageID());
+        mealPicture.setImageResource(mMealsList.get(position).getImage());
 
         //set tag to the ID
         //USED FOR THE TOAST PRINT DEBUGGING TO BE REMOVED LATER?
