@@ -1,10 +1,10 @@
 package edu.wit.mobileapp.mealprepplanner;
 
 import android.database.Cursor;
-import android.os.Bundle;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.os.Bundle;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity
             setFragment(shoppingListFragment);
         }
 
+
         // Event listener on nav bar click (either MealsList, or ShoppingList)
         navigationView.setOnNavigationItemSelectedListener(listener ->
         {
@@ -124,6 +125,7 @@ public class MainActivity extends AppCompatActivity
 
         });
     }
+
 
     // Sets fragment
     private void setFragment(Fragment fragment)

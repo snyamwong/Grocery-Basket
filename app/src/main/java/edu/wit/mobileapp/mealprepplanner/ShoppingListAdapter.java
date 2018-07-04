@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ShoppingListAdapter extends BaseAdapter {
 
@@ -21,6 +22,7 @@ public class ShoppingListAdapter extends BaseAdapter {
     private static final int INGREDIENT = 0;
     private static final int HEADER =1;
     private LayoutInflater inflater;
+    public HashMap<String, Integer> selected;
 
     //Sets context, Shopping List, & inflater
     public ShoppingListAdapter(Context mContext, ArrayList<Object> mIngredientList) {
@@ -71,11 +73,25 @@ public class ShoppingListAdapter extends BaseAdapter {
                 //render info based on ingredient stored values
                 name.setText(ingredient.getName());
                 amount.setText(measurement);
+
                 //needed because views are recycled after first 10
                 //basically restoring checked state
-                cb.setChecked(ingredient.isSelected());
-                setStrikeThrough(name, ingredient.isSelected());
-                setStrikeThrough(amount, ingredient.isSelected());
+
+                //false is default
+                cb.setChecked(false);
+                setStrikeThrough(name, false);
+                setStrikeThrough(amount, false);
+
+                //if marked as selected and amount is unchanged
+                if(selected.containsKey(ingredient.getName()) && selected.get(ingredient.getName()) == ingredient.getAmount()){
+                    cb.setChecked(true);
+                    setStrikeThrough(name, true);
+                    setStrikeThrough(amount, true);
+                 //marked as selected but amount has changed = remove from selected
+                }else if(selected.containsKey(ingredient.getName()) && selected.get(ingredient.getName()) != ingredient.getAmount()){
+                    selected.remove(ingredient.getName());
+                }
+
                 //attach ingredient to cb for onClick action
                 cb.setTag(ingredient);
 
@@ -95,9 +111,17 @@ public class ShoppingListAdapter extends BaseAdapter {
                         Ingredient ingredient = (Ingredient)cb.getTag();
                         Toast.makeText(mContext, "cb clicked: " + ingredient.toString(), Toast.LENGTH_SHORT).show();
                         //change ingredient set value and change text views accordingly
-                        ingredient.setSelected(cb.isChecked());
-                        setStrikeThrough(name, ingredient.isSelected());
-                        setStrikeThrough(amount, ingredient.isSelected());
+                        //if unchecked -> checked
+                        if(cb.isChecked()){
+                            selected.put(ingredient.getName(), ingredient.getAmount());
+                            setStrikeThrough(name, true);
+                            setStrikeThrough(amount, true);
+                        //if checked -> unchecked
+                        }else{
+                            selected.remove(ingredient.getName());
+                            setStrikeThrough(name, false);
+                            setStrikeThrough(amount, false);
+                        }
                     }
                 });
 
@@ -133,4 +157,5 @@ public class ShoppingListAdapter extends BaseAdapter {
     public long getItemId(int i) {
         return i;
     }
+
 }

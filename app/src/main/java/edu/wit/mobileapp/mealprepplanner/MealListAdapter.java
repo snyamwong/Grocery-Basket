@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -46,14 +47,15 @@ public class MealListAdapter extends BaseAdapter {
     /**
      * get the new view with the updated List
      * @param position = List position
-     * @param convertView = not used
+     * @param v = new view to return
      * @param parent = not used
      * @return = new view
      */
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View v, ViewGroup parent) {
         //New view based on the list layout
-        View v = View.inflate(mContext, R.layout.meals_list, null);
+        v = View.inflate(mContext, R.layout.meals_list, null);
+
         /*
             PLACEHOLDER MEAL UPDATE
          */
