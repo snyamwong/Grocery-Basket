@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -23,8 +24,12 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class ShoppingListFragment extends Fragment {
 
+    //List view
     private ListView mShoppingListView;
+
+    //Main list
     private ArrayList<Object> mShoppingList;
+    //Sub lists
     private ArrayList<Ingredient> mProduceList;
     private ArrayList<Ingredient> mBakeryList;
     private ArrayList<Ingredient> mDeliList;
@@ -34,6 +39,7 @@ public class ShoppingListFragment extends Fragment {
     private ArrayList<Ingredient> mDairyList;
     private ShoppingListAdapter adapter;
 
+    //Meal list from meal fragment
     private ArrayList<Meal> mMealsList;
 
     //Preferences for json storage
@@ -68,17 +74,27 @@ public class ShoppingListFragment extends Fragment {
 
     }
 
-    private View view;
+    //render view
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_shopping_list, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_shopping_list, container, false);
+
         adapter = new ShoppingListAdapter(getActivity().getApplicationContext(), mShoppingList); //object to update fragment
         mShoppingListView = (ListView) view.findViewById(R.id.shoppingListView);
         mShoppingListView.setAdapter(adapter);
 
         retrieveGlobalDataFromStorage();
         buildShoppingList();
+
+        //toggle empty text visibility
+        TextView emptyTxt = (TextView) view.findViewById(R.id.emptyShoppingList);
+        if(!mShoppingList.isEmpty()) {
+            emptyTxt.setVisibility(View.INVISIBLE);
+        }else {
+            emptyTxt.setVisibility(View.VISIBLE);
+        }
+
+        //Log.v("Meals Fragment", "onCreateView called");
         return view;
     }
 
@@ -91,6 +107,7 @@ public class ShoppingListFragment extends Fragment {
     }
 
     //array list -> json
+    //selected hash map ->json
     public void storeGlobalData(){
         Gson gson = new Gson();
         //Transform the ArrayLists into JSON Data.
@@ -103,6 +120,7 @@ public class ShoppingListFragment extends Fragment {
     }
 
     //json -> array list
+    //json -> selected hash map
     public void retrieveGlobalDataFromStorage(){
         Gson gson = new Gson();
         if(mPrefs.contains("mealsJSONData")){
@@ -121,9 +139,12 @@ public class ShoppingListFragment extends Fragment {
         }
     }
 
+    //take meals list and call addIngredientToSubList w/ correct parameters
     public void setShoppingList() {
+        //for each ingredient in each meal
         for(Meal meal : mMealsList){
             for(Ingredient ingredient : meal.getIngredients()){
+                //add to appropriate sub list
                 switch (ingredient.getCategory()){
                     case "Produce":
                         addIngredientToSubList(mProduceList, ingredient);
@@ -151,6 +172,7 @@ public class ShoppingListFragment extends Fragment {
         }
     }
 
+    //Add ingredient to sublist, add amounts if ingredient is already there
     private void addIngredientToSubList(ArrayList<Ingredient> list, Ingredient ingredient){
         if(list.contains(ingredient)){
             Ingredient found = list.get(list.indexOf(ingredient));
@@ -160,12 +182,13 @@ public class ShoppingListFragment extends Fragment {
         }
     }
 
-    //TODO: convert measurements to be the same as well
+    //combine listed ingredient amount with new ingredient amount
+    //TODO: convert measurements to be the same as well, might not need to
     private int combineAmounts(Ingredient i1, Ingredient i2){
         return  i1.getAmount() + i2.getAmount();
     }
 
-    //TODO take ingredient list from mealList and build based on that
+    //builds shopping list based on sublists
     private void buildShoppingList(){
         if(!mProduceList.isEmpty()){
             mShoppingList.add("Produce");

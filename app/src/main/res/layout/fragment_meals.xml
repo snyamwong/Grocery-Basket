@@ -17,6 +17,14 @@
         app:titleTextColor="@color/colorWhite"
         />
 
+    <TextView
+        android:id="@+id/emptyMealsList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="@string/emptyMealsList" />
+
     <ListView
         android:id="@+id/mealsListView"
         android:layout_width="match_parent"

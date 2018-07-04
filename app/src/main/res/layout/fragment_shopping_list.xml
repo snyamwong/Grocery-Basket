@@ -17,6 +17,14 @@
         app:titleTextColor="@color/colorWhite"
         />
 
+    <TextView
+        android:id="@+id/emptyShoppingList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="@string/emptyShoppingList" />
+
     <ListView
         android:id="@+id/shoppingListView"
         android:layout_width="match_parent"

@@ -111,10 +111,12 @@ public class ShoppingListAdapter extends BaseAdapter {
                         Ingredient ingredient = (Ingredient)cb.getTag();
                         Toast.makeText(mContext, "cb clicked: " + ingredient.toString(), Toast.LENGTH_SHORT).show();
                         //change ingredient set value and change text views accordingly
+                        //if unchecked -> checked
                         if(cb.isChecked()){
                             selected.put(ingredient.getName(), ingredient.getAmount());
                             setStrikeThrough(name, true);
                             setStrikeThrough(amount, true);
+                        //if checked -> unchecked
                         }else{
                             selected.remove(ingredient.getName());
                             setStrikeThrough(name, false);
