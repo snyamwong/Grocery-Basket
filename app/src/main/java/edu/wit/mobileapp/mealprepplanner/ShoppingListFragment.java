@@ -23,6 +23,8 @@ import java.util.HashMap;
 import static android.content.Context.MODE_PRIVATE;
 
 public class ShoppingListFragment extends Fragment {
+    //Log tag
+    private static final String TAG = "ShoppingListFragment";
 
     //List view
     private ListView mShoppingListView;
@@ -45,9 +47,6 @@ public class ShoppingListFragment extends Fragment {
     //Preferences for json storage
     public SharedPreferences mPrefs;
     public Editor preferenceEditor;
-
-    //Debug log tag
-    private final String LOGTAG = "ShoppingListFragment";
 
     public ShoppingListFragment() {
         // Required empty public constructor
