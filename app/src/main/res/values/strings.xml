@@ -10,7 +10,6 @@
 
     <string name="emptyMealsList">No Meals to Eat!</string>
     <string name="emptyShoppingList">No Shopping to Do!</string>
-    <string name="delete">DELETE</string>
 
-
+    <string name="remove">REMOVE</string>
 </resources>
