@@ -1,9 +1,12 @@
 package edu.wit.mobileapp.mealprepplanner;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import java.io.File;
@@ -11,7 +14,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
+/**
+ * A helper class for the database being used in this app.
+ *
+ * Provides an easy method to query something
+ *
+ * Make sure to open/close accordingly (i.e open during search, close during meal list/shopping list)
+ */
 public class Database extends SQLiteOpenHelper
 {
 //    private String recipeTable;
@@ -31,7 +42,8 @@ public class Database extends SQLiteOpenHelper
         this.context = context;
     }
 
-    /**
+    /*
+     * XXX
      * Creates database by copying local database to phone database
      * At the moment, since we're changing local database super often,
      * the method will assume that the phone never has a database
@@ -124,6 +136,86 @@ public class Database extends SQLiteOpenHelper
         }
 
         super.close();
+    }
+
+    /**
+     * Gets recipes given the recipe's name
+     * Then, gets recipeIngredients given the recipe's ID
+     * <p>
+     * i.e in the search activity:
+     * user types in meal name of Bagel
+     * searches for all name that have Bagel in the name
+     * searches for all ingredients for each recipe that has Bagel in the name
+     * returns an ArrayList<Recipe>, which contains all recipes with Bagel in the name
+     * <p>
+     * TODO
+     * clean up code, separate operations in the method
+     *
+     * @param userInputRecipeName
+     * @return ArrayList<Recipe>
+     */
+    public ArrayList<Recipe> getRecipes(String userInputRecipeName)
+    {
+        String[] recipeColumns = {"recipe_id, name, image, description, instruction, chef"};
+        // using LIKE clause here so the user can just request for any recipe that has just the ingredient/name
+        String where = "name LIKE ?";
+        String[] where_args = new String[]{"%" + userInputRecipeName + "%"};
+        String having = null;
+        String group_by = null;
+        String order_by = "name";
+
+        ArrayList<Recipe> recipes = new ArrayList<>();
+        Cursor cursor;
+
+        // here, queries the Recipe database for all recipes that are LIKE userInputRecipeName
+        cursor = this.getDb().query("Recipe", recipeColumns, where, where_args, group_by, having, order_by);
+        while (cursor.moveToNext())
+        {
+            Integer recipeID = cursor.getInt(cursor.getColumnIndex("recipe_id"));
+            String name = cursor.getString(cursor.getColumnIndex("name"));
+            byte[] blob = cursor.getBlob(cursor.getColumnIndex("image"));
+            String description = cursor.getString(cursor.getColumnIndex("description"));
+            String instruction = cursor.getString(cursor.getColumnIndex("instruction"));
+            String chef = cursor.getString(cursor.getColumnIndex("chef"));
+            Bitmap image = BitmapFactory.decodeByteArray(blob, 0, blob.length);
+
+            Recipe recipe = new Recipe(recipeID, name, image, description, instruction, chef);
+
+            recipes.add(recipe);
+        }
+
+        // here, queries the Recipe_Ingredient database for all the ingredients using the results of the previous query
+        for (Recipe r : recipes)
+        {
+            String[] ingredientsColumns = {"recipe_id", "recipe_name", "ingredient_name", "ingredient_category", "quantity", "unit"};
+            where = "recipe_id = ?";
+            where_args = new String[]{Integer.toString(r.getRecipeID())};
+            having = null;
+            group_by = null;
+            order_by = "recipe_name";
+
+            // cursor will move to each ingredient with the name recipeID
+            cursor = this.getDb().query("Recipe_Ingredient", ingredientsColumns, where, where_args, having, group_by, order_by);
+            while (cursor.moveToNext())
+            {
+                Integer recipeID = cursor.getInt(cursor.getColumnIndex("recipe_id"));
+                String recipeName = cursor.getString(cursor.getColumnIndex("recipe_name"));
+                String ingredientName = cursor.getString(cursor.getColumnIndex("ingredient_name"));
+                String ingredientCategory = cursor.getString(cursor.getColumnIndex("ingredient_category"));
+                Double quantity = cursor.getDouble(cursor.getColumnIndex("quantity"));
+                String unit = cursor.getString(cursor.getColumnIndex("unit"));
+
+                RecipeIngredients recipeIngredient;
+                recipeIngredient = new RecipeIngredients(recipeID, recipeName, ingredientName, ingredientCategory, quantity, unit);
+
+                r.getIngredients().add(recipeIngredient);
+            }
+        }
+
+        // XXX logging result of the recipe, delete during production / non testing
+        Log.v(LOGTAG, recipes.toString());
+
+        return recipes;
     }
 
     @Override

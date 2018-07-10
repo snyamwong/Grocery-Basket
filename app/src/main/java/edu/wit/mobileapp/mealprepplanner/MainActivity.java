@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity
             to prevent memory leak and such
         */
 
+        // XXX DELETE THIS POST PRODUCTION - ONLY HERE FOR DEMO PURPOSES
+
         // Set up database
         Database database = new Database(this);
 
@@ -67,24 +69,13 @@ public class MainActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        // XXX should clean this up by moving all of this code into the Database helper class
+        // LIKE clause ignores cases, so no need to worry about the user lacking IQ when using the app
+        database.getRecipes("baGeL");
 
-        // Little Test Query!
-        String[] columns = {"name"};
-        String where = "name = ?";
-        String[] where_args = {"BAGEL WITH CHEESE"};
-        String having = null;
-        String group_by = null;
-        String order_by = "name";
+        // close the database after not being used
+        database.close();
 
-        Cursor cursor = database.getDb().query("Recipe", columns, where, where_args, group_by, having, order_by);
-        while (cursor.moveToNext())
-        {
-            String name = cursor.getString(cursor.getColumnIndex("name"));
-            Log.v(LOGTAG, String.format("name = %s\n", name));
-        }
-
-        // XXX END OF DATABASE SAMPLE CODE
+        // END OF DEMO CODE
 
         // Set init fragment (if-else statement required as changing the portrait orientation changes onCreate / onDestroy)
         // Default fragment is the MealList (if it is null)

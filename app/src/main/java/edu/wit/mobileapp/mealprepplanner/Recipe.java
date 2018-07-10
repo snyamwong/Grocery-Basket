@@ -1,34 +1,54 @@
 package edu.wit.mobileapp.mealprepplanner;
 
+import android.graphics.Bitmap;
+
+import java.util.ArrayList;
+
 public class Recipe
 {
+    // unique ID given to each recipe
     private int recipeID;
 
+    // name of the recipe
     private String name;
 
+    // image of the recipe
+    private Bitmap image;
+
+    // text of the description
     private String description;
 
-    private String instructions;
+    // text of the instruction
+    private String instruction;
 
+    // name of the chef (credits)
+    private String chef;
+
+    // all of the ingredients in the recipe
+    private ArrayList<RecipeIngredients> ingredients;
 
     public Recipe() {}
 
-    public Recipe(int recipeID, String name, String description, String instructions)
+    public Recipe(int recipeID, String name, Bitmap image, String description, String instruction, String chef)
     {
         this.recipeID = recipeID;
         this.name = name;
+        this.image = image;
         this.description = description;
-        this.instructions = instructions;
+        this.instruction = instruction;
+        this.chef = chef;
+        // XXX this is to avoid headaches - each instances of Recipe will have automatically have an ArrayList for ingredients created
+        this.ingredients = new ArrayList<>();
     }
 
-    public String getInstructions()
+    public String getInstruction()
     {
-        return instructions;
+        return instruction;
     }
 
-    public void setInstructions(String instructions)
+    public void setInstruction(String instruction)
     {
-        this.instructions = instructions;
+        this.instruction = instruction;
     }
 
     public String getDescription()
@@ -59,5 +79,38 @@ public class Recipe
     public void setRecipeID(int recipeID)
     {
         this.recipeID = recipeID;
+    }
+
+    public ArrayList<RecipeIngredients> getIngredients()
+    {
+        return ingredients;
+    }
+
+    public void setIngredients(ArrayList<RecipeIngredients> ingredients)
+    {
+        this.ingredients = ingredients;
+    }
+
+    public String getChef()
+    {
+        return chef;
+    }
+
+    public void setChef(String chef)
+    {
+        this.chef = chef;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Recipe{" +
+                "recipeID=" + recipeID +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", instruction='" + instruction + '\'' +
+                ", chef='" + chef + '\'' +
+                ", ingredients=" + ingredients +
+                '}';
     }
 }

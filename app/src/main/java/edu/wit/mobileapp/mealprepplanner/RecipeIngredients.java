@@ -2,11 +2,13 @@ package edu.wit.mobileapp.mealprepplanner;
 
 public class RecipeIngredients
 {
-    private int recipeIngredientsID;
-
     private int recipeID;
 
-    private int ingredientID;
+    private String recipeName;
+
+    private String ingredientName;
+
+    private String ingredientCategory;
 
     private double quantity;
 
@@ -14,23 +16,14 @@ public class RecipeIngredients
 
     public RecipeIngredients() {}
 
-    public RecipeIngredients(int recipeIngredientsID, int recipeID, int ingredientID, double quantity, String unit)
+    public RecipeIngredients(int recipeID, String recipeName, String ingredientName, String ingredientCategory, double quantity, String unit)
     {
-        this.recipeIngredientsID = recipeIngredientsID;
         this.recipeID = recipeID;
-        this.ingredientID = ingredientID;
+        this.recipeName = recipeName;
+        this.ingredientName = ingredientName;
+        this.ingredientCategory = ingredientCategory;
         this.quantity = quantity;
         this.unit = unit;
-    }
-
-    public int getRecipeIngredientsID()
-    {
-        return recipeIngredientsID;
-    }
-
-    public void setRecipeIngredientsID(int recipeIngredientsID)
-    {
-        this.recipeIngredientsID = recipeIngredientsID;
     }
 
     public int getRecipeID()
@@ -43,14 +36,34 @@ public class RecipeIngredients
         this.recipeID = recipeID;
     }
 
-    public int getIngredientID()
+    public String getRecipeName()
     {
-        return ingredientID;
+        return recipeName;
     }
 
-    public void setIngredientID(int ingredientID)
+    public void setRecipeName(String recipeName)
     {
-        this.ingredientID = ingredientID;
+        this.recipeName = recipeName;
+    }
+
+    public String getIngredientName()
+    {
+        return ingredientName;
+    }
+
+    public void setIngredientName(String ingredientName)
+    {
+        this.ingredientName = ingredientName;
+    }
+
+    public String getIngredientCategory()
+    {
+        return ingredientCategory;
+    }
+
+    public void setIngredientCategory(String ingredientCategory)
+    {
+        this.ingredientCategory = ingredientCategory;
     }
 
     public double getQuantity()
@@ -71,5 +84,16 @@ public class RecipeIngredients
     public void setUnit(String unit)
     {
         this.unit = unit;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "RecipeIngredients{" +
+                ", ingredientName='" + ingredientName + '\'' +
+                ", ingredientCategory='" + ingredientCategory + '\'' +
+                ", quantity=" + quantity +
+                ", unit='" + unit + '\'' +
+                '}';
     }
 }
