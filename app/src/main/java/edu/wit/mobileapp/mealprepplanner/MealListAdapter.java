@@ -96,4 +96,10 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         // notify item added by position
         notifyItemInserted(position);
     }
+
+    public void updateList(List<Meal> list) {
+        mealsList = list;
+        notifyDataSetChanged();
+    }
+
 }
