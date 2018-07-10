@@ -24,20 +24,23 @@
         android:id="@+id/searchInput"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_below="@+id/searchTopBar"
         android:drawableStart="@drawable/ic_search_black_24dp"
         android:hint="@string/search_hint"
-        android:singleLine="true">
-    </EditText>
+        android:textSize="10pt"
+        android:singleLine="true"
+        android:inputType="textVisiblePassword"/>
 
-    <ListView
+
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/searchListView"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/searchInput"
-        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/searchInput"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
         android:dividerHeight="10dp"
         android:divider="#d1d1d1"/>
-
 </RelativeLayout>

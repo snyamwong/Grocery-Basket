@@ -1,13 +1,20 @@
 package edu.wit.mobileapp.mealprepplanner;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -16,61 +23,77 @@ import java.util.ArrayList;
  * @author: Jason Fagerberg
  */
 
+public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHolder>{
+    private static final String TAG = "MealListAdapter";
 
-public class MealListAdapter extends BaseAdapter {
-
-    //activity and corresponding list
+    //vars
+    private List<Meal> mealsList;
     private Context mContext;
-    private ArrayList<Meal> mMealsList;
 
-    public MealListAdapter(Context mContext, ArrayList<Meal> mMeals) {
+    public MealListAdapter(Context mContext, ArrayList<Meal> mealsList) {
+        this.mealsList = mealsList;
         this.mContext = mContext;
-        this.mMealsList = mMeals;
+    }
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(mContext);
+        View view = inflater.inflate(R.layout.meals_list, null);
+        return new ViewHolder(view);
     }
 
     @Override
-    public int getCount() {
-        return mMealsList.size();
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Meal meal = mealsList.get(position);
+        holder.image.setImageResource(meal.getImage());
+        holder.name.setText(meal.getName());
+        String amount = "x" + Integer.toString(meal.getAmount());
+        holder.amount.setText(amount);
+
+        holder.foreground.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Meal meal = mealsList.get(holder.getAdapterPosition());
+                Toast.makeText(mContext, "Clicked Meal:    " + meal.getName() + " x" + meal.getAmount(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
-    public Object getItem(int position) {
-        return mMealsList.get(position);
+    public int getItemCount() {
+        return mealsList.size();
     }
 
-    @Override
-    public long getItemId(int position) {
-        return position;
+    //ViewHolder
+    public class ViewHolder extends RecyclerView.ViewHolder{
+
+        ImageView image;
+        TextView name, amount;
+        RelativeLayout foreground, background;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            image = itemView.findViewById(R.id.meal_picture);
+            name = itemView.findViewById(R.id.meal_name);
+            amount = itemView.findViewById(R.id.meal_amount);
+
+            foreground = itemView.findViewById(R.id.view_foreground);
+            background= itemView.findViewById(R.id.view_background);
+        }
     }
 
-    /**
-     * get the new view with the updated List
-     * @param position = List position
-     * @param convertView = not used
-     * @param parent = not used
-     * @return = new view
-     */
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        //New view based on the list layout
-        View v = View.inflate(mContext, R.layout.meals_list, null);
-        /*
-            PLACEHOLDER MEAL UPDATE
-         */
-        TextView mealName = (TextView) v.findViewById(R.id.meal_name);
-        TextView mealAmount = (TextView) v.findViewById(R.id.meal_amount);
-        ImageView mealPicture = (ImageView) v.findViewById(R.id.meal_picture);
+    public void removeItem(int position) {
+        mealsList.remove(position);
+        // notify the item removed by position
+        // to perform recycler view delete animations
+        // NOTE: don't call notifyDataSetChanged()
+        notifyItemRemoved(position);
+    }
 
-        //Change the three objects in the meals_list layout to the variables we just created
-        mealName.setText(mMealsList.get(position).getName());
-        mealAmount.setText("x" + Integer.toString(mMealsList.get(position).getAmount()));
-        mealPicture.setImageResource(mMealsList.get(position).getImageID());
-
-        //set tag to the ID
-        //USED FOR THE TOAST PRINT DEBUGGING TO BE REMOVED LATER?
-        v.setTag(mMealsList.get(position).getId());
-
-        //Return new view
-        return v;
+    public void restoreItem(Meal item, int position) {
+        mealsList.add(position, item);
+        // notify item added by position
+        notifyItemInserted(position);
     }
 }

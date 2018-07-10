@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity
             setFragment(shoppingListFragment);
         }
 
+
         // Event listener on nav bar click (either MealsList, or ShoppingList)
         navigationView.setOnNavigationItemSelectedListener(listener ->
         {
@@ -69,6 +70,7 @@ public class MainActivity extends AppCompatActivity
 
         });
     }
+
 
     // Sets fragment
     private void setFragment(Fragment fragment)

@@ -2,24 +2,27 @@ package edu.wit.mobileapp.mealprepplanner;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.ListView;
 
+
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 public class SearchActivity extends AppCompatActivity{
 
     private ArrayList<Meal> mMealsList;
     private  MealListAdapter adapter;
-    private ListView listView;
+    private RecyclerView listView;
     private EditText search;
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
@@ -29,20 +32,14 @@ public class SearchActivity extends AppCompatActivity{
         //Generate sample data
         if(mMealsList == null) {
             mMealsList = new ArrayList<>();
+            ArrayList<Ingredient> ingredients = new ArrayList<>();
 
-            mMealsList.add(new Meal(1, R.drawable.food, "Chicken", 1));
-            mMealsList.add(new Meal(2, R.drawable.food, "Pizza", 1));
-            mMealsList.add(new Meal(3, R.drawable.food, "Steak", 1));
-            mMealsList.add(new Meal(4, R.drawable.food, "Pasta", 1));
-            mMealsList.add(new Meal(5, R.drawable.food, "Tacos", 1));
-            mMealsList.add(new Meal(1, R.drawable.food, "Chicken", 1));
-            mMealsList.add(new Meal(2, R.drawable.food, "Pizza", 1));
-            mMealsList.add(new Meal(3, R.drawable.food, "Steak", 1));
-            mMealsList.add(new Meal(4, R.drawable.food, "Pasta", 1));
-            mMealsList.add(new Meal(5, R.drawable.food, "Tacos", 1));
+            int rand = (int) (Math.random()*100);
+            Meal toAdd = new Meal(rand, R.drawable.food, "Generic Meal #" + Integer.toString(rand), 1,ingredients);
+            mMealsList.add(toAdd);
         }
 
-        listView = (ListView)findViewById(R.id.searchListView);
+        listView = (RecyclerView) findViewById(R.id.searchListView);
         adapter = new MealListAdapter(this, mMealsList);
 
         listView.setAdapter(adapter);
