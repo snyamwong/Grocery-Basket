@@ -37,9 +37,10 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/padd_10"
             android:layout_toStartOf="@id/delete_icon"
-            android:text="@string/delete"
+            android:text="@string/remove"
             android:textColor="#fff"
-            android:textSize="13sp" />
+            android:textSize="17sp"
+            android:textStyle="bold"/>
 
     </RelativeLayout>
 
