@@ -12,12 +12,14 @@ import android.widget.EditText;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class SearchActivity extends AppCompatActivity {
 
     private ArrayList<Meal> mMealsList;
     private  MealListAdapter adapter;
     private RecyclerView listView;
     private EditText searchField;
+
 
 
     @Override

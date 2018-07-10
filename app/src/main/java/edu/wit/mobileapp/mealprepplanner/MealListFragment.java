@@ -53,7 +53,6 @@ import com.google.gson.reflect.TypeToken;
 public class MealListFragment extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
     //Debug log tag
     private static final String LOGTAG = "MealsListFragment";
-
     Activity context;
 
     //Objects in fragment
@@ -163,6 +162,7 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
                 //TODO remove when search and add is working
                 TextView emptyTxt = (TextView) getActivity().findViewById(R.id.emptyMealsList);
                 emptyTxt.setVisibility(View.INVISIBLE);
+
 
             }
         });

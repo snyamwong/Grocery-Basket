@@ -81,6 +81,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             foreground = itemView.findViewById(R.id.view_foreground);
             background= itemView.findViewById(R.id.view_background);
         }
+
     }
 
     public void removeItem(int position) {
