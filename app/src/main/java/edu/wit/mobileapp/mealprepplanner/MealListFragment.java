@@ -139,7 +139,6 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
         }
 
         //Add button Setup
-        //TODO: make button navigate to search activity
         FloatingActionButton btnAdd = (FloatingActionButton) view.findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,16 +147,16 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
                 //navigates to search activity
                 Intent intent = new Intent(context, SearchActivity.class);
 
+                startActivity(intent);
+
+
                 //Placeholder Action to add placeholder meal
                 int rand = (int) (Math.random()*100);
                 Meal toAdd = new Meal(rand, R.drawable.food, "Generic Meal #" + Integer.toString(rand), 1,ingredients);
                 mMealsList.add(toAdd);
+
                 mealListView.setAdapter(adapter);
                 mealListView.getLayoutManager().scrollToPosition(mMealsList.size() - 1); //Nav to end of list
-                Toast.makeText(getActivity().getApplicationContext(), "Placeholder Food added", Toast.LENGTH_SHORT).show();
-
-
-                startActivity(intent);
 
                 //TODO remove when search and add is working
                 TextView emptyTxt = (TextView) getActivity().findViewById(R.id.emptyMealsList);
