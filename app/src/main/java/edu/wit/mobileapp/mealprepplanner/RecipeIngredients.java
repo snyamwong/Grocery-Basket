@@ -36,17 +36,35 @@ public class RecipeIngredients
         this.recipeID = recipeID;
     }
 
-    public String getRecipeName() { return recipeName; }
+    public String getRecipeName()
+    {
+        return recipeName;
+    }
 
-    public void setRecipeName(String recipeName) { this.recipeName = recipeName; }
+    public void setRecipeName(String recipeName)
+    {
+        this.recipeName = recipeName;
+    }
 
-    public String getIngredientName() { return ingredientName; }
+    public String getIngredientName()
+    {
+        return ingredientName;
+    }
 
-    public void setIngredientName(String ingredientName) { this.ingredientName = ingredientName; }
+    public void setIngredientName(String ingredientName)
+    {
+        this.ingredientName = ingredientName;
+    }
 
-    public String getIngredientCategory() { return ingredientCategory; }
+    public String getIngredientCategory()
+    {
+        return ingredientCategory;
+    }
 
-    public void setIngredientCategory(String ingredientCategory) { this.ingredientCategory = ingredientCategory; }
+    public void setIngredientCategory(String ingredientCategory)
+    {
+        this.ingredientCategory = ingredientCategory;
+    }
 
     public double getQuantity()
     {
@@ -66,5 +84,16 @@ public class RecipeIngredients
     public void setUnit(String unit)
     {
         this.unit = unit;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "RecipeIngredients{" +
+                ", ingredientName='" + ingredientName + '\'' +
+                ", ingredientCategory='" + ingredientCategory + '\'' +
+                ", quantity=" + quantity +
+                ", unit='" + unit + '\'' +
+                '}';
     }
 }

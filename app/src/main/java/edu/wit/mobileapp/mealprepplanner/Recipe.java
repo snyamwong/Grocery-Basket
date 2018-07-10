@@ -100,4 +100,17 @@ public class Recipe
     {
         this.chef = chef;
     }
+
+    @Override
+    public String toString()
+    {
+        return "Recipe{" +
+                "recipeID=" + recipeID +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", instruction='" + instruction + '\'' +
+                ", chef='" + chef + '\'' +
+                ", ingredients=" + ingredients +
+                '}';
+    }
 }

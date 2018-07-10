@@ -16,6 +16,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
+/**
+ * A helper class for the database being used in this app.
+ *
+ * Provides an easy method to query something
+ *
+ * Make sure to open/close accordingly (i.e open during search, close during meal list/shopping list)
+ */
 public class Database extends SQLiteOpenHelper
 {
 //    private String recipeTable;
@@ -35,7 +42,8 @@ public class Database extends SQLiteOpenHelper
         this.context = context;
     }
 
-    /**
+    /*
+     * XXX
      * Creates database by copying local database to phone database
      * At the moment, since we're changing local database super often,
      * the method will assume that the phone never has a database
@@ -148,11 +156,12 @@ public class Database extends SQLiteOpenHelper
      */
     public ArrayList<Recipe> getRecipes(String userInputRecipeName)
     {
-        String[] recipeColumns = {"recipeID, name, image, description, instruction, chef"};
+        String[] recipeColumns = {"recipe_id, name, image, description, instruction, chef"};
+        // using LIKE clause here so the user can just request for any recipe that has just the ingredient/name
         String where = "name LIKE ?";
-        String[] where_args = new String[]{userInputRecipeName};
+        String[] where_args = new String[]{"%" + userInputRecipeName + "%"};
         String having = null;
-        String group_by = "name";
+        String group_by = null;
         String order_by = "name";
 
         ArrayList<Recipe> recipes = new ArrayList<>();
@@ -171,21 +180,22 @@ public class Database extends SQLiteOpenHelper
             Bitmap image = BitmapFactory.decodeByteArray(blob, 0, blob.length);
 
             Recipe recipe = new Recipe(recipeID, name, image, description, instruction, chef);
+
             recipes.add(recipe);
         }
 
         // here, queries the Recipe_Ingredient database for all the ingredients using the results of the previous query
         for (Recipe r : recipes)
         {
-            String[] ingredientsColumns = {"recipeID", "recipe_name", "ingredient_name", "ingredient_category", "quantity", "unit"};
-            where = "recipeID = ?";
+            String[] ingredientsColumns = {"recipe_id", "recipe_name", "ingredient_name", "ingredient_category", "quantity", "unit"};
+            where = "recipe_id = ?";
             where_args = new String[]{Integer.toString(r.getRecipeID())};
             having = null;
-            group_by = "recipe_name";
+            group_by = null;
             order_by = "recipe_name";
 
             // cursor will move to each ingredient with the name recipeID
-            cursor = this.getDb().query("Recipe_Ingredients", ingredientsColumns, where, where_args, having, group_by, order_by);
+            cursor = this.getDb().query("Recipe_Ingredient", ingredientsColumns, where, where_args, having, group_by, order_by);
             while (cursor.moveToNext())
             {
                 Integer recipeID = cursor.getInt(cursor.getColumnIndex("recipe_id"));
@@ -201,6 +211,9 @@ public class Database extends SQLiteOpenHelper
                 r.getIngredients().add(recipeIngredient);
             }
         }
+
+        // XXX logging result of the recipe, delete during production / non testing
+        Log.v(LOGTAG, recipes.toString());
 
         return recipes;
     }
