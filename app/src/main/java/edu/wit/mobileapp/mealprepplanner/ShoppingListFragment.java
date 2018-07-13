@@ -2,6 +2,7 @@ package edu.wit.mobileapp.mealprepplanner;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -103,6 +104,16 @@ public class ShoppingListFragment extends Fragment {
         super.onPause();
         storeGlobalData();
         //Log.v(LOGTAG, "onPause.....finished");
+    }
+
+    @Override
+    public void onStart() {
+        MainActivity main = (MainActivity)getActivity();
+        BottomNavigationView bot = main.findViewById(R.id.main_nav);
+        bot.setVisibility(View.VISIBLE);
+        bot.setSelectedItemId(R.id.nav_shopping_list);
+        super.onStart();
+        Log.v(TAG, "onStart.....finished");
     }
 
     //array list -> json

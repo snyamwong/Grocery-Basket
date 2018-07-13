@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -82,7 +84,7 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
         retrieveGlobalDataFromStorage();
         adapter = new MealListAdapter(getActivity().getApplicationContext(), mMealsList); //object to update fragment
 
-        //Log.v(LOGTAG, "onCreate.....finished");
+        Log.v(LOGTAG, "onCreate.....finished");
     }
 
     //build view
@@ -145,22 +147,24 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
             public void onClick(View view) {
 
                 //navigates to search activity
-                Intent intent = new Intent(context, SearchActivity.class);
-
-                startActivity(intent);
-
+//                Intent intent = new Intent(context, SearchActivity.class);
+//
+//                startActivity(intent);
+                MainActivity main = (MainActivity)getActivity();
+                Fragment searchFragment = new SearchFragment();
+                main.setFragment(searchFragment);
 
                 //Placeholder Action to add placeholder meal
-                int rand = (int) (Math.random()*100);
-                Meal toAdd = new Meal(rand, R.drawable.food, "Generic Meal #" + Integer.toString(rand), 1,ingredients);
-                mMealsList.add(toAdd);
-
-                mealListView.setAdapter(adapter);
-                mealListView.getLayoutManager().scrollToPosition(mMealsList.size() - 1); //Nav to end of list
-
-                //TODO remove when search and add is working
-                TextView emptyTxt = (TextView) getActivity().findViewById(R.id.emptyMealsList);
-                emptyTxt.setVisibility(View.INVISIBLE);
+//                int rand = (int) (Math.random()*100);
+//                Meal toAdd = new Meal(rand, R.drawable.food, "Generic Meal #" + Integer.toString(rand), 1,ingredients);
+//                mMealsList.add(toAdd);
+//
+//                mealListView.setAdapter(adapter);
+//                mealListView.getLayoutManager().scrollToPosition(mMealsList.size() - 1); //Nav to end of list
+//
+//                //TODO remove when search and add is working
+//                TextView emptyTxt = (TextView) getActivity().findViewById(R.id.emptyMealsList);
+//                emptyTxt.setVisibility(View.INVISIBLE);
 
 
             }
@@ -169,6 +173,16 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
         //toggle empty text visibility
         toggleEmptyTextVisibility();
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        MainActivity main = (MainActivity)getActivity();
+        BottomNavigationView bot = main.findViewById(R.id.main_nav);
+        bot.setVisibility(View.VISIBLE);
+        bot.setSelectedItemId(R.id.nav_meals);
+        super.onStart();
+        Log.v(LOGTAG, "onStart.....finished");
     }
 
     //Create menu where delete button sits

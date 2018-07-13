@@ -1,7 +1,7 @@
 package edu.wit.mobileapp.mealprepplanner;
 
-import android.database.Cursor;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity
     // Both fragments (MealListFragment,
     private MealListFragment mealListFragment;
     private ShoppingListFragment shoppingListFragment;
+    private SearchFragment searchFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -33,6 +34,8 @@ public class MainActivity extends AppCompatActivity
         //init both fragments
         mealListFragment = new MealListFragment();
         shoppingListFragment = new ShoppingListFragment();
+        searchFragment = new SearchFragment();
+
 
         // XXX START - database sample code
 
@@ -99,32 +102,39 @@ public class MainActivity extends AppCompatActivity
         // Event listener on nav bar click (either MealsList, or ShoppingList)
         navigationView.setOnNavigationItemSelectedListener(listener ->
         {
-
-            switch (listener.getItemId())
-            {
-                case R.id.nav_meals:
-                    setFragment(mealListFragment);
-                    return true;
-
-                case R.id.nav_shopping_list:
-                    setFragment(shoppingListFragment);
-                    return true;
-
-                default:
-                    return false;
+            if(listener.getItemId() == R.id.nav_meals && !mealListFragment.isVisible()){
+                setFragment(mealListFragment);
+                return true;
+            }else if (listener.getItemId() == R.id.nav_shopping_list && !shoppingListFragment.isVisible()){
+                setFragment(shoppingListFragment);
+                return true;
             }
-
+            return true;
         });
     }
 
-
     // Sets fragment
-    private void setFragment(Fragment fragment)
+    public void setFragment(Fragment fragment)
     {
         MealPrepPlannerApplication.setMainActivityFragment(fragment);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_frame, fragment);
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
+    @Override
+    public void onBackPressed() {
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+
+        if (count == 1) {
+            Log.v(LOGTAG,"onBackPressed......Called       COUNT = " + count);
+            this.finishAffinity();
+        } else {
+            Log.v(LOGTAG,"onBackPressed......Called       COUNT = " + count);
+            getSupportFragmentManager().popBackStack();
+        }
+    }
+
 }
