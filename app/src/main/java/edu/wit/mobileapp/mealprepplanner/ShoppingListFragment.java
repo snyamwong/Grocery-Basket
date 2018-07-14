@@ -101,15 +101,6 @@ public class ShoppingListFragment extends Fragment {
         return view;
     }
 
-    //save array list
-    @Override
-    public void onPause() {
-        super.onPause();
-        storeGlobalData();
-        adapter.storeGlobalData();
-        //Log.v(LOGTAG, "onPause.....finished");
-    }
-
     @Override
     public void onStart() {
         MainActivity main = (MainActivity)getActivity();
@@ -120,27 +111,13 @@ public class ShoppingListFragment extends Fragment {
         Log.v(TAG, "onStart.....finished");
     }
 
-    //array list -> json
-    //selected hash map ->json
-    public void storeGlobalData(){
-        Gson gson = new Gson();
-        //Transform the ArrayLists into JSON Data.
-        String mealsJSON = gson.toJson(mMealsList);
-        preferenceEditor.putString("mealsJSONData", mealsJSON);
-        //Commit the changes.
-        preferenceEditor.commit();
-    }
 
     //json -> array list
-    //json -> selected hash map
     public void retrieveGlobalDataFromStorage(){
-        Gson gson = new Gson();
-        if(mPrefs.contains("mealsJSONData")){
-            String mealsJSON = mPrefs.getString("mealsJSONData", "");
-            Type mealType = new TypeToken<Collection<Meal>>() {}.getType();
-            mMealsList = gson.fromJson(mealsJSON, mealType);
-            setShoppingList();
-        }
+        MainActivity main = (MainActivity)getActivity();
+        mMealsList = main.mMealsList;
+        setShoppingList();
+
     }
 
     //take meals list and call addIngredientToSubList w/ correct parameters

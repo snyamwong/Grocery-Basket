@@ -73,12 +73,11 @@ public class SearchFragment extends Fragment {
         if(mSearchList == null) {
             mSearchList = new ArrayList<>();
             for(int i = 0; i < 25; i++) {
-                int rand = (int) (Math.random()*100);
+                //int rand = (int) (Math.random()*100);
+                int rand = i;
                 mSearchList.add(new Meal(i, R.drawable.food, "Generic Meal #" + Integer.toString(rand), 1, ingredients));
             }
         }
-
-        adapter = new SearchListAdapter(this, mSearchList);
     }
 
     @Nullable
@@ -87,14 +86,17 @@ public class SearchFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         searchField = (EditText) view.findViewById(R.id.searchInput);
-        adapter = new SearchListAdapter(this, mSearchList);
 
         listView = view.findViewById(R.id.searchListView);
         listView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        retrieveGlobalDataFromStorage();
+
+        adapter = new SearchListAdapter(getContext(), mSearchList);
+
         listView.setAdapter(adapter);
 
-        retrieveGlobalDataFromStorage();
+
 
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.searchTopBar);
@@ -109,6 +111,7 @@ public class SearchFragment extends Fragment {
                 onBackPressed();
             }
         });
+
 
 
         searchField.addTextChangedListener(new TextWatcher() {
@@ -130,31 +133,10 @@ public class SearchFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        storeGlobalData();
-        Log.v(TAG, "OnPause........finished");
-    }
-
-    //array list -> json
-    public void storeGlobalData(){
-        Gson gson = new Gson();
-        //Transform the ArrayLists into JSON Data.
-        String mealsJSON = gson.toJson(mMealsList);
-        preferenceEditor.putString("mealsJSONData", mealsJSON);
-        //Commit the changes.
-        preferenceEditor.commit();
-    }
-
     //json -> array list
     public void retrieveGlobalDataFromStorage(){
-        Gson gson = new Gson();
-        if(mPrefs.contains("mealsJSONData")){
-            String mealsJSON = mPrefs.getString("mealsJSONData", "");
-            Type mealType = new TypeToken<Collection<Meal>>() {}.getType();
-            mMealsList = gson.fromJson(mealsJSON, mealType);
-        }
+        MainActivity main = ((MainActivity)(getActivity()));
+        mMealsList = main.mMealsList;
     }
 
     @Override

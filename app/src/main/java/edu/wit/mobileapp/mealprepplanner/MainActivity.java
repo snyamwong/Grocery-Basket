@@ -1,5 +1,6 @@
 package edu.wit.mobileapp.mealprepplanner;
 
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -8,11 +9,22 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity
 {
     private final String LOGTAG = "MYAPP";
+
+    //global lists
+    public ArrayList<Meal> mMealsList;
+    public HashMap<String, Integer> mSelectedIngredients;
 
     //class vars for nav bar and frame
     private BottomNavigationView navigationView;
@@ -22,11 +34,23 @@ public class MainActivity extends AppCompatActivity
     private ShoppingListFragment shoppingListFragment;
     private SearchFragment searchFragment;
 
+    //Preferences for json storage
+    public SharedPreferences mPrefs;
+    public SharedPreferences.Editor preferenceEditor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //set preferences
+        mPrefs = getPreferences(MODE_PRIVATE);
+        preferenceEditor = mPrefs.edit();
+
+        //Get global lists
+        retrieveGlobalDataFromStorage();
+
 
         //init nav bar and frame
         navigationView = findViewById(R.id.main_nav);
@@ -53,7 +77,7 @@ public class MainActivity extends AppCompatActivity
 
             onPause() - db.close
             onResume() - db.open
-            
+
             to prevent memory leak and such
         */
 
@@ -113,15 +137,59 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    @Override
+    protected void onPause() {
+        storeGlobalData();
+        super.onPause();
+    }
+
     // Sets fragment
     public void setFragment(Fragment fragment)
     {
+        if (fragment == null){
+            fragment = searchFragment;
+        }
         MealPrepPlannerApplication.setMainActivityFragment(fragment);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_frame, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    //meal list -> json
+    //Selected Items -> json
+    public void storeGlobalData(){
+        Gson gson = new Gson();
+        //Transform the ArrayLists into JSON Data.
+        String mealsJSON = gson.toJson(mMealsList);
+        preferenceEditor.putString("mealsJSONData", mealsJSON);
+
+        //selected ==> jason
+        String selectedJSON = gson.toJson(mSelectedIngredients);
+        preferenceEditor.putString("selectedJSONData", selectedJSON);
+
+        //Commit the changes.
+        preferenceEditor.commit();
+    }
+
+    //json -> array list
+    //json -> selected items
+    public void retrieveGlobalDataFromStorage(){
+        Gson gson = new Gson();
+        if(mPrefs.contains("mealsJSONData")){
+            String mealsJSON = mPrefs.getString("mealsJSONData", "");
+            Type mealType = new TypeToken<Collection<Meal>>() {}.getType();
+            mMealsList = gson.fromJson(mealsJSON, mealType);
+        }else {
+            mMealsList = new ArrayList<>();
+        }
+
+        if(mPrefs.contains("selectedJSONData")){
+            String selectedJSON = mPrefs.getString("selectedJSONData", "");
+            Type selectedType = new TypeToken<HashMap<String, Integer>>() {}.getType();
+            mSelectedIngredients = gson.fromJson(selectedJSON, selectedType);
+        }
     }
 
     @Override

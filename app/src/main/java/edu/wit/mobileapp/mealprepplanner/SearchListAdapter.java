@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -26,13 +27,15 @@ import static android.content.Context.MODE_PRIVATE;
 public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.ViewHolder>{
     //vars
     private List<Meal> searchList;
+    private ArrayList<Meal> mMealsList;
     private Context mContext;
-    private SearchFragment fragment;
 
-    public SearchListAdapter(SearchFragment fragment, List<Meal> searchList) {
+
+
+    public SearchListAdapter(Context mContext, List<Meal> searchList) {
         this.searchList = searchList;
-        this.mContext = fragment.getContext();
-        this.fragment = fragment;
+        this.mContext = mContext;
+        retrieveGlobalDataFromStorage();
     }
 
     @NonNull
@@ -49,15 +52,25 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
         holder.image.setImageResource(meal.getImage());
         holder.name.setText(meal.getName());
 
+        holder.foreground.setBackgroundColor(Color.WHITE);
+
         holder.foreground.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Meal meal = searchList.get(holder.getAdapterPosition());
-                fragment.addMealToGlobalList(meal);
-                Toast.makeText(mContext, "Meal:" + meal.getName() + " added to meal list", Toast.LENGTH_LONG).show();
-                holder.foreground.setBackgroundColor(Color.GREEN);
+                if(!mMealsList.contains(meal)){
+                    Toast.makeText(mContext, "Meal:" + meal.getName() + " added to meal list", Toast.LENGTH_LONG).show();
+                    holder.foreground.setBackgroundColor(Color.GREEN);
+                    mMealsList.add(meal);
+                }
             }
         });
+
+        if(mMealsList.contains(meal)){
+            holder.foreground.setBackgroundColor(Color.GREEN);
+        }else{
+            holder.foreground.setBackgroundColor(Color.WHITE);
+        }
     }
 
     @Override
@@ -79,6 +92,13 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
 
             foreground = itemView.findViewById(R.id.view_foreground);
         }
+    }
+
+    //json -> array list
+    //json -> selected hash map
+    public void retrieveGlobalDataFromStorage(){
+        MainActivity main = ((MainActivity)(mContext));
+        mMealsList = main.mMealsList;
     }
 
     public void updateList(List<Meal> list) {

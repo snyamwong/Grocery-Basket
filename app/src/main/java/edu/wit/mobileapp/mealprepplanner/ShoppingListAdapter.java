@@ -69,7 +69,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
     @Override
     public ShoppingListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        Log.v(TAG, "onCreateViewHolder called....... viewType = " + viewType);
+        //Log.v(TAG, "onCreateViewHolder called....... viewType = " + viewType);
         View view = null;
         switch (viewType){
             case INGREDIENT:
@@ -112,7 +112,6 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
                     setStrikeThrough(holder.ingredientName, false);
                     setStrikeThrough(holder.ingredientAmount, false);
                     selected.remove(ingredient.getName());
-                    //storeGlobalData();
                 }
 
                 holder.cb.setOnClickListener(new View.OnClickListener() {
@@ -139,10 +138,11 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
                             selected.remove(ingredient.getName());
                             setStrikeThrough(name, false);
                             setStrikeThrough(amount, false);
+                            storeGlobalDataFromStorage();
                         }
-                        //storeGlobalData();
                     }
                 });
+                storeGlobalDataFromStorage();
                 break;
             case HEADER:
                 String header = (String) mShoppingList.get(position);
@@ -151,25 +151,17 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         }
     }
 
-    //selected hash map ->json
-    public void storeGlobalData(){
-        Gson gson = new Gson();
-        //Transform the ArrayLists into JSON Data.
-        String selectedJSON = gson.toJson(selected);
-        preferenceEditor.putString("selectedJSONData", selectedJSON);
-        //Commit the changes.
-        preferenceEditor.commit();
+
+    public void storeGlobalDataFromStorage(){
+        MainActivity main = ((MainActivity)(mContext));
+        main.mSelectedIngredients = selected;
     }
 
-    //json -> array list
     //json -> selected hash map
     public void retrieveGlobalDataFromStorage(){
-        Gson gson = new Gson();
-        if(mPrefs.contains("selectedJSONData")){
-            String selectedJSON = mPrefs.getString("selectedJSONData", "");
-            Type selectedType = new TypeToken<HashMap<String, Integer>>() {}.getType();
-            selected = gson.fromJson(selectedJSON, selectedType);
-        }
+        MainActivity main = ((MainActivity)(mContext));
+        selected = main.mSelectedIngredients;
+        Log.v(TAG, "Retrieve selected finished");
     }
 
     //strike through a text view if true un-strike through if false

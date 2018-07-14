@@ -117,26 +117,13 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, MealListFragment.this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(mealListView);
 
-        ArrayList<Ingredient> ingredients = new ArrayList<>();
-        int n = 2;
-        for(int i = 0; i < n; i++){
-            ingredients.add(new Ingredient("Produce Ingredient " + i, i, "oz", "Produce"));
-            ingredients.add(new Ingredient("Bakery Ingredient " + (i+n), (i+n), "oz", "Bakery"));
-            ingredients.add(new Ingredient("Deli Ingredient " + (i+n*2), (i+n*2), "oz", "Deli"));
-            ingredients.add(new Ingredient("Meat Ingredient " + (i+n*3), (i+n*3), "oz", "Meat"));
-            ingredients.add(new Ingredient("Seafood Ingredient " + (i+n*4), (i+n*4), "oz", "Seafood"));
-            ingredients.add(new Ingredient("Grocery Ingredient " + (i+n*5), (i+n*5), "oz", "Grocery"));
-            ingredients.add(new Ingredient("Dairy Ingredient " + (i+n*6), (i+n*6), "oz", "Dairy"));
-        }
-
         //Add button Setup
         FloatingActionButton btnAdd = (FloatingActionButton) view.findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 MainActivity main = (MainActivity)getActivity();
-                Fragment searchFragment = new SearchFragment();
-                main.setFragment(searchFragment);
+                main.setFragment(null);
             }
         });
 
@@ -195,12 +182,8 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
                             mealListView.getLayoutManager().scrollToPosition(mMealsList.size() - 1); //Nav to end of list
 
                             //Clear selected options
-                            Gson gson = new Gson();
-                            //Transform the ArrayLists into JSON Data.
-                            String selectedJSON = gson.toJson(new HashMap<String,Integer>());
-                            preferenceEditor.putString("selectedJSONData", selectedJSON);
-                            //Commit the changes.
-                            preferenceEditor.commit();
+                            MainActivity main = (MainActivity)getActivity();
+                            main.mSelectedIngredients.clear();
 
                             //toggle empty text visibility
                             TextView emptyTxt = (TextView) getActivity().findViewById(R.id.emptyMealsList);
@@ -224,35 +207,23 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
         return true;
     }
 
-    //save array list
     @Override
     public void onPause() {
+        storeGlobalDataFromStorage();
         super.onPause();
-        storeGlobalData();
-        //Log.v(LOGTAG, "onPause.....finished");
     }
 
-    //array list -> json
-    public void storeGlobalData(){
-        Gson gson = new Gson();
-        //Transform the ArrayLists into JSON Data.
-        String mealsJSON = gson.toJson(mMealsList);
-        preferenceEditor.putString("mealsJSONData", mealsJSON);
-        //Commit the changes.
-        preferenceEditor.commit();
+    public void storeGlobalDataFromStorage(){
+        MainActivity main = ((MainActivity)(getActivity()));
+        main.mMealsList = mMealsList;
     }
 
     //json -> array list
     public void retrieveGlobalDataFromStorage(){
-        if(mPrefs.contains("mealsJSONData")){
-            Gson gson = new Gson();
-            String mealsJSON = mPrefs.getString("mealsJSONData", "");
-            Type mealType = new TypeToken<Collection<Meal>>() {}.getType();
-            mMealsList = gson.fromJson(mealsJSON, mealType);
-        }else {
-            mMealsList = new ArrayList<>();
-        }
+        MainActivity main = ((MainActivity)(getActivity()));
+        mMealsList = main.mMealsList;
     }
+
 
     private void toggleEmptyTextVisibility(){
         //toggle empty text visibility
