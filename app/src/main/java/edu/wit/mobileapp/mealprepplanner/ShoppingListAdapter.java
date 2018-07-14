@@ -1,105 +1,123 @@
 package edu.wit.mobileapp.mealprepplanner;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
+import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
-public class ShoppingListAdapter extends BaseAdapter {
+import static android.content.Context.MODE_PRIVATE;
 
+public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ViewHolder>{
+    private static final String TAG = "ShoppingListAdapter";
+    private List<Object> mShoppingList;
     private Context mContext;
-    private ArrayList<Object> mShoppingList;
+
     private static final int INGREDIENT = 0;
     private static final int HEADER =1;
-    private LayoutInflater inflater;
-    public HashMap<String, Integer> selected;
 
-    //Sets context, Shopping List, & inflater
-    public ShoppingListAdapter(Context mContext, ArrayList<Object> mIngredientList) {
+    private HashMap<String, Integer> selected;
+
+    //Preferences for json storage
+    public SharedPreferences mPrefs;
+    public SharedPreferences.Editor preferenceEditor;
+
+    public ShoppingListAdapter(List<Object> mShoppingList, Context mContext) {
+        this.mShoppingList = mShoppingList;
         this.mContext = mContext;
-        this.mShoppingList = mIngredientList;
-        inflater = (LayoutInflater) mContext.getSystemService(mContext.LAYOUT_INFLATER_SERVICE);
+
+        mPrefs = ((Activity)(mContext)).getPreferences(MODE_PRIVATE);
+        preferenceEditor = mPrefs.edit();
+
+        retrieveGlobalDataFromStorage();
     }
 
-    //get if view is header or ingredient
+    public class ViewHolder extends RecyclerView.ViewHolder{
+
+        TextView header, ingredientName, ingredientAmount;
+        CheckBox cb;
+        boolean checked;
+        public ViewHolder(View itemView) {
+            super(itemView);
+            header = itemView.findViewById(R.id.ingredient_type_header);
+            ingredientName = itemView.findViewById(R.id.ingredient_name);
+            ingredientAmount = itemView.findViewById(R.id.ingredient_amount);
+            cb = itemView.findViewById(R.id.ingredient_chk_box);
+            checked = false;
+        }
+    }
+
+    @NonNull
     @Override
-    public int getItemViewType(int position){
-        if(mShoppingList.get(position) instanceof Ingredient){
-            return INGREDIENT;
-        }
-        else
-        {
-            return HEADER;
-        }
-    }
-
-    //strike through a text view if true un-strike through if false
-    private void setStrikeThrough(TextView text, boolean doStrike){
-        if(doStrike){
-            text.setPaintFlags(text.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        }else{
-            text.setPaintFlags(text.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-        }
-
-    }
-
-    //render view
-    @Override
-    public View getView(int i, View convertView, ViewGroup viewGroup) {
-
-        //if header or ingredient
-        switch (getItemViewType(i)){
+    public ShoppingListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(mContext);
+        Log.v(TAG, "onCreateViewHolder called....... viewType = " + viewType);
+        View view = null;
+        switch (viewType){
             case INGREDIENT:
-                //attach shopping list layout
-                convertView = inflater.inflate(R.layout.shopping_list, null);
+                view = inflater.inflate(R.layout.shopping_list, parent, false);
+                break;
+            case HEADER:
+                view = inflater.inflate(R.layout.shopping_list_section_headers, parent, false);
+                break;
+        }
 
-                //Vars: base ingredient, cb & text views in row, amount string
-                Ingredient ingredient = (Ingredient) mShoppingList.get(i);
-                CheckBox cb = convertView.findViewById(R.id.ingredient_chk_box);
-                TextView name = convertView.findViewById(R.id.ingredient_name);
-                TextView amount = convertView.findViewById(R.id.ingredient_amount);
-                String measurement = Integer.toString(ingredient.getAmount()) + " " + ingredient.getMeasurement();
+        return new ShoppingListAdapter.ViewHolder(view);
+    }
 
-                //render info based on ingredient stored values
-                name.setText(ingredient.getName());
-                amount.setText(measurement);
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        int viewType = getItemViewType(position);
 
-                //needed because views are recycled after first 10
-                //basically restoring checked state
+        switch (viewType){
+            case INGREDIENT:
+                Ingredient ingredient = (Ingredient) mShoppingList.get(position);
+                //retrieveGlobalDataFromStorage();
 
-                //false is default
-                cb.setChecked(false);
-                setStrikeThrough(name, false);
-                setStrikeThrough(amount, false);
+                holder.checked = selected.containsKey(ingredient.getName());
 
-                //if marked as selected and amount is unchanged
-                if(selected.containsKey(ingredient.getName()) && selected.get(ingredient.getName()) == ingredient.getAmount()){
-                    cb.setChecked(true);
-                    setStrikeThrough(name, true);
-                    setStrikeThrough(amount, true);
-                 //marked as selected but amount has changed = remove from selected
-                }else if(selected.containsKey(ingredient.getName()) && selected.get(ingredient.getName()) != ingredient.getAmount()){
+                holder.ingredientName.setText(ingredient.getName());
+                String amount = ingredient.getAmount() + " " + ingredient.getMeasurement();
+                holder.ingredientAmount.setText(amount);
+
+                //todo delete no longer needed, only for debug purpose
+                holder.cb.setTag(ingredient);
+
+                //if marked as selected and amount is unchanged ==> keep checked
+                if(holder.checked && holder.ingredientAmount.getText().equals(amount)){
+                    holder.cb.setChecked(true);
+                    setStrikeThrough(holder.ingredientName, true);
+                    setStrikeThrough(holder.ingredientAmount, true);
+                    //marked as selected but amount has changed = remove from selected
+                }else{
+                    holder.cb.setChecked(false);
+                    setStrikeThrough(holder.ingredientName, false);
+                    setStrikeThrough(holder.ingredientAmount, false);
                     selected.remove(ingredient.getName());
+                    //storeGlobalData();
                 }
 
-                //attach ingredient to cb for onClick action
-                cb.setTag(ingredient);
-
-                //On checkbox click
-                cb.setOnClickListener(new View.OnClickListener() {
+                holder.cb.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //passed checkbox
                         CheckBox cb = (CheckBox) v;
                         //get the layout
                         RelativeLayout r = (RelativeLayout) v.getParent();
@@ -116,46 +134,66 @@ public class ShoppingListAdapter extends BaseAdapter {
                             selected.put(ingredient.getName(), ingredient.getAmount());
                             setStrikeThrough(name, true);
                             setStrikeThrough(amount, true);
-                        //if checked -> unchecked
+                            //if checked -> unchecked
                         }else{
                             selected.remove(ingredient.getName());
                             setStrikeThrough(name, false);
                             setStrikeThrough(amount, false);
                         }
+                        //storeGlobalData();
                     }
                 });
-
                 break;
             case HEADER:
-                //attach header layout
-                convertView = inflater.inflate(R.layout.shopping_list_section_headers, null);
-                //header text init
-                TextView ingredient_type_header = convertView.findViewById(R.id.ingredient_type_header);
-                ingredient_type_header.setText(mShoppingList.get(i).toString());
+                String header = (String) mShoppingList.get(position);
+                holder.header.setText(header);
                 break;
         }
-        //return newly rendered view
-        return convertView;
+    }
+
+    //selected hash map ->json
+    public void storeGlobalData(){
+        Gson gson = new Gson();
+        //Transform the ArrayLists into JSON Data.
+        String selectedJSON = gson.toJson(selected);
+        preferenceEditor.putString("selectedJSONData", selectedJSON);
+        //Commit the changes.
+        preferenceEditor.commit();
+    }
+
+    //json -> array list
+    //json -> selected hash map
+    public void retrieveGlobalDataFromStorage(){
+        Gson gson = new Gson();
+        if(mPrefs.contains("selectedJSONData")){
+            String selectedJSON = mPrefs.getString("selectedJSONData", "");
+            Type selectedType = new TypeToken<HashMap<String, Integer>>() {}.getType();
+            selected = gson.fromJson(selectedJSON, selectedType);
+        }
+    }
+
+    //strike through a text view if true un-strike through if false
+    private void setStrikeThrough(TextView text, boolean doStrike){
+        if(doStrike){
+            text.setPaintFlags(text.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }else{
+            text.setPaintFlags(text.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+        }
     }
 
     @Override
-    public int getViewTypeCount(){
-        return 2;
-    }
-
-    @Override
-    public int getCount() {
+    public int getItemCount() {
         return mShoppingList.size();
     }
 
     @Override
-    public Object getItem(int i) {
-        return mShoppingList.get(i);
+    public int getItemViewType(int position){
+        if(mShoppingList.get(position) instanceof Ingredient){
+            return INGREDIENT;
+        }
+        else
+        {
+            return HEADER;
+        }
     }
-
-    @Override
-    public long getItemId(int i) {
-        return i;
-    }
-
 }

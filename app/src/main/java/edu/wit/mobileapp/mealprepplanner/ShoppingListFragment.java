@@ -4,11 +4,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.widget.TextView;
@@ -28,7 +29,7 @@ public class ShoppingListFragment extends Fragment {
     private static final String TAG = "ShoppingListFragment";
 
     //List view
-    private ListView mShoppingListView;
+    private RecyclerView mShoppingListView;
 
     //Main list
     private ArrayList<Object> mShoppingList;
@@ -63,6 +64,13 @@ public class ShoppingListFragment extends Fragment {
         mPrefs = getActivity().getPreferences(MODE_PRIVATE);
         preferenceEditor = mPrefs.edit();
 
+    }
+
+    //render view
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_shopping_list, container, false);
+
         mShoppingList = new ArrayList<>();
         mProduceList = new ArrayList<>();
         mBakeryList = new ArrayList<>();
@@ -72,18 +80,14 @@ public class ShoppingListFragment extends Fragment {
         mGroceryList = new ArrayList<>();
         mDairyList = new ArrayList<>();
 
-    }
+        retrieveGlobalDataFromStorage();
 
-    //render view
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_shopping_list, container, false);
+        adapter = new ShoppingListAdapter(mShoppingList, getContext()); //object to update fragment
+        mShoppingListView = (RecyclerView) view.findViewById(R.id.shoppingListView);
+        mShoppingListView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        adapter = new ShoppingListAdapter(getActivity().getApplicationContext(), mShoppingList); //object to update fragment
-        mShoppingListView = (ListView) view.findViewById(R.id.shoppingListView);
         mShoppingListView.setAdapter(adapter);
 
-        retrieveGlobalDataFromStorage();
         buildShoppingList();
 
         //toggle empty text visibility
@@ -93,7 +97,6 @@ public class ShoppingListFragment extends Fragment {
         }else {
             emptyTxt.setVisibility(View.VISIBLE);
         }
-
         //Log.v("Meals Fragment", "onCreateView called");
         return view;
     }
@@ -103,6 +106,7 @@ public class ShoppingListFragment extends Fragment {
     public void onPause() {
         super.onPause();
         storeGlobalData();
+        adapter.storeGlobalData();
         //Log.v(LOGTAG, "onPause.....finished");
     }
 
@@ -122,9 +126,7 @@ public class ShoppingListFragment extends Fragment {
         Gson gson = new Gson();
         //Transform the ArrayLists into JSON Data.
         String mealsJSON = gson.toJson(mMealsList);
-        String selectedJSON = gson.toJson(adapter.selected);
         preferenceEditor.putString("mealsJSONData", mealsJSON);
-        preferenceEditor.putString("selectedJSONData", selectedJSON);
         //Commit the changes.
         preferenceEditor.commit();
     }
@@ -138,14 +140,6 @@ public class ShoppingListFragment extends Fragment {
             Type mealType = new TypeToken<Collection<Meal>>() {}.getType();
             mMealsList = gson.fromJson(mealsJSON, mealType);
             setShoppingList();
-        }
-
-        if(mPrefs.contains("selectedJSONData")){
-            String selectedJSON = mPrefs.getString("selectedJSONData", "");
-            Type selectedType = new TypeToken<HashMap<String, Integer>>() {}.getType();
-            adapter.selected = gson.fromJson(selectedJSON, selectedType);
-        }else{
-            adapter.selected = new HashMap<>();
         }
     }
 

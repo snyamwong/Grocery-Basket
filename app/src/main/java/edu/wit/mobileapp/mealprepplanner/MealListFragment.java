@@ -80,10 +80,6 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
         mPrefs = getActivity().getPreferences(MODE_PRIVATE);
         preferenceEditor = mPrefs.edit();
 
-        //Retrieve saved array list then set adapter
-        retrieveGlobalDataFromStorage();
-        adapter = new MealListAdapter(getActivity().getApplicationContext(), mMealsList); //object to update fragment
-
         Log.v(LOGTAG, "onCreate.....finished");
     }
 
@@ -93,7 +89,6 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
                              Bundle savedInstanceState) {
 
         context = getActivity();
-
         View view;
 
         //inflate fragment
@@ -122,12 +117,6 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, MealListFragment.this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(mealListView);
 
-
-
-        //update list
-        mealListView.setAdapter(adapter); //Update display with new list
-        mealListView.getLayoutManager().scrollToPosition(mMealsList.size() - 1); //Nav to end of list
-
         ArrayList<Ingredient> ingredients = new ArrayList<>();
         int n = 2;
         for(int i = 0; i < n; i++){
@@ -145,38 +134,27 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                //navigates to search activity
-//                Intent intent = new Intent(context, SearchActivity.class);
-//
-//                startActivity(intent);
                 MainActivity main = (MainActivity)getActivity();
                 Fragment searchFragment = new SearchFragment();
                 main.setFragment(searchFragment);
-
-                //Placeholder Action to add placeholder meal
-//                int rand = (int) (Math.random()*100);
-//                Meal toAdd = new Meal(rand, R.drawable.food, "Generic Meal #" + Integer.toString(rand), 1,ingredients);
-//                mMealsList.add(toAdd);
-//
-//                mealListView.setAdapter(adapter);
-//                mealListView.getLayoutManager().scrollToPosition(mMealsList.size() - 1); //Nav to end of list
-//
-//                //TODO remove when search and add is working
-//                TextView emptyTxt = (TextView) getActivity().findViewById(R.id.emptyMealsList);
-//                emptyTxt.setVisibility(View.INVISIBLE);
-
-
             }
         });
 
-        //toggle empty text visibility
-        toggleEmptyTextVisibility();
         return view;
     }
 
     @Override
     public void onStart() {
+        retrieveGlobalDataFromStorage();
+        //Retrieve saved array list then set adapter
+        adapter = new MealListAdapter(getActivity().getApplicationContext(), mMealsList); //object to update fragment
+        //update list
+        mealListView.setAdapter(adapter); //Update display with new list
+        mealListView.getLayoutManager().scrollToPosition(mMealsList.size() - 1); //Nav to end of list
+        //toggle empty text visibility
+        toggleEmptyTextVisibility();
+
+
         MainActivity main = (MainActivity)getActivity();
         BottomNavigationView bot = main.findViewById(R.id.main_nav);
         bot.setVisibility(View.VISIBLE);

@@ -22,7 +22,8 @@
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:background="#d1d1d1">
+        android:background="#d1d1d1"
+        android:layout_above="@id/main_nav">
     </FrameLayout>
 
 </RelativeLayout>
