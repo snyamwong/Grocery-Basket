@@ -1,6 +1,5 @@
 *.iml
 *.ser
-*.xml
 .DS_Store
 .externalNativeBuild
 .gradle
