@@ -125,28 +125,30 @@ public class ShoppingListFragment extends Fragment {
         //for each ingredient in each meal
         for(Meal meal : mMealsList){
             for(Ingredient ingredient : meal.getIngredients()){
+                //copy ingredient to preserve mMealList
+                Ingredient copy = new Ingredient(ingredient.getName(), ingredient.getAmount(), ingredient.getMeasurement(), ingredient.getCategory());
                 //add to appropriate sub list
                 switch (ingredient.getCategory()){
                     case "Produce":
-                        addIngredientToSubList(mProduceList, ingredient);
+                        addIngredientToSubList(mProduceList, copy);
                         break;
                     case "Bakery":
-                        addIngredientToSubList(mBakeryList, ingredient);
+                        addIngredientToSubList(mBakeryList, copy);
                         break;
                     case "Deli":
-                        addIngredientToSubList(mDeliList, ingredient);
+                        addIngredientToSubList(mDeliList, copy);
                         break;
                     case "Meat":
-                        addIngredientToSubList(mMeatList, ingredient);
+                        addIngredientToSubList(mMeatList, copy);
                         break;
                     case "Seafood":
-                        addIngredientToSubList(mSeafoodList, ingredient);
+                        addIngredientToSubList(mSeafoodList, copy);
                         break;
                     case "Grocery":
-                        addIngredientToSubList(mGroceryList, ingredient);
+                        addIngredientToSubList(mGroceryList, copy);
                         break;
                     case "Dairy":
-                        addIngredientToSubList(mDairyList, ingredient);
+                        addIngredientToSubList(mDairyList, copy);
                         break;
                 }
             }
