@@ -1,5 +1,6 @@
 *.iml
 *.ser
+.idea/assetWizardSettings.xml
 .DS_Store
 .externalNativeBuild
 .gradle
