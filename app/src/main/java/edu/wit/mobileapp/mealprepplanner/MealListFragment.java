@@ -92,9 +92,6 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
         mealListView = view.findViewById(R.id.mealsListView);
         mealListView.setHasFixedSize(true);
         mealListView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mealListView.setItemAnimator(new DefaultItemAnimator());
-        mealListView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
-
 
         //Add touch listener for left swipe
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, MealListFragment.this);
