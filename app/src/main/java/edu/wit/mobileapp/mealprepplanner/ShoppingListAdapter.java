@@ -1,11 +1,8 @@
 package edu.wit.mobileapp.mealprepplanner;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,15 +13,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-import static android.content.Context.MODE_PRIVATE;
 
 public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ViewHolder>{
     private static final String TAG = "ShoppingListAdapter";
@@ -34,20 +25,17 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
     private static final int INGREDIENT = 0;
     private static final int HEADER =1;
 
+    private MainActivity main;
+
     private HashMap<String, Integer> selected;
 
-    //Preferences for json storage
-    public SharedPreferences mPrefs;
-    public SharedPreferences.Editor preferenceEditor;
-
     public ShoppingListAdapter(List<Object> mShoppingList, Context mContext) {
+        main = ((MainActivity)(mContext));
         this.mShoppingList = mShoppingList;
         this.mContext = mContext;
 
-        mPrefs = ((Activity)(mContext)).getPreferences(MODE_PRIVATE);
-        preferenceEditor = mPrefs.edit();
-
-        retrieveGlobalDataFromStorage();
+        MainActivity main = ((MainActivity)(mContext));
+        selected = main.getmSelectedIngredients();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -90,19 +78,15 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         switch (viewType){
             case INGREDIENT:
                 Ingredient ingredient = (Ingredient) mShoppingList.get(position);
-                //retrieveGlobalDataFromStorage();
 
                 holder.checked = selected.containsKey(ingredient.getName());
 
                 holder.ingredientName.setText(ingredient.getName());
-                String amount = ingredient.getAmount() + " " + ingredient.getMeasurement();
-                holder.ingredientAmount.setText(amount);
-
-                //todo delete no longer needed, only for debug purpose
-                holder.cb.setTag(ingredient);
+                String amountString = ingredient.getAmount() + " " + ingredient.getMeasurement();
+                holder.ingredientAmount.setText(amountString);
 
                 //if marked as selected and amount is unchanged ==> keep checked
-                if(holder.checked && holder.ingredientAmount.getText().equals(amount)){
+                if(holder.checked && selected.get(ingredient.getName()) == ingredient.getAmount()){
                     holder.cb.setChecked(true);
                     setStrikeThrough(holder.ingredientName, true);
                     setStrikeThrough(holder.ingredientAmount, true);
@@ -114,9 +98,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
                     selected.remove(ingredient.getName());
                 }
 
-                holder.cb.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                holder.cb.setOnClickListener((View v) ->{
                         CheckBox cb = (CheckBox) v;
                         //get the layout
                         RelativeLayout r = (RelativeLayout) v.getParent();
@@ -124,12 +106,10 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
                         TextView name = r.findViewById(R.id.ingredient_name);
                         TextView amount = r.findViewById(R.id.ingredient_amount);
 
-                        //Ingredient is attached to cb so that ingredient cant store if it is checked
-                        Ingredient ingredient = (Ingredient)cb.getTag();
                         Toast.makeText(mContext, "cb clicked: " + ingredient.toString(), Toast.LENGTH_SHORT).show();
                         //change ingredient set value and change text views accordingly
                         //if unchecked -> checked
-                        if(cb.isChecked()){
+                        if(cb.isChecked() ){
                             selected.put(ingredient.getName(), ingredient.getAmount());
                             setStrikeThrough(name, true);
                             setStrikeThrough(amount, true);
@@ -138,30 +118,17 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
                             selected.remove(ingredient.getName());
                             setStrikeThrough(name, false);
                             setStrikeThrough(amount, false);
-                            storeGlobalDataFromStorage();
+
+                            main.setmSelectedIngredients(selected);
                         }
-                    }
                 });
-                storeGlobalDataFromStorage();
+                main.setmSelectedIngredients(selected);
                 break;
             case HEADER:
                 String header = (String) mShoppingList.get(position);
                 holder.header.setText(header);
                 break;
         }
-    }
-
-
-    public void storeGlobalDataFromStorage(){
-        MainActivity main = ((MainActivity)(mContext));
-        main.mSelectedIngredients = selected;
-    }
-
-    //json -> selected hash map
-    public void retrieveGlobalDataFromStorage(){
-        MainActivity main = ((MainActivity)(mContext));
-        selected = main.mSelectedIngredients;
-        Log.v(TAG, "Retrieve selected finished");
     }
 
     //strike through a text view if true un-strike through if false

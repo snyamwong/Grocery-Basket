@@ -1,7 +1,5 @@
 package edu.wit.mobileapp.mealprepplanner;
 
-
-import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -16,45 +14,38 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-
-import static android.content.Context.MODE_PRIVATE;
 
 
 public class SearchFragment extends Fragment {
     private static final String TAG = "SearchFragment";
 
+    //List of search results
     private ArrayList<Meal> mSearchList;
-    private ArrayList<Meal> mMealsList;
-    private  SearchListAdapter adapter;
+    //updates search results
+    private SearchListAdapter adapter;
+    //views
     private RecyclerView listView;
     private EditText searchField;
 
-
-    //Preferences for json storage
-    public SharedPreferences mPrefs;
-    public SharedPreferences.Editor preferenceEditor;
+    private MainActivity main;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
 
-        MainActivity main = (MainActivity)(getActivity());
+        //hide bottom nav bar, make frame fill that space
+        main = (MainActivity)(getActivity());
         main.findViewById(R.id.main_nav).setVisibility(View.INVISIBLE);
-
-        mPrefs = getActivity().getPreferences(MODE_PRIVATE);
-        preferenceEditor = mPrefs.edit();
-
-        retrieveGlobalDataFromStorage();
+        FrameLayout fl = getActivity().findViewById(R.id.main_frame);
+        fl.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
         //Generate sample data
         ArrayList<Ingredient> ingredients = new ArrayList<>();
@@ -73,9 +64,7 @@ public class SearchFragment extends Fragment {
         if(mSearchList == null) {
             mSearchList = new ArrayList<>();
             for(int i = 0; i < 25; i++) {
-                //int rand = (int) (Math.random()*100);
-                int rand = i;
-                mSearchList.add(new Meal(i, R.drawable.food, "Generic Meal #" + Integer.toString(rand), 1, ingredients));
+                mSearchList.add(new Meal(i, R.drawable.food, "Generic Meal #" + Integer.toString(i), 1, ingredients));
             }
         }
     }
@@ -84,35 +73,26 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
+        //inflate layout
         View view = inflater.inflate(R.layout.fragment_search, container, false);
-        searchField = (EditText) view.findViewById(R.id.searchInput);
-
+        searchField = view.findViewById(R.id.searchInput);
         listView = view.findViewById(R.id.searchListView);
         listView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        retrieveGlobalDataFromStorage();
-
+        //set adapter
         adapter = new SearchListAdapter(getContext(), mSearchList);
-
         listView.setAdapter(adapter);
 
-
-
-
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.searchTopBar);
+        //top bar setup
+        Toolbar toolbar = view.findViewById(R.id.searchTopBar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        toolbar.setNavigationOnClickListener((View v) -> {
                 onBackPressed();
-            }
         });
-
-
 
         searchField.addTextChangedListener(new TextWatcher() {
             @Override
@@ -133,17 +113,14 @@ public class SearchFragment extends Fragment {
         return view;
     }
 
-    //json -> array list
-    public void retrieveGlobalDataFromStorage(){
-        MainActivity main = ((MainActivity)(getActivity()));
-        mMealsList = main.mMealsList;
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
-        MainActivity main = (MainActivity)getActivity();
+        //Show bottom nav bar / change frame to only fill space above it
         main.findViewById(R.id.main_nav).setVisibility(View.VISIBLE);
+        LayoutParams params= new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT);
+        params.addRule(RelativeLayout.ABOVE, R.id.main_nav);
+        main.findViewById(R.id.main_frame).setLayoutParams(params);
     }
 
     void filter(String text) {
@@ -156,13 +133,9 @@ public class SearchFragment extends Fragment {
         adapter.updateList(temp);
     }
 
-    public void addMealToGlobalList(Meal meal){
-        mMealsList.add(meal);
-    }
-
+    //pass onto main activity on back press
     public void onBackPressed() {
         Log.v(TAG,"onBackPressed......Called");
-        MainActivity main = (MainActivity)getActivity();
         main.onBackPressed();
     }
 }

@@ -30,12 +30,13 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
     private ArrayList<Meal> mMealsList;
     private Context mContext;
 
-
+    private MainActivity main;
 
     public SearchListAdapter(Context mContext, List<Meal> searchList) {
         this.searchList = searchList;
         this.mContext = mContext;
-        retrieveGlobalDataFromStorage();
+        main = ((MainActivity)(mContext));
+        mMealsList = main.getmMealsList();
     }
 
     @NonNull
@@ -54,16 +55,13 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
 
         holder.foreground.setBackgroundColor(Color.WHITE);
 
-        holder.foreground.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Meal meal = searchList.get(holder.getAdapterPosition());
+        holder.foreground.setOnClickListener((View v) -> {
                 if(!mMealsList.contains(meal)){
                     Toast.makeText(mContext, "Meal:" + meal.getName() + " added to meal list", Toast.LENGTH_LONG).show();
                     holder.foreground.setBackgroundColor(Color.GREEN);
                     mMealsList.add(meal);
+                    main.setmMealsList(mMealsList);
                 }
-            }
         });
 
         if(mMealsList.contains(meal)){
@@ -92,13 +90,6 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
 
             foreground = itemView.findViewById(R.id.view_foreground);
         }
-    }
-
-    //json -> array list
-    //json -> selected hash map
-    public void retrieveGlobalDataFromStorage(){
-        MainActivity main = ((MainActivity)(mContext));
-        mMealsList = main.mMealsList;
     }
 
     public void updateList(List<Meal> list) {

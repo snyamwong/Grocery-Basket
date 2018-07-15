@@ -2,7 +2,6 @@ package edu.wit.mobileapp.mealprepplanner;
 
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
@@ -23,8 +22,8 @@ public class MainActivity extends AppCompatActivity
     private final String LOGTAG = "MYAPP";
 
     //global lists
-    public ArrayList<Meal> mMealsList;
-    public HashMap<String, Integer> mSelectedIngredients;
+    private ArrayList<Meal> mMealsList;
+    private HashMap<String, Integer> mSelectedIngredients;
 
     //class vars for nav bar and frame
     private BottomNavigationView navigationView;
@@ -35,8 +34,8 @@ public class MainActivity extends AppCompatActivity
     private SearchFragment searchFragment;
 
     //Preferences for json storage
-    public SharedPreferences mPrefs;
-    public SharedPreferences.Editor preferenceEditor;
+    private SharedPreferences mPrefs;
+    private SharedPreferences.Editor preferenceEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -48,7 +47,7 @@ public class MainActivity extends AppCompatActivity
         mPrefs = getPreferences(MODE_PRIVATE);
         preferenceEditor = mPrefs.edit();
 
-        //Get global lists
+        //Get global lists from last time list was destroyed
         retrieveGlobalDataFromStorage();
 
 
@@ -137,18 +136,16 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    //Store meals list and selected map's current state
     @Override
     protected void onPause() {
         storeGlobalData();
         super.onPause();
     }
 
-    // Sets fragment
+    // Sets fragment null case is for add buttons call of this method
     public void setFragment(Fragment fragment)
     {
-        if (fragment == null){
-            fragment = searchFragment;
-        }
         MealPrepPlannerApplication.setMainActivityFragment(fragment);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -192,6 +189,9 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+
+    // back button pressed = trace back
+    // on first fragment = close app
     @Override
     public void onBackPressed() {
         int count = getSupportFragmentManager().getBackStackEntryCount();
@@ -205,4 +205,23 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    public ArrayList<Meal> getmMealsList() {
+        return mMealsList;
+    }
+
+    public void setmMealsList(ArrayList<Meal> mMealsList) {
+        this.mMealsList = mMealsList;
+    }
+
+    public HashMap<String, Integer> getmSelectedIngredients() {
+        return mSelectedIngredients;
+    }
+
+    public void setmSelectedIngredients(HashMap<String, Integer> mSelectedIngredients) {
+        this.mSelectedIngredients = mSelectedIngredients;
+    }
+
+    public SearchFragment getSearchFragment() {
+        return searchFragment;
+    }
 }

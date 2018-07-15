@@ -41,5 +41,4 @@
         android:layout_marginRight="10dp"
         android:dividerHeight="10dp"
         android:divider="#d1d1d1"/>
-
 </RelativeLayout>

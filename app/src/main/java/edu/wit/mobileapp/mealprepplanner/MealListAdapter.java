@@ -11,8 +11,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,11 +28,13 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
     private List<Meal> mealsList;
     private Context mContext;
 
+    //constructor
     public MealListAdapter(Context mContext, ArrayList<Meal> mealsList) {
         this.mealsList = mealsList;
         this.mContext = mContext;
     }
 
+    //set layout inflater & inflate layout
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -43,6 +43,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         return new ViewHolder(view);
     }
 
+    //When view is rendered bind the correct holder to it
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Meal meal = mealsList.get(position);
@@ -51,12 +52,9 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         String amount = "x" + Integer.toString(meal.getAmount());
         holder.amount.setText(amount);
 
-        holder.foreground.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Meal meal = mealsList.get(holder.getAdapterPosition());
+        holder.foreground.setOnClickListener((View v) -> {
+                //Meal clicked = mealsList.get(holder.getAdapterPosition());
                 Toast.makeText(mContext, "Clicked Meal:    " + meal.getName() + " x" + meal.getAmount(), Toast.LENGTH_LONG).show();
-            }
         });
     }
 
@@ -65,7 +63,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         return mealsList.size();
     }
 
-    //ViewHolder
+    //ViewHolder for each item in list
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         ImageView image;
@@ -84,14 +82,13 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
 
     }
 
+    //swipe remove
     public void removeItem(int position) {
         mealsList.remove(position);
-        // notify the item removed by position
-        // to perform recycler view delete animations
-        // NOTE: don't call notifyDataSetChanged()
         notifyItemRemoved(position);
     }
 
+    //undo swipe remove
     public void restoreItem(Meal item, int position) {
         mealsList.add(position, item);
         // notify item added by position

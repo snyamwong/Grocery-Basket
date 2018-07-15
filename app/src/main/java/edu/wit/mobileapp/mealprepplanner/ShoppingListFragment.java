@@ -10,19 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class ShoppingListFragment extends Fragment {
     //Log tag
@@ -46,9 +36,7 @@ public class ShoppingListFragment extends Fragment {
     //Meal list from meal fragment
     private ArrayList<Meal> mMealsList;
 
-    //Preferences for json storage
-    public SharedPreferences mPrefs;
-    public Editor preferenceEditor;
+    private MainActivity main;
 
     public ShoppingListFragment() {
         // Required empty public constructor
@@ -57,13 +45,9 @@ public class ShoppingListFragment extends Fragment {
     //init data
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        main = (MainActivity)getActivity();
         //Log.v("Meals Fragment", "onCreate called");
         super.onCreate(savedInstanceState);
-
-        //set preferences
-        mPrefs = getActivity().getPreferences(MODE_PRIVATE);
-        preferenceEditor = mPrefs.edit();
-
     }
 
     //render view
@@ -80,10 +64,11 @@ public class ShoppingListFragment extends Fragment {
         mGroceryList = new ArrayList<>();
         mDairyList = new ArrayList<>();
 
-        retrieveGlobalDataFromStorage();
+        mMealsList = main.getmMealsList();
+        setShoppingList();
 
         adapter = new ShoppingListAdapter(mShoppingList, getContext()); //object to update fragment
-        mShoppingListView = (RecyclerView) view.findViewById(R.id.shoppingListView);
+        mShoppingListView = view.findViewById(R.id.shoppingListView);
         mShoppingListView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mShoppingListView.setAdapter(adapter);
@@ -91,7 +76,7 @@ public class ShoppingListFragment extends Fragment {
         buildShoppingList();
 
         //toggle empty text visibility
-        TextView emptyTxt = (TextView) view.findViewById(R.id.emptyShoppingList);
+        TextView emptyTxt = view.findViewById(R.id.emptyShoppingList);
         if(!mShoppingList.isEmpty()) {
             emptyTxt.setVisibility(View.INVISIBLE);
         }else {
@@ -103,7 +88,6 @@ public class ShoppingListFragment extends Fragment {
 
     @Override
     public void onStart() {
-        MainActivity main = (MainActivity)getActivity();
         BottomNavigationView bot = main.findViewById(R.id.main_nav);
         bot.setVisibility(View.VISIBLE);
         bot.setSelectedItemId(R.id.nav_shopping_list);
@@ -111,14 +95,12 @@ public class ShoppingListFragment extends Fragment {
         Log.v(TAG, "onStart.....finished");
     }
 
-
-    //json -> array list
-    public void retrieveGlobalDataFromStorage(){
-        MainActivity main = (MainActivity)getActivity();
-        mMealsList = main.mMealsList;
-        setShoppingList();
-
+    @Override
+    public void onPause() {
+        main.setmMealsList(mMealsList);
+        super.onPause();
     }
+
 
     //take meals list and call addIngredientToSubList w/ correct parameters
     public void setShoppingList() {
@@ -171,7 +153,7 @@ public class ShoppingListFragment extends Fragment {
         return  i1.getAmount() + i2.getAmount();
     }
 
-    //builds shopping list based on sublists
+    //builds shopping list based on sub lists
     private void buildShoppingList(){
         if(!mProduceList.isEmpty()){
             mShoppingList.add("Produce");
