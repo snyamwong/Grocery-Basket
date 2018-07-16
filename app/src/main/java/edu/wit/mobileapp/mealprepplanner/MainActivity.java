@@ -186,6 +186,8 @@ public class MainActivity extends AppCompatActivity
             String selectedJSON = mPrefs.getString("selectedJSONData", "");
             Type selectedType = new TypeToken<HashMap<String, Integer>>() {}.getType();
             mSelectedIngredients = gson.fromJson(selectedJSON, selectedType);
+        }else{
+            mSelectedIngredients = new HashMap<>();
         }
     }
 
