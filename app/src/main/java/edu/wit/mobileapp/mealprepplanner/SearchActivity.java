@@ -6,21 +6,28 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.EditText;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * (Replace with SearchFragment)
+ *
+ * The Activity that represents when user searches for a recipe in the database
+ */
+public class SearchActivity extends AppCompatActivity
+{
 
-public class SearchActivity extends AppCompatActivity {
+    private static final String TAG = "SearchActivity";
 
-    private ArrayList<Meal> mMealsList;
-    private  MealListAdapter adapter;
-    private RecyclerView listView;
-    private EditText searchField;
-
-
+    private List<Recipe> recipeArrayList;
+    private RecipeListAdapter recipeListAdapter;
+    private RecyclerView recyclerView;
+    private EditText editText;
+    private Database database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -28,53 +35,104 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        searchField = (EditText) findViewById(R.id.searchInput);
-        adapter = new MealListAdapter(this, mMealsList);
+        // Set up database
+        database = new Database(this);
+        database.open();
 
-        //Generate sample data
-        ArrayList<Ingredient> ingredients = new ArrayList<>();
+        /*
+         * TODO
+         *
+         * change meal list adapter
+         * or
+         * make recipe list adapter
+         *
+         * change all Meal generic to Recipe generic
+         *
+         * connect search and db
+         */
 
+        // initializing EditText
+        editText = findViewById(R.id.searchInput);
 
-        if(mMealsList == null) {
-            mMealsList = new ArrayList<Meal>();
-            for(int i = 0; i < 25; i++) {
-                int rand = (int) (Math.random()*100);
-                mMealsList.add(new Meal(i, R.drawable.food, "Generic Meal #" + Integer.toString(rand), 1, ingredients));
-            }
-        }
+        // initializing RecyclerView
+        this.recipeArrayList = new ArrayList<>();
+        recipeListAdapter = new RecipeListAdapter(this, recipeArrayList);
+        recyclerView = findViewById(R.id.searchListView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(recipeListAdapter);
 
-        adapter = new MealListAdapter(this, mMealsList);
-        listView = findViewById(R.id.searchListView);
-        listView.setLayoutManager(new LinearLayoutManager(this));
-        listView.setAdapter(adapter);
-
-        searchField.addTextChangedListener(new TextWatcher() {
+        editText.addTextChangedListener(new TextWatcher()
+        {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after)
+            {
 
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
 
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-                filter(s.toString());
+            public void afterTextChanged(Editable s)
+            {
+                // After user finishes typing, filters
+                String userInput = filter(s.toString());
+
+                // Then searches database and return result
+                searchDatabase(userInput);
             }
         });
 
     }
 
-    void filter(String text) {
-        List<Meal> temp = new ArrayList<>();
-        for(Meal meal : mMealsList) {
-            if(meal.getName().toLowerCase().contains(text)) {
-                temp.add(meal);
-            }
-        }
-        adapter.updateList(temp);
+    /**
+     * At the moment, not too too useful other than trimming whitespaces.
+     *
+     * LIKE clause in database already ignores case
+     *
+     * Maybe have a more sophisticated filtering text.
+     *
+     * @param text
+     * @return
+     */
+    String filter(String text)
+    {
+        return text.trim().toLowerCase();
     }
+
+    /**
+     * Given userInput, searches database for recipes with userInput
+     *
+     * Updates RecipeListAdapter with results from query
+     * @param userInput
+     */
+    void searchDatabase(String userInput)
+    {
+        List<Recipe> result = this.database.getRecipes(userInput);
+
+        recipeListAdapter.updateList(result);
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+
+        // closes the database when not in search activity to prevent corruption
+        database.close();
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+        // opens the database when navigating to search activity
+        database.open();
+    }
+
 
 }

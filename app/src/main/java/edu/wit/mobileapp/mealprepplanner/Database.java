@@ -18,22 +18,18 @@ import java.util.ArrayList;
 
 /**
  * A helper class for the database being used in this app.
- *
+ * <p>
  * Provides an easy method to query something
- *
+ * <p>
  * Make sure to open/close accordingly (i.e open during search, close during meal list/shopping list)
  */
 public class Database extends SQLiteOpenHelper
 {
-//    private String recipeTable;
-//    private String ingredientTable;
-//    private String recipeIngredientTable;
-
     private static final String LOGTAG = "DATABASE_LOG";
-
-    private Context context;
     private static String DB_PATH = "/data/data/edu.wit.mobileapp.mealprepplanner/";
     private static String DB_NAME = "meal_prep_db.db";
+
+    private Context context;
     private SQLiteDatabase db;
 
     public Database(Context context)
@@ -45,14 +41,6 @@ public class Database extends SQLiteOpenHelper
     /*
      * XXX
      * Creates database by copying local database to phone database
-     * At the moment, since we're changing local database super often,
-     * the method will assume that the phone never has a database
-     * Thus, it will always overwrite whatever the phone database has
-     * <p>
-     * Eventually, we will want to check if the phone already has a database
-     * This can done by:
-     * <p>
-     * if(!exists())
      *
      * @throws IOException
      */
@@ -115,8 +103,21 @@ public class Database extends SQLiteOpenHelper
      *
      * @throws SQLException
      */
-    public void openDataBase() throws SQLException
+    public void open() throws SQLException
     {
+        // first, checks if database exists in local phone's storage
+        if (!this.exists())
+        {
+            try
+            {
+                this.createDatabase();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
         // opens the database
         String path = DB_PATH + DB_NAME;
 
@@ -221,42 +222,13 @@ public class Database extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-//        DB_PATH = "/data/data/edu.wit.mobileapp.mealprepplanner/meal_prep_db.db";
-//
-//        recipeTable =
-//                "CREATE TABLE IF NOT EXISTS recipe" +
-//                        "(_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-//                        "name TEXT, " +
-//                        "description TEXT," +
-//                        "instructions String" +
-//                        ");";
-//
-//        recipeIngredientTable =
-//                "CREATE TABLE IF NOT EXISTS recipe_ingredient" +
-//                        "(_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-//                        "RecipeID INTEGER, " +
-//                        "IngredientID INTEGER, " +
-//                        "measurement FLOAT, " +
-//                        "unit TEXT" +
-//                        ");";
-//
-//        ingredientTable =
-//                "CREATE TABLE IF NOT EXISTS ingredient" +
-//                        "(_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-//                        "name TEXT, " +
-//                        "category TEXT" +
-//                        ");";
-//
-//        db.execSQL(recipeTable);
-//        db.execSQL(recipeIngredientTable);
-//        db.execSQL(ingredientTable);
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
-//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-//        onCreate(db);
+
     }
 
     public SQLiteDatabase getDb()

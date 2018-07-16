@@ -54,29 +54,6 @@ public class MainActivity extends AppCompatActivity
             to prevent memory leak and such
         */
 
-        // XXX DELETE THIS POST PRODUCTION - ONLY HERE FOR DEMO PURPOSES
-
-        // Set up database
-        Database database = new Database(this);
-
-        try
-        {
-            database.createDatabase();
-            database.openDataBase();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-
-        // LIKE clause ignores cases, so no need to worry about the user lacking IQ when using the app
-        database.getRecipes("baGeL");
-
-        // close the database after not being used
-        database.close();
-
-        // END OF DEMO CODE
-
         // Set init fragment (if-else statement required as changing the portrait orientation changes onCreate / onDestroy)
         // Default fragment is the MealList (if it is null)
         if (MealPrepPlannerApplication.getMainActivityFragment() == null)
