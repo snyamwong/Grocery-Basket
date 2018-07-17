@@ -6,7 +6,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.widget.EditText;
 
 
@@ -15,7 +14,7 @@ import java.util.List;
 
 /**
  * (Replace with SearchFragment)
- *
+ * <p>
  * The Activity that represents when user searches for a recipe in the database
  */
 public class SearchActivity extends AppCompatActivity
@@ -23,10 +22,13 @@ public class SearchActivity extends AppCompatActivity
 
     private static final String TAG = "SearchActivity";
 
+    // recipe list
     private List<Recipe> recipeArrayList;
     private RecipeListAdapter recipeListAdapter;
     private RecyclerView recyclerView;
+    // user input
     private EditText editText;
+    // database of recipe
     private Database database;
 
     @Override
@@ -39,18 +41,6 @@ public class SearchActivity extends AppCompatActivity
         database = new Database(this);
         database.open();
 
-        /*
-         * TODO
-         *
-         * change meal list adapter
-         * or
-         * make recipe list adapter
-         *
-         * change all Meal generic to Recipe generic
-         *
-         * connect search and db
-         */
-
         // initializing EditText
         editText = findViewById(R.id.searchInput);
 
@@ -61,6 +51,7 @@ public class SearchActivity extends AppCompatActivity
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(recipeListAdapter);
 
+        // listens for text changed
         editText.addTextChangedListener(new TextWatcher()
         {
             @Override
@@ -90,9 +81,9 @@ public class SearchActivity extends AppCompatActivity
 
     /**
      * At the moment, not too too useful other than trimming whitespaces.
-     *
+     * <p>
      * LIKE clause in database already ignores case
-     *
+     * <p>
      * Maybe have a more sophisticated filtering text.
      *
      * @param text
@@ -105,15 +96,16 @@ public class SearchActivity extends AppCompatActivity
 
     /**
      * Given userInput, searches database for recipes with userInput
-     *
+     * <p>
      * Updates RecipeListAdapter with results from query
+     *
      * @param userInput
      */
     void searchDatabase(String userInput)
     {
         List<Recipe> result = this.database.getRecipes(userInput);
 
-        recipeListAdapter.updateList(result);
+        recipeListAdapter.updateRecipeList(result);
     }
 
     @Override
@@ -133,6 +125,5 @@ public class SearchActivity extends AppCompatActivity
         // opens the database when navigating to search activity
         database.open();
     }
-
 
 }

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,24 +23,32 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
     private static final String TAG = "RecipeListAdapter";
 
     private Context context;
+    // List of recipe(s)
     private List<Recipe> recipeArrayList;
 
-    // Constructor
+    /**
+     * Constructor
+     *
+     * @param context
+     * @param recipeArrayList
+     */
     public RecipeListAdapter(Context context, List<Recipe> recipeArrayList)
     {
         this.context = context;
         this.recipeArrayList = recipeArrayList;
     }
 
-    // Viewholder
-    public class ViewHolder extends RecyclerView.ViewHolder
+    /**
+     * ViewHolder inner class
+     */
+    class ViewHolder extends RecyclerView.ViewHolder
     {
 
         ImageView image;
         TextView name;
         RelativeLayout foreground, background;
 
-        public ViewHolder(View itemView)
+        ViewHolder(View itemView)
         {
             super(itemView);
 
@@ -51,16 +60,37 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
         }
     }
 
+    /**
+     * NOTE: Using layout recipe_list rather than meals_list
+     * <p>
+     * Inflate layout here
+     *
+     * @param parent
+     * @param viewType
+     * @return
+     */
     @NonNull
     @Override
     public RecipeListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
+        // Here, using recipe_list instead of meals_list so I avoid using the
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.meals_list, null);
+        View view = inflater.inflate(R.layout.recipe_list, null);
 
         return new RecipeListAdapter.ViewHolder(view);
     }
 
+    /**
+     * At the moment, only two things are certained with SearchActivity / RecipeList
+     * <p>
+     * 1) image
+     * 2) name
+     * <p>
+     * If needed, add attributes here.
+     *
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(@NonNull RecipeListAdapter.ViewHolder holder, int position)
     {
@@ -68,11 +98,11 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
         holder.name.setText(recipe.getName());
         holder.image.setImageBitmap(recipe.getImage());
 
-//        holder.foreground.setOnClickListener(v ->
-//        {
-//             Recipe recipe = recipeArrayList.get(holder.getAdapterPosition());
-//             Toast.makeText(context, "Clicked Meal:    " + meal.getName() + " x" + meal.getAmount(), Toast.LENGTH_LONG).show();
-//        });
+        holder.foreground.setOnClickListener(v ->
+        {
+            // TODO this should transition into MealInfoFragment
+            Toast.makeText(context, String.format("Clicked on %s", recipe.getName()), Toast.LENGTH_LONG).show();
+        });
     }
 
     @Override
@@ -81,7 +111,12 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
         return recipeArrayList.size();
     }
 
-    public void removeItem(int position)
+    /**
+     * Used to remove recipe
+     *
+     * @param position
+     */
+    public void removeRecipe(int position)
     {
         recipeArrayList.remove(position);
 
@@ -91,7 +126,13 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
         notifyItemRemoved(position);
     }
 
-    public void restoreItem(Recipe item, int position)
+    /**
+     * Used to restore recipe
+     *
+     * @param item
+     * @param position
+     */
+    public void restoreRecipe(Recipe item, int position)
     {
         recipeArrayList.add(position, item);
 
@@ -99,7 +140,12 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
         notifyItemInserted(position);
     }
 
-    public void updateList(List<Recipe> list)
+    /**
+     * Used to update recipe
+     *
+     * @param list
+     */
+    public void updateRecipeList(List<Recipe> list)
     {
         recipeArrayList = list;
 
