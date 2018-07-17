@@ -219,8 +219,8 @@ public class Database extends SQLiteOpenHelper
                 Double quantity = cursor.getDouble(cursor.getColumnIndex("quantity"));
                 String unit = cursor.getString(cursor.getColumnIndex("unit"));
 
-                RecipeIngredients recipeIngredient;
-                recipeIngredient = new RecipeIngredients(recipeID, recipeName, ingredientName, ingredientCategory, quantity, unit);
+                RecipeIngredient recipeIngredient;
+                recipeIngredient = new RecipeIngredient(recipeID, recipeName, ingredientName, ingredientCategory, quantity, unit);
 
                 r.getIngredients().add(recipeIngredient);
             }

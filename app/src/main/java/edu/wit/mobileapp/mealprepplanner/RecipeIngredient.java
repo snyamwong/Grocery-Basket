@@ -1,6 +1,6 @@
 package edu.wit.mobileapp.mealprepplanner;
 
-public class RecipeIngredients
+public class RecipeIngredient
 {
     private int recipeID;
 
@@ -14,9 +14,9 @@ public class RecipeIngredients
 
     private String unit;
 
-    public RecipeIngredients() {}
+    public RecipeIngredient() {}
 
-    public RecipeIngredients(int recipeID, String recipeName, String ingredientName, String ingredientCategory, double quantity, String unit)
+    public RecipeIngredient(int recipeID, String recipeName, String ingredientName, String ingredientCategory, double quantity, String unit)
     {
         this.recipeID = recipeID;
         this.recipeName = recipeName;
@@ -89,7 +89,7 @@ public class RecipeIngredients
     @Override
     public String toString()
     {
-        return "RecipeIngredients{" +
+        return "RecipeIngredient{" +
                 ", ingredientName='" + ingredientName + '\'' +
                 ", ingredientCategory='" + ingredientCategory + '\'' +
                 ", quantity=" + quantity +

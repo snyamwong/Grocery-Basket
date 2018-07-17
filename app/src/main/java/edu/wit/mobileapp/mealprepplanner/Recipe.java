@@ -25,7 +25,7 @@ public class Recipe
     private String chef;
 
     // all of the ingredients in the recipe
-    private ArrayList<RecipeIngredients> ingredients;
+    private ArrayList<RecipeIngredient> ingredients;
 
     public Recipe() {}
 
@@ -81,12 +81,12 @@ public class Recipe
         this.recipeID = recipeID;
     }
 
-    public ArrayList<RecipeIngredients> getIngredients()
+    public ArrayList<RecipeIngredient> getIngredients()
     {
         return ingredients;
     }
 
-    public void setIngredients(ArrayList<RecipeIngredients> ingredients)
+    public void setIngredients(ArrayList<RecipeIngredient> ingredients)
     {
         this.ingredients = ingredients;
     }
