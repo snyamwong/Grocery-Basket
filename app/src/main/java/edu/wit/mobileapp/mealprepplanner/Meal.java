@@ -74,4 +74,9 @@ public class Meal
     public ArrayList<Ingredient> getIngredients() {
         return ingredients;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.getName().equals(((Meal)(obj)).getName());
+    }
 }

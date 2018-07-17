@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#d1d1d1"
-    tools:context=".SearchActivity">
+    tools:context=".SearchFragment">
 
 
     <android.support.v7.widget.Toolbar
@@ -31,7 +31,6 @@
         android:singleLine="true"
         android:inputType="textVisiblePassword"/>
 
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/searchListView"
         android:layout_width="match_parent"
@@ -40,8 +39,6 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
         android:dividerHeight="10dp"
         android:divider="#d1d1d1"/>
-
 </RelativeLayout>

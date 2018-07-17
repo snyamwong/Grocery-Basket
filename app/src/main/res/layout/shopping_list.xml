@@ -1,41 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorWhite"
-    tools:context=".ShoppingListFragment">
+    android:paddingLeft="3dp"
+    android:paddingRight="3dp"
+    android:paddingBottom="3dp"
+    android:paddingTop="3dp"
+    android:background="#d1d1d1">
 
-    <CheckBox
-        android:id="@+id/ingredient_chk_box"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="17sp"
-        android:paddingTop="13dp"
-        android:paddingBottom="13dp"
-        android:checked="false" />
-
-    <TextView
-        android:id="@+id/ingredient_name"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@id/ingredient_chk_box"
-        android:textSize="17sp"
-        android:layout_marginStart="40dp"
-        android:layout_marginEnd="13dp"
-        android:layout_marginTop="13dp"
-        android:layout_marginBottom="10dp"/>
+        android:background="@color/colorWhite"
+        tools:context=".ShoppingListFragment">
 
-    <TextView
-        android:id="@+id/ingredient_amount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignEnd="@id/ingredient_chk_box"
-        android:textSize="17sp"
-        android:layout_marginEnd="13dp"
-        android:layout_marginTop="13dp"
-        android:layout_marginBottom="10dp"/>
+        <CheckBox
+            android:id="@+id/ingredient_chk_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:paddingTop="13dp"
+            android:paddingBottom="13dp"
+            android:checked="false" />
+
+        <TextView
+            android:id="@+id/ingredient_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/ingredient_chk_box"
+            android:textSize="17sp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="13dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/app_name"/>
+
+        <TextView
+            android:id="@+id/ingredient_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignEnd="@id/ingredient_chk_box"
+            android:textSize="17sp"
+            android:layout_marginEnd="13dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/app_name"/>
 
 
-</RelativeLayout>
+    </RelativeLayout>
+
+</FrameLayout>

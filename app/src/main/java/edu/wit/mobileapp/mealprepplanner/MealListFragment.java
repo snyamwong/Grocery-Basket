@@ -3,10 +3,10 @@ package edu.wit.mobileapp.mealprepplanner;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -29,18 +29,9 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import static android.content.Context.MODE_PRIVATE;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-
-//object to json packages
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 
 /**
@@ -61,9 +52,8 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
     private ArrayList<Meal> mMealsList;
     private RelativeLayout relativeLayout;
 
-    //Preferences for json storage
-    public SharedPreferences mPrefs;
-    public Editor preferenceEditor;
+    //main activity
+    private MainActivity main;
 
     public MealListFragment() {
         // Required empty public constructor
@@ -74,15 +64,9 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //set preferences
-        mPrefs = getActivity().getPreferences(MODE_PRIVATE);
-        preferenceEditor = mPrefs.edit();
+        main = (MainActivity)getActivity();
 
-        //Retrieve saved array list then set adapter
-        retrieveGlobalDataFromStorage();
-        adapter = new MealListAdapter(getActivity().getApplicationContext(), mMealsList); //object to update fragment
-
-        //Log.v(LOGTAG, "onCreate.....finished");
+        Log.v(LOGTAG, "onCreate.....finished");
     }
 
     //build view
@@ -91,7 +75,6 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
                              Bundle savedInstanceState) {
 
         context = getActivity();
-
         View view;
 
         //inflate fragment
@@ -101,74 +84,54 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
         relativeLayout = view.findViewById(R.id.meals_layout);
 
         //create toolbar named 'topBar'
-        Toolbar topBar = (Toolbar) view.findViewById(R.id.mealsTopBar);
+        Toolbar topBar = view.findViewById(R.id.mealsTopBar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(topBar);
         setHasOptionsMenu(true);
 
         //Infinite List View
-        mealListView = (RecyclerView)  view.findViewById(R.id.mealsListView);
+        mealListView = view.findViewById(R.id.mealsListView);
         mealListView.setHasFixedSize(true);
         mealListView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mealListView.setItemAnimator(new DefaultItemAnimator());
-        mealListView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
 
-
-        // adding item touch helper
-        // only ItemTouchHelper.LEFT added to detect Right to Left swipe
-        // if you want both Right -> Left and Left -> Right
-        // add pass ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT as param
+        //Add touch listener for left swipe
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, MealListFragment.this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(mealListView);
 
+        //Add button Setup
+        FloatingActionButton btnAdd = view.findViewById(R.id.btnAdd);
+        btnAdd.setOnClickListener((View v) -> {
+            //set fragment null will set fragment to SearchFragment
+            main.setFragment(main.getSearchFragment());
 
+        });
 
+        return view;
+    }
+
+    @Override
+    public void onStart() {
+        MainActivity main = (MainActivity)getActivity();
+        mMealsList = main.getmMealsList();
+        //Retrieve saved array list then set adapter
+        adapter = new MealListAdapter(getActivity().getApplicationContext(), mMealsList); //object to update fragment
         //update list
         mealListView.setAdapter(adapter); //Update display with new list
         mealListView.getLayoutManager().scrollToPosition(mMealsList.size() - 1); //Nav to end of list
-
-        ArrayList<Ingredient> ingredients = new ArrayList<>();
-        int n = 2;
-        for(int i = 0; i < n; i++){
-            ingredients.add(new Ingredient("Produce Ingredient " + i, i, "oz", "Produce"));
-            ingredients.add(new Ingredient("Bakery Ingredient " + (i+n), (i+n), "oz", "Bakery"));
-            ingredients.add(new Ingredient("Deli Ingredient " + (i+n*2), (i+n*2), "oz", "Deli"));
-            ingredients.add(new Ingredient("Meat Ingredient " + (i+n*3), (i+n*3), "oz", "Meat"));
-            ingredients.add(new Ingredient("Seafood Ingredient " + (i+n*4), (i+n*4), "oz", "Seafood"));
-            ingredients.add(new Ingredient("Grocery Ingredient " + (i+n*5), (i+n*5), "oz", "Grocery"));
-            ingredients.add(new Ingredient("Dairy Ingredient " + (i+n*6), (i+n*6), "oz", "Dairy"));
-        }
-
-        //Add button Setup
-        FloatingActionButton btnAdd = (FloatingActionButton) view.findViewById(R.id.btnAdd);
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                //navigates to search activity
-                Intent intent = new Intent(context, SearchActivity.class);
-
-                startActivity(intent);
-
-
-                //Placeholder Action to add placeholder meal
-                int rand = (int) (Math.random()*100);
-                Meal toAdd = new Meal(rand, R.drawable.food, "Generic Meal #" + Integer.toString(rand), 1,ingredients);
-                mMealsList.add(toAdd);
-
-                mealListView.setAdapter(adapter);
-                mealListView.getLayoutManager().scrollToPosition(mMealsList.size() - 1); //Nav to end of list
-
-                //TODO remove when search and add is working
-                TextView emptyTxt = (TextView) getActivity().findViewById(R.id.emptyMealsList);
-                emptyTxt.setVisibility(View.INVISIBLE);
-
-
-            }
-        });
-
         //toggle empty text visibility
         toggleEmptyTextVisibility();
-        return view;
+
+
+        BottomNavigationView bot = main.findViewById(R.id.main_nav);
+        bot.setVisibility(View.VISIBLE);
+        bot.setSelectedItemId(R.id.nav_meals);
+        super.onStart();
+        Log.v(LOGTAG, "onStart.....finished");
+    }
+
+    @Override
+    public void onPause() {
+        main.setmMealsList(mMealsList);
+        super.onPause();
     }
 
     //Create menu where delete button sits
@@ -203,15 +166,12 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
                             mealListView.getLayoutManager().scrollToPosition(mMealsList.size() - 1); //Nav to end of list
 
                             //Clear selected options
-                            Gson gson = new Gson();
-                            //Transform the ArrayLists into JSON Data.
-                            String selectedJSON = gson.toJson(new HashMap<String,Integer>());
-                            preferenceEditor.putString("selectedJSONData", selectedJSON);
-                            //Commit the changes.
-                            preferenceEditor.commit();
+                            HashMap<String, Integer> selected = main.getmSelectedIngredients();
+                            selected.clear();
+                            main.setmSelectedIngredients(selected);
 
                             //toggle empty text visibility
-                            TextView emptyTxt = (TextView) getActivity().findViewById(R.id.emptyMealsList);
+                            TextView emptyTxt = getActivity().findViewById(R.id.emptyMealsList);
                             emptyTxt.setVisibility(View.VISIBLE);
                             break;
 
@@ -232,39 +192,10 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
         return true;
     }
 
-    //save array list
-    @Override
-    public void onPause() {
-        super.onPause();
-        storeGlobalData();
-        //Log.v(LOGTAG, "onPause.....finished");
-    }
-
-    //array list -> json
-    public void storeGlobalData(){
-        Gson gson = new Gson();
-        //Transform the ArrayLists into JSON Data.
-        String mealsJSON = gson.toJson(mMealsList);
-        preferenceEditor.putString("mealsJSONData", mealsJSON);
-        //Commit the changes.
-        preferenceEditor.commit();
-    }
-
-    //json -> array list
-    public void retrieveGlobalDataFromStorage(){
-        if(mPrefs.contains("mealsJSONData")){
-            Gson gson = new Gson();
-            String mealsJSON = mPrefs.getString("mealsJSONData", "");
-            Type mealType = new TypeToken<Collection<Meal>>() {}.getType();
-            mMealsList = gson.fromJson(mealsJSON, mealType);
-        }else {
-            mMealsList = new ArrayList<>();
-        }
-    }
-
+    //toggle the empty list text
     private void toggleEmptyTextVisibility(){
         //toggle empty text visibility
-        TextView emptyTxt = (TextView) relativeLayout.findViewById(R.id.emptyMealsList);
+        TextView emptyTxt = relativeLayout.findViewById(R.id.emptyMealsList);
         if(!mMealsList.isEmpty()) {
             emptyTxt.setVisibility(View.INVISIBLE);
         }else {
@@ -292,14 +223,10 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
 
             // showing snack bar with Undo option
             Snackbar snackbar = Snackbar.make(relativeLayout, name + " removed from meal list!", Snackbar.LENGTH_LONG);
-            snackbar.setAction("UNDO", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
+            snackbar.setAction("UNDO", (View v) -> {
                     // undo is selected, restore the deleted item
                     adapter.restoreItem(deletedItem, deletedIndex);
                     toggleEmptyTextVisibility();
-                }
             });
             snackbar.setActionTextColor(Color.YELLOW);
             snackbar.show();

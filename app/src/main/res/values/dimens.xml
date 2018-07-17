@@ -1,7 +1,10 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="activity_padding_horizontal">16dp</dimen>
     <dimen name="padd_10">10dp</dimen>
     <dimen name="ic_delete">30dp</dimen>
     <dimen name="thumbnail">90dp</dimen>
+    <dimen name="design_bottom_navigation_item_max_width" tools:override="true">600dp</dimen>
+    <dimen name="design_bottom_navigation_active_item_max_width" tools:override="true">600dp</dimen>
+
 </resources>

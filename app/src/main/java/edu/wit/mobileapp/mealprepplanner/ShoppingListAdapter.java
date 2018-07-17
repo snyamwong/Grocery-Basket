@@ -2,44 +2,132 @@ package edu.wit.mobileapp.mealprepplanner;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-public class ShoppingListAdapter extends BaseAdapter {
 
+public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ViewHolder>{
+    private static final String TAG = "ShoppingListAdapter";
+    private List<Object> mShoppingList;
     private Context mContext;
-    private ArrayList<Object> mShoppingList;
+
     private static final int INGREDIENT = 0;
     private static final int HEADER =1;
-    private LayoutInflater inflater;
-    public HashMap<String, Integer> selected;
 
-    //Sets context, Shopping List, & inflater
-    public ShoppingListAdapter(Context mContext, ArrayList<Object> mIngredientList) {
+    private MainActivity main;
+
+    private HashMap<String, Integer> selected;
+
+    public ShoppingListAdapter(List<Object> mShoppingList, Context mContext) {
+        main = ((MainActivity)(mContext));
+        this.mShoppingList = mShoppingList;
         this.mContext = mContext;
-        this.mShoppingList = mIngredientList;
-        inflater = (LayoutInflater) mContext.getSystemService(mContext.LAYOUT_INFLATER_SERVICE);
+
+        MainActivity main = ((MainActivity)(mContext));
+        selected = main.getmSelectedIngredients();
     }
 
-    //get if view is header or ingredient
-    @Override
-    public int getItemViewType(int position){
-        if(mShoppingList.get(position) instanceof Ingredient){
-            return INGREDIENT;
+    public class ViewHolder extends RecyclerView.ViewHolder{
+
+        TextView header, ingredientName, ingredientAmount;
+        CheckBox cb;
+        boolean checked;
+        public ViewHolder(View itemView) {
+            super(itemView);
+            header = itemView.findViewById(R.id.ingredient_type_header);
+            ingredientName = itemView.findViewById(R.id.ingredient_name);
+            ingredientAmount = itemView.findViewById(R.id.ingredient_amount);
+            cb = itemView.findViewById(R.id.ingredient_chk_box);
+            checked = false;
         }
-        else
-        {
-            return HEADER;
+    }
+
+    @NonNull
+    @Override
+    public ShoppingListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(mContext);
+        //Log.v(TAG, "onCreateViewHolder called....... viewType = " + viewType);
+        View view = null;
+        switch (viewType){
+            case INGREDIENT:
+                view = inflater.inflate(R.layout.shopping_list, parent, false);
+                break;
+            case HEADER:
+                view = inflater.inflate(R.layout.shopping_list_section_headers, parent, false);
+                break;
+        }
+
+        return new ShoppingListAdapter.ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        int viewType = getItemViewType(position);
+
+        switch (viewType){
+            case INGREDIENT:
+                Ingredient ingredient = (Ingredient) mShoppingList.get(position);
+
+                holder.checked = selected.containsKey(ingredient.getName());
+
+                holder.ingredientName.setText(ingredient.getName());
+                String amountString = ingredient.getAmount() + " " + ingredient.getMeasurement();
+                holder.ingredientAmount.setText(amountString);
+
+                //if marked as selected and amount is unchanged ==> keep checked
+                if(holder.checked && selected.get(ingredient.getName()) == ingredient.getAmount()){
+                    holder.cb.setChecked(true);
+                    setStrikeThrough(holder.ingredientName, true);
+                    setStrikeThrough(holder.ingredientAmount, true);
+                    //marked as selected but amount has changed = remove from selected
+                }else{
+                    holder.cb.setChecked(false);
+                    setStrikeThrough(holder.ingredientName, false);
+                    setStrikeThrough(holder.ingredientAmount, false);
+                    selected.remove(ingredient.getName());
+                }
+
+                holder.cb.setOnClickListener((View v) ->{
+                        CheckBox cb = (CheckBox) v;
+                        //get the layout
+                        RelativeLayout r = (RelativeLayout) v.getParent();
+                        //get the two text views
+                        TextView name = r.findViewById(R.id.ingredient_name);
+                        TextView amount = r.findViewById(R.id.ingredient_amount);
+
+                        Toast.makeText(mContext, "cb clicked: " + ingredient.toString(), Toast.LENGTH_SHORT).show();
+                        //change ingredient set value and change text views accordingly
+                        //if unchecked -> checked
+                        if(cb.isChecked() ){
+                            selected.put(ingredient.getName(), ingredient.getAmount());
+                            setStrikeThrough(name, true);
+                            setStrikeThrough(amount, true);
+                            //if checked -> unchecked
+                        }else{
+                            selected.remove(ingredient.getName());
+                            setStrikeThrough(name, false);
+                            setStrikeThrough(amount, false);
+
+                            main.setmSelectedIngredients(selected);
+                        }
+                });
+                main.setmSelectedIngredients(selected);
+                break;
+            case HEADER:
+                String header = (String) mShoppingList.get(position);
+                holder.header.setText(header);
+                break;
         }
     }
 
@@ -50,112 +138,21 @@ public class ShoppingListAdapter extends BaseAdapter {
         }else{
             text.setPaintFlags(text.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
         }
-
-    }
-
-    //render view
-    @Override
-    public View getView(int i, View convertView, ViewGroup viewGroup) {
-
-        //if header or ingredient
-        switch (getItemViewType(i)){
-            case INGREDIENT:
-                //attach shopping list layout
-                convertView = inflater.inflate(R.layout.shopping_list, null);
-
-                //Vars: base ingredient, cb & text views in row, amount string
-                Ingredient ingredient = (Ingredient) mShoppingList.get(i);
-                CheckBox cb = convertView.findViewById(R.id.ingredient_chk_box);
-                TextView name = convertView.findViewById(R.id.ingredient_name);
-                TextView amount = convertView.findViewById(R.id.ingredient_amount);
-                String measurement = Integer.toString(ingredient.getAmount()) + " " + ingredient.getMeasurement();
-
-                //render info based on ingredient stored values
-                name.setText(ingredient.getName());
-                amount.setText(measurement);
-
-                //needed because views are recycled after first 10
-                //basically restoring checked state
-
-                //false is default
-                cb.setChecked(false);
-                setStrikeThrough(name, false);
-                setStrikeThrough(amount, false);
-
-                //if marked as selected and amount is unchanged
-                if(selected.containsKey(ingredient.getName()) && selected.get(ingredient.getName()) == ingredient.getAmount()){
-                    cb.setChecked(true);
-                    setStrikeThrough(name, true);
-                    setStrikeThrough(amount, true);
-                 //marked as selected but amount has changed = remove from selected
-                }else if(selected.containsKey(ingredient.getName()) && selected.get(ingredient.getName()) != ingredient.getAmount()){
-                    selected.remove(ingredient.getName());
-                }
-
-                //attach ingredient to cb for onClick action
-                cb.setTag(ingredient);
-
-                //On checkbox click
-                cb.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //passed checkbox
-                        CheckBox cb = (CheckBox) v;
-                        //get the layout
-                        RelativeLayout r = (RelativeLayout) v.getParent();
-                        //get the two text views
-                        TextView name = r.findViewById(R.id.ingredient_name);
-                        TextView amount = r.findViewById(R.id.ingredient_amount);
-
-                        //Ingredient is attached to cb so that ingredient cant store if it is checked
-                        Ingredient ingredient = (Ingredient)cb.getTag();
-                        Toast.makeText(mContext, "cb clicked: " + ingredient.toString(), Toast.LENGTH_SHORT).show();
-                        //change ingredient set value and change text views accordingly
-                        //if unchecked -> checked
-                        if(cb.isChecked()){
-                            selected.put(ingredient.getName(), ingredient.getAmount());
-                            setStrikeThrough(name, true);
-                            setStrikeThrough(amount, true);
-                        //if checked -> unchecked
-                        }else{
-                            selected.remove(ingredient.getName());
-                            setStrikeThrough(name, false);
-                            setStrikeThrough(amount, false);
-                        }
-                    }
-                });
-
-                break;
-            case HEADER:
-                //attach header layout
-                convertView = inflater.inflate(R.layout.shopping_list_section_headers, null);
-                //header text init
-                TextView ingredient_type_header = convertView.findViewById(R.id.ingredient_type_header);
-                ingredient_type_header.setText(mShoppingList.get(i).toString());
-                break;
-        }
-        //return newly rendered view
-        return convertView;
     }
 
     @Override
-    public int getViewTypeCount(){
-        return 2;
-    }
-
-    @Override
-    public int getCount() {
+    public int getItemCount() {
         return mShoppingList.size();
     }
 
     @Override
-    public Object getItem(int i) {
-        return mShoppingList.get(i);
+    public int getItemViewType(int position){
+        if(mShoppingList.get(position) instanceof Ingredient){
+            return INGREDIENT;
+        }
+        else
+        {
+            return HEADER;
+        }
     }
-
-    @Override
-    public long getItemId(int i) {
-        return i;
-    }
-
 }

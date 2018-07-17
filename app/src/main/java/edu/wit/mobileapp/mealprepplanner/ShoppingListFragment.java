@@ -2,32 +2,24 @@ package edu.wit.mobileapp.mealprepplanner;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class ShoppingListFragment extends Fragment {
     //Log tag
     private static final String TAG = "ShoppingListFragment";
 
     //List view
-    private ListView mShoppingListView;
+    private RecyclerView mShoppingListView;
 
     //Main list
     private ArrayList<Object> mShoppingList;
@@ -44,9 +36,7 @@ public class ShoppingListFragment extends Fragment {
     //Meal list from meal fragment
     private ArrayList<Meal> mMealsList;
 
-    //Preferences for json storage
-    public SharedPreferences mPrefs;
-    public Editor preferenceEditor;
+    private MainActivity main;
 
     public ShoppingListFragment() {
         // Required empty public constructor
@@ -55,12 +45,15 @@ public class ShoppingListFragment extends Fragment {
     //init data
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        main = (MainActivity)getActivity();
         //Log.v("Meals Fragment", "onCreate called");
         super.onCreate(savedInstanceState);
+    }
 
-        //set preferences
-        mPrefs = getActivity().getPreferences(MODE_PRIVATE);
-        preferenceEditor = mPrefs.edit();
+    //render view
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_shopping_list, container, false);
 
         mShoppingList = new ArrayList<>();
         mProduceList = new ArrayList<>();
@@ -71,100 +64,73 @@ public class ShoppingListFragment extends Fragment {
         mGroceryList = new ArrayList<>();
         mDairyList = new ArrayList<>();
 
-    }
+        mMealsList = main.getmMealsList();
+        setShoppingList();
 
-    //render view
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_shopping_list, container, false);
+        adapter = new ShoppingListAdapter(mShoppingList, getContext()); //object to update fragment
+        mShoppingListView = view.findViewById(R.id.shoppingListView);
+        mShoppingListView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        adapter = new ShoppingListAdapter(getActivity().getApplicationContext(), mShoppingList); //object to update fragment
-        mShoppingListView = (ListView) view.findViewById(R.id.shoppingListView);
         mShoppingListView.setAdapter(adapter);
 
-        retrieveGlobalDataFromStorage();
         buildShoppingList();
 
         //toggle empty text visibility
-        TextView emptyTxt = (TextView) view.findViewById(R.id.emptyShoppingList);
+        TextView emptyTxt = view.findViewById(R.id.emptyShoppingList);
         if(!mShoppingList.isEmpty()) {
             emptyTxt.setVisibility(View.INVISIBLE);
         }else {
             emptyTxt.setVisibility(View.VISIBLE);
         }
-
         //Log.v("Meals Fragment", "onCreateView called");
         return view;
     }
 
-    //save array list
+    @Override
+    public void onStart() {
+        BottomNavigationView bot = main.findViewById(R.id.main_nav);
+        bot.setVisibility(View.VISIBLE);
+        bot.setSelectedItemId(R.id.nav_shopping_list);
+        super.onStart();
+        Log.v(TAG, "onStart.....finished");
+    }
+
     @Override
     public void onPause() {
+        main.setmMealsList(mMealsList);
         super.onPause();
-        storeGlobalData();
-        //Log.v(LOGTAG, "onPause.....finished");
     }
 
-    //array list -> json
-    //selected hash map ->json
-    public void storeGlobalData(){
-        Gson gson = new Gson();
-        //Transform the ArrayLists into JSON Data.
-        String mealsJSON = gson.toJson(mMealsList);
-        String selectedJSON = gson.toJson(adapter.selected);
-        preferenceEditor.putString("mealsJSONData", mealsJSON);
-        preferenceEditor.putString("selectedJSONData", selectedJSON);
-        //Commit the changes.
-        preferenceEditor.commit();
-    }
-
-    //json -> array list
-    //json -> selected hash map
-    public void retrieveGlobalDataFromStorage(){
-        Gson gson = new Gson();
-        if(mPrefs.contains("mealsJSONData")){
-            String mealsJSON = mPrefs.getString("mealsJSONData", "");
-            Type mealType = new TypeToken<Collection<Meal>>() {}.getType();
-            mMealsList = gson.fromJson(mealsJSON, mealType);
-            setShoppingList();
-        }
-
-        if(mPrefs.contains("selectedJSONData")){
-            String selectedJSON = mPrefs.getString("selectedJSONData", "");
-            Type selectedType = new TypeToken<HashMap<String, Integer>>() {}.getType();
-            adapter.selected = gson.fromJson(selectedJSON, selectedType);
-        }else{
-            adapter.selected = new HashMap<>();
-        }
-    }
 
     //take meals list and call addIngredientToSubList w/ correct parameters
     public void setShoppingList() {
         //for each ingredient in each meal
         for(Meal meal : mMealsList){
             for(Ingredient ingredient : meal.getIngredients()){
+                //copy ingredient to preserve mMealList
+                Ingredient copy = new Ingredient(ingredient.getName(), ingredient.getAmount(), ingredient.getMeasurement(), ingredient.getCategory());
                 //add to appropriate sub list
                 switch (ingredient.getCategory()){
                     case "Produce":
-                        addIngredientToSubList(mProduceList, ingredient);
+                        addIngredientToSubList(mProduceList, copy);
                         break;
                     case "Bakery":
-                        addIngredientToSubList(mBakeryList, ingredient);
+                        addIngredientToSubList(mBakeryList, copy);
                         break;
                     case "Deli":
-                        addIngredientToSubList(mDeliList, ingredient);
+                        addIngredientToSubList(mDeliList, copy);
                         break;
                     case "Meat":
-                        addIngredientToSubList(mMeatList, ingredient);
+                        addIngredientToSubList(mMeatList, copy);
                         break;
                     case "Seafood":
-                        addIngredientToSubList(mSeafoodList, ingredient);
+                        addIngredientToSubList(mSeafoodList, copy);
                         break;
                     case "Grocery":
-                        addIngredientToSubList(mGroceryList, ingredient);
+                        addIngredientToSubList(mGroceryList, copy);
                         break;
                     case "Dairy":
-                        addIngredientToSubList(mDairyList, ingredient);
+                        addIngredientToSubList(mDairyList, copy);
                         break;
                 }
             }
@@ -187,7 +153,7 @@ public class ShoppingListFragment extends Fragment {
         return  i1.getAmount() + i2.getAmount();
     }
 
-    //builds shopping list based on sublists
+    //builds shopping list based on sub lists
     private void buildShoppingList(){
         if(!mProduceList.isEmpty()){
             mShoppingList.add("Produce");
