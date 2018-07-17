@@ -49,7 +49,7 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
     //Objects in fragment
     private RecyclerView mealListView;
     private MealListAdapter adapter;
-    private ArrayList<Meal> mMealsList;
+    private ArrayList<Recipe> mMealsList;
     private RelativeLayout relativeLayout;
 
     //main activity
@@ -215,7 +215,7 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
             String name = mMealsList.get(viewHolder.getAdapterPosition()).getName();
 
             // backup of removed item for undo purpose
-            final Meal deletedItem = mMealsList.get(viewHolder.getAdapterPosition());
+            final Recipe deletedItem = mMealsList.get(viewHolder.getAdapterPosition());
             final int deletedIndex = viewHolder.getAdapterPosition();
 
             // remove the item from recycler view

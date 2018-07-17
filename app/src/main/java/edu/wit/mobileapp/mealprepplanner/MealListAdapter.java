@@ -25,11 +25,11 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
     private static final String TAG = "MealListAdapter";
 
     //vars
-    private List<Meal> mealsList;
+    private List<Recipe> mealsList;
     private Context mContext;
 
     //constructor
-    public MealListAdapter(Context mContext, ArrayList<Meal> mealsList) {
+    public MealListAdapter(Context mContext, ArrayList<Recipe> mealsList) {
         this.mealsList = mealsList;
         this.mContext = mContext;
     }
@@ -46,15 +46,16 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
     //When view is rendered bind the correct holder to it
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Meal meal = mealsList.get(position);
-        holder.image.setImageResource(meal.getImage());
+        Recipe meal = mealsList.get(position);
+        //holder.image.setImageResource(meal.getImage());
+        holder.image.setImageBitmap(meal.getImage());
         holder.name.setText(meal.getName());
-        String amount = "x" + Integer.toString(meal.getAmount());
+        String amount = "x" + Integer.toString(meal.getMultiplier());
         holder.amount.setText(amount);
 
         holder.foreground.setOnClickListener((View v) -> {
                 //Meal clicked = mealsList.get(holder.getAdapterPosition());
-                Toast.makeText(mContext, "Clicked Meal:    " + meal.getName() + " x" + meal.getAmount(), Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, "Clicked Meal:    " + meal.getName() + " x" + meal.getMultiplier(), Toast.LENGTH_LONG).show();
         });
     }
 
@@ -89,7 +90,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
     }
 
     //undo swipe remove
-    public void restoreItem(Meal item, int position) {
+    public void restoreItem(Recipe item, int position) {
         mealsList.add(position, item);
         // notify item added by position
         notifyItemInserted(position);

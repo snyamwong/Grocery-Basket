@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity
     private final String LOGTAG = "MYAPP";
 
     //global lists
-    private ArrayList<Meal> mMealsList;
+    private ArrayList<Recipe> mMealsList;
     private HashMap<String, Integer> mSelectedIngredients;
 
     //class vars for nav bar and frame
@@ -163,11 +163,11 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public ArrayList<Meal> getmMealsList() {
+    public ArrayList<Recipe> getmMealsList() {
         return mMealsList;
     }
 
-    public void setmMealsList(ArrayList<Meal> mMealsList) {
+    public void setmMealsList(ArrayList<Recipe> mMealsList) {
         this.mMealsList = mMealsList;
     }
 
