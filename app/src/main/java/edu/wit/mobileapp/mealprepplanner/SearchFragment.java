@@ -69,9 +69,11 @@ public class SearchFragment extends Fragment
         searchField = view.findViewById(R.id.searchInput);
 
         //set adapter
+        // shows all the results in the database
         this.recipeArrayList = new ArrayList<>();
         recipeListAdapter = new RecipeListAdapter(getContext(), recipeArrayList);
         recyclerView.setAdapter(recipeListAdapter);
+        searchDatabase("");
 
         //top bar setup
         Toolbar toolbar = view.findViewById(R.id.searchTopBar);

@@ -1,6 +1,7 @@
 package edu.wit.mobileapp.mealprepplanner;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,6 +26,9 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
     private Context context;
     // List of recipe(s)
     private List<Recipe> recipeArrayList;
+    private ArrayList<Meal> mRecipeArrayList;
+
+    private MainActivity main;
 
     /**
      * Constructor
@@ -36,6 +40,9 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
     {
         this.context = context;
         this.recipeArrayList = recipeArrayList;
+        this.mRecipeArrayList = new ArrayList<>();
+        main = ((MainActivity)(context));
+        // recipeArrayList = main.getmMealsList();
     }
 
     /**
@@ -92,14 +99,24 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
      * @param position
      */
     @Override
-    public void onBindViewHolder(@NonNull RecipeListAdapter.ViewHolder holder, int position)
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position)
     {
         Recipe recipe = recipeArrayList.get(position);
         holder.name.setText(recipe.getName());
         holder.image.setImageBitmap(recipe.getImage());
 
+        Meal meal = new Meal();
+        meal.setName(recipe.getName());
+
         holder.foreground.setOnClickListener(v ->
         {
+            if(!mRecipeArrayList.contains(meal)){
+                Toast.makeText(context, "Meal:" + recipe.getName() + " added to meal list", Toast.LENGTH_LONG).show();
+                holder.foreground.setBackgroundColor(Color.GREEN);
+                mRecipeArrayList.add(meal);
+                main.setmMealsList(mRecipeArrayList);
+            }
+
             // TODO this should transition into MealInfoFragment
             Toast.makeText(context, String.format("Clicked on %s", recipe.getName()), Toast.LENGTH_LONG).show();
         });

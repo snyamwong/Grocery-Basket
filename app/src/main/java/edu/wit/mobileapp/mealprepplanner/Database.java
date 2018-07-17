@@ -178,9 +178,22 @@ public class Database extends SQLiteOpenHelper
             String description = cursor.getString(cursor.getColumnIndex("description"));
             String instruction = cursor.getString(cursor.getColumnIndex("instruction"));
             String chef = cursor.getString(cursor.getColumnIndex("chef"));
-            Bitmap image = BitmapFactory.decodeByteArray(blob, 0, blob.length);
+            Recipe recipe;
 
-            Recipe recipe = new Recipe(recipeID, name, image, description, instruction, chef);
+            if (blob != null)
+            {
+                Bitmap image = BitmapFactory.decodeByteArray(blob, 0, blob.length);
+                recipe = new Recipe(recipeID, name, image, description, instruction, chef);
+            }
+            else
+            {
+                int w = 400, h = 300;
+                Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
+                Bitmap bmp = Bitmap.createBitmap(w, h, conf); // this creates a MUTABLE bitmap
+
+                recipe = new Recipe(recipeID, name, bmp, description, instruction, chef);
+            }
+
 
             recipes.add(recipe);
         }
