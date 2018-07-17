@@ -90,9 +90,8 @@ public class SearchFragment extends Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        toolbar.setNavigationOnClickListener((View v) -> {
-                onBackPressed();
-        });
+        toolbar.setNavigationOnClickListener((View v) -> onBackPressed());
+
 
         searchField.addTextChangedListener(new TextWatcher() {
             @Override
