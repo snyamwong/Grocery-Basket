@@ -12,8 +12,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -49,7 +47,7 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
     //Objects in fragment
     private RecyclerView mealListView;
     private MealListAdapter adapter;
-    private ArrayList<Recipe> mMealsList;
+    private ArrayList<Recipe> mRecipeList;
     private RelativeLayout relativeLayout;
 
     //main activity
@@ -111,12 +109,12 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
     @Override
     public void onStart() {
         MainActivity main = (MainActivity)getActivity();
-        mMealsList = main.getmMealsList();
+        mRecipeList = main.getmRecipeList();
         //Retrieve saved array list then set adapter
-        adapter = new MealListAdapter(getActivity().getApplicationContext(), mMealsList); //object to update fragment
+        adapter = new MealListAdapter(getActivity().getApplicationContext(), mRecipeList); //object to update fragment
         //update list
         mealListView.setAdapter(adapter); //Update display with new list
-        mealListView.getLayoutManager().scrollToPosition(mMealsList.size() - 1); //Nav to end of list
+        mealListView.getLayoutManager().scrollToPosition(mRecipeList.size() - 1); //Nav to end of list
         //toggle empty text visibility
         toggleEmptyTextVisibility();
 
@@ -130,7 +128,7 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
 
     @Override
     public void onPause() {
-        main.setmMealsList(mMealsList);
+        main.setmRecipeList(mRecipeList);
         super.onPause();
     }
 
@@ -144,7 +142,7 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
     //On delete button press
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
-        if(mMealsList.size() == 0){return false;} //No items to delete, do nothing
+        if(mRecipeList.size() == 0){return false;} //No items to delete, do nothing
         int res_id = item.getItemId(); //get ID of pressed button (Only one button so this is redundant)
         //Redundant, only button is delete button
         if(res_id == R.id.deleteAll){
@@ -161,9 +159,9 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
                             toast.show();
 
                             //clear meal list
-                            mMealsList.clear();
+                            mRecipeList.clear();
                             mealListView.setAdapter(adapter);
-                            mealListView.getLayoutManager().scrollToPosition(mMealsList.size() - 1); //Nav to end of list
+                            mealListView.getLayoutManager().scrollToPosition(mRecipeList.size() - 1); //Nav to end of list
 
                             //Clear selected options
                             HashMap<String, Integer> selected = main.getmSelectedIngredients();
@@ -196,7 +194,7 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
     private void toggleEmptyTextVisibility(){
         //toggle empty text visibility
         TextView emptyTxt = relativeLayout.findViewById(R.id.emptyMealsList);
-        if(!mMealsList.isEmpty()) {
+        if(!mRecipeList.isEmpty()) {
             emptyTxt.setVisibility(View.INVISIBLE);
         }else {
             emptyTxt.setVisibility(View.VISIBLE);
@@ -212,10 +210,10 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         if (viewHolder instanceof MealListAdapter.ViewHolder) {
             // get the removed item name to display it in snack bar
-            String name = mMealsList.get(viewHolder.getAdapterPosition()).getName();
+            String name = mRecipeList.get(viewHolder.getAdapterPosition()).getName();
 
             // backup of removed item for undo purpose
-            final Recipe deletedItem = mMealsList.get(viewHolder.getAdapterPosition());
+            final Recipe deletedItem = mRecipeList.get(viewHolder.getAdapterPosition());
             final int deletedIndex = viewHolder.getAdapterPosition();
 
             // remove the item from recycler view
