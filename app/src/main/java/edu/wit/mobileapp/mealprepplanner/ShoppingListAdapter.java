@@ -28,7 +28,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
     private MainActivity main;
 
-    private HashMap<String, Integer> selected;
+    private HashMap<String, Double> selected;
 
     public ShoppingListAdapter(List<Object> mShoppingList, Context mContext)
     {
@@ -86,16 +86,16 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         switch (viewType)
         {
             case INGREDIENT:
-                Ingredient ingredient = (Ingredient) mShoppingList.get(position);
+                RecipeIngredient ingredient = (RecipeIngredient) mShoppingList.get(position);
 
-                holder.checked = selected.containsKey(ingredient.getName());
+                String amountString = ingredient.getQuantity() + " " + ingredient.getUnit();
 
-                holder.ingredientName.setText(ingredient.getName());
-                String amountString = ingredient.getAmount() + " " + ingredient.getMeasurement();
+                holder.checked = selected.containsKey(ingredient.getIngredientName());
+                holder.ingredientName.setText(ingredient.getIngredientName());
                 holder.ingredientAmount.setText(amountString);
 
                 //if marked as selected and amount is unchanged ==> keep checked
-                if (holder.checked && selected.get(ingredient.getName()) == ingredient.getAmount())
+                if (holder.checked && selected.get(ingredient.getIngredientName()) == ingredient.getQuantity())
                 {
                     holder.cb.setChecked(true);
                     setStrikeThrough(holder.ingredientName, true);
@@ -107,7 +107,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
                     holder.cb.setChecked(false);
                     setStrikeThrough(holder.ingredientName, false);
                     setStrikeThrough(holder.ingredientAmount, false);
-                    selected.remove(ingredient.getName());
+                    selected.remove(ingredient.getIngredientName());
                 }
 
                 holder.cb.setOnClickListener((View v) ->
@@ -124,14 +124,14 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
                     //if unchecked -> checked
                     if (cb.isChecked())
                     {
-                        selected.put(ingredient.getName(), ingredient.getAmount());
+                        selected.put(ingredient.getIngredientName(), ingredient.getQuantity());
                         setStrikeThrough(name, true);
                         setStrikeThrough(amount, true);
                         //if checked -> unchecked
                     }
                     else
                     {
-                        selected.remove(ingredient.getName());
+                        selected.remove(ingredient.getIngredientName());
                         setStrikeThrough(name, false);
                         setStrikeThrough(amount, false);
 
@@ -140,6 +140,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
                 });
                 main.setmSelectedIngredients(selected);
                 break;
+
             case HEADER:
                 String header = (String) mShoppingList.get(position);
                 holder.header.setText(header);
@@ -147,7 +148,12 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         }
     }
 
-    //strike through a text view if true un-strike through if false
+    /**
+     * Strikes through a text view if true un-strike through if false
+     *
+     * @param text
+     * @param doStrike
+     */
     private void setStrikeThrough(TextView text, boolean doStrike)
     {
         if (doStrike)
@@ -169,7 +175,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
     @Override
     public int getItemViewType(int position)
     {
-        if (mShoppingList.get(position) instanceof Ingredient)
+        if (mShoppingList.get(position) instanceof RecipeIngredient)
         {
             return INGREDIENT;
         }

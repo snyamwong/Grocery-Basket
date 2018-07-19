@@ -21,19 +21,19 @@ public class MainActivity extends AppCompatActivity
 {
     private final String LOGTAG = "MYAPP";
 
-    //global lists
+    // global lists
     private ArrayList<Recipe> mRecipeList;
-    private HashMap<String, Integer> mSelectedIngredients;
+    private HashMap<String, Double> mSelectedIngredients;
 
-    //class vars for nav bar and frame
+    // class vars for nav bar and frame
     private BottomNavigationView navigationView;
 
-    // Both fragments (MealListFragment,
+    // fragments
     private MealListFragment mealListFragment;
     private ShoppingListFragment shoppingListFragment;
     private SearchFragment searchFragment;
 
-    //Preferences for json storage
+    // preferences for json storage
     private SharedPreferences mPrefs;
     private SharedPreferences.Editor preferenceEditor;
 
@@ -43,24 +43,23 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //set preferences
+        // sets preferences
         mPrefs = getPreferences(MODE_PRIVATE);
         preferenceEditor = mPrefs.edit();
 
-        //Get global lists from last time list was destroyed
+        // gets global lists from last time list was destroyed
         retrieveGlobalDataFromStorage();
 
-
-        //init nav bar and frame
+        // init nav bar and frame
         navigationView = findViewById(R.id.main_nav);
 
-        //init both fragments
+        // init all three fragments
         mealListFragment = new MealListFragment();
         shoppingListFragment = new ShoppingListFragment();
         searchFragment = new SearchFragment();
 
-        // Set init fragment (if-else statement required as changing the portrait orientation changes onCreate / onDestroy)
-        // Default fragment is the MealList (if it is null)
+        // set init fragment (if-else statement required as changing the portrait orientation changes onCreate / onDestroy)
+        // default fragment is the MealList (if it is null)
         if (MealPrepPlannerApplication.getMainActivityFragment() == null)
         {
             Log.v(LOGTAG, "Main Activity Fragment - NULL\n");
@@ -77,14 +76,16 @@ public class MainActivity extends AppCompatActivity
             setFragment(shoppingListFragment);
         }
 
-
-        // Event listener on nav bar click (either MealsList, or ShoppingList)
+        // event listener on nav bar click (either MealsList, or ShoppingList)
         navigationView.setOnNavigationItemSelectedListener(listener ->
         {
-            if(listener.getItemId() == R.id.nav_meals && !mealListFragment.isVisible()){
+            if (listener.getItemId() == R.id.nav_meals && !mealListFragment.isVisible())
+            {
                 setFragment(mealListFragment);
                 return true;
-            }else if (listener.getItemId() == R.id.nav_shopping_list && !shoppingListFragment.isVisible()){
+            }
+            else if (listener.getItemId() == R.id.nav_shopping_list && !shoppingListFragment.isVisible())
+            {
                 setFragment(shoppingListFragment);
                 return true;
             }
@@ -92,14 +93,21 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    //Store meals list and selected map's current state
+
     @Override
-    protected void onPause() {
+    protected void onPause()
+    {
+        //Store meals list and selected map's current state
+
         storeGlobalData();
         super.onPause();
     }
 
-    // Sets fragment null case is for add buttons call of this method
+    /**
+     * Sets fragment null case is for add buttons call of this method
+     *
+     * @param fragment
+     */
     public void setFragment(Fragment fragment)
     {
         MealPrepPlannerApplication.setMainActivityFragment(fragment);
@@ -110,39 +118,53 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
-    //meal list -> json
-    //Selected Items -> json
-    public void storeGlobalData(){
+    /**
+     * Stores meal list into JSON
+     * Stores selected items into JSON
+     */
+    public void storeGlobalData()
+    {
         Gson gson = new Gson();
-        //Transform the ArrayLists into JSON Data.
+
+        // transforms the ArrayLists into JSON Data.
         String recipeJSON = gson.toJson(mRecipeList);
         preferenceEditor.putString("mealsJSONData", recipeJSON);
 
-        //selected ==> jason
+        // selected ==> jason (lol leaving this typo here - Tin)
         String selectedJSON = gson.toJson(mSelectedIngredients);
         preferenceEditor.putString("selectedJSONData", selectedJSON);
 
-        //Commit the changes.
+        // commits the changes
         preferenceEditor.commit();
     }
 
-    //json -> array list
-    //json -> selected items
-    public void retrieveGlobalDataFromStorage(){
+    /**
+     * Retrieves ArrayList from JSON
+     * Retrieves selected items from JSON
+     */
+    public void retrieveGlobalDataFromStorage()
+    {
         Gson gson = new Gson();
-        if(mPrefs.contains("mealsJSONData")){
+
+        if (mPrefs.contains("mealsJSONData"))
+        {
             String mealsJSON = mPrefs.getString("mealsJSONData", "");
             Type mealType = new TypeToken<Collection<Meal>>() {}.getType();
             mRecipeList = gson.fromJson(mealsJSON, mealType);
-        }else {
+        }
+        else
+        {
             mRecipeList = new ArrayList<>();
         }
 
-        if(mPrefs.contains("selectedJSONData")){
+        if (mPrefs.contains("selectedJSONData"))
+        {
             String selectedJSON = mPrefs.getString("selectedJSONData", "");
             Type selectedType = new TypeToken<HashMap<String, Integer>>() {}.getType();
             mSelectedIngredients = gson.fromJson(selectedJSON, selectedType);
-        }else{
+        }
+        else
+        {
             mSelectedIngredients = new HashMap<>();
         }
     }
@@ -151,35 +173,44 @@ public class MainActivity extends AppCompatActivity
     // back button pressed = trace back
     // on first fragment = close app
     @Override
-    public void onBackPressed() {
+    public void onBackPressed()
+    {
         int count = getSupportFragmentManager().getBackStackEntryCount();
 
-        if (count == 1) {
-            Log.v(LOGTAG,"onBackPressed......Called       COUNT = " + count);
+        if (count == 1)
+        {
+            Log.v(LOGTAG, "onBackPressed......Called       COUNT = " + count);
             this.finishAffinity();
-        } else {
-            Log.v(LOGTAG,"onBackPressed......Called       COUNT = " + count);
+        }
+        else
+        {
+            Log.v(LOGTAG, "onBackPressed......Called       COUNT = " + count);
             getSupportFragmentManager().popBackStack();
         }
     }
 
-    public ArrayList<Recipe> getmRecipeList() {
+    public ArrayList<Recipe> getmRecipeList()
+    {
         return mRecipeList;
     }
 
-    public void setmRecipeList(ArrayList<Recipe> mMealsList) {
+    public void setmRecipeList(ArrayList<Recipe> mMealsList)
+    {
         this.mRecipeList = mMealsList;
     }
 
-    public HashMap<String, Integer> getmSelectedIngredients() {
+    public HashMap<String, Double> getmSelectedIngredients()
+    {
         return mSelectedIngredients;
     }
 
-    public void setmSelectedIngredients(HashMap<String, Integer> mSelectedIngredients) {
+    public void setmSelectedIngredients(HashMap<String, Double> mSelectedIngredients)
+    {
         this.mSelectedIngredients = mSelectedIngredients;
     }
 
-    public SearchFragment getSearchFragment() {
+    public SearchFragment getSearchFragment()
+    {
         return searchFragment;
     }
 }

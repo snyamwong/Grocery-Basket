@@ -33,13 +33,13 @@ import java.util.HashMap;
 
 
 /**
- *
  * MEALS FRAGMENT
  *
- *@author: Jason Fagerberg
+ * @author: Jason Fagerberg
  */
 
-public class MealListFragment extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
+public class MealListFragment extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener
+{
     //Debug log tag
     private static final String LOGTAG = "MealsListFragment";
     Activity context;
@@ -53,16 +53,18 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
     //main activity
     private MainActivity main;
 
-    public MealListFragment() {
+    public MealListFragment()
+    {
         // Required empty public constructor
     }
 
     //init data
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
-        main = (MainActivity)getActivity();
+        main = (MainActivity) getActivity();
 
         Log.v(LOGTAG, "onCreate.....finished");
     }
@@ -70,7 +72,8 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
     //build view
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState)
+    {
 
         context = getActivity();
         View view;
@@ -83,7 +86,7 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
 
         //create toolbar named 'topBar'
         Toolbar topBar = view.findViewById(R.id.mealsTopBar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(topBar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(topBar);
         setHasOptionsMenu(true);
 
         //Infinite List View
@@ -97,7 +100,8 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
 
         //Add button Setup
         FloatingActionButton btnAdd = view.findViewById(R.id.btnAdd);
-        btnAdd.setOnClickListener((View v) -> {
+        btnAdd.setOnClickListener((View v) ->
+        {
             //set fragment null will set fragment to SearchFragment
             main.setFragment(main.getSearchFragment());
 
@@ -107,8 +111,9 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
     }
 
     @Override
-    public void onStart() {
-        MainActivity main = (MainActivity)getActivity();
+    public void onStart()
+    {
+        MainActivity main = (MainActivity) getActivity();
         mRecipeList = main.getmRecipeList();
         //Retrieve saved array list then set adapter
         adapter = new MealListAdapter(getActivity().getApplicationContext(), mRecipeList); //object to update fragment
@@ -127,34 +132,41 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
     }
 
     @Override
-    public void onPause() {
+    public void onPause()
+    {
         main.setmRecipeList(mRecipeList);
         super.onPause();
     }
 
     //Create menu where delete button sits
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+    {
         inflater.inflate(R.menu.menu_meals, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     //On delete button press
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        if(mRecipeList.size() == 0){return false;} //No items to delete, do nothing
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        if (mRecipeList.size() == 0) {return false;} //No items to delete, do nothing
         int res_id = item.getItemId(); //get ID of pressed button (Only one button so this is redundant)
         //Redundant, only button is delete button
-        if(res_id == R.id.deleteAll){
+        if (res_id == R.id.deleteAll)
+        {
 
             //Are you sure? box class
-            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener()
+            {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    switch (which){
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    switch (which)
+                    {
                         case DialogInterface.BUTTON_POSITIVE:
                             //Yes is pressed
-                            Toast toast = Toast.makeText(getActivity().getApplicationContext(), "All Meals Deleted " , Toast.LENGTH_SHORT);
+                            Toast toast = Toast.makeText(getActivity().getApplicationContext(), "All Meals Deleted ", Toast.LENGTH_SHORT);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
 
@@ -164,7 +176,7 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
                             mealListView.getLayoutManager().scrollToPosition(mRecipeList.size() - 1); //Nav to end of list
 
                             //Clear selected options
-                            HashMap<String, Integer> selected = main.getmSelectedIngredients();
+                            HashMap<String, Double> selected = main.getmSelectedIngredients();
                             selected.clear();
                             main.setmSelectedIngredients(selected);
 
@@ -191,12 +203,16 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
     }
 
     //toggle the empty list text
-    private void toggleEmptyTextVisibility(){
+    private void toggleEmptyTextVisibility()
+    {
         //toggle empty text visibility
         TextView emptyTxt = relativeLayout.findViewById(R.id.emptyMealsList);
-        if(!mRecipeList.isEmpty()) {
+        if (!mRecipeList.isEmpty())
+        {
             emptyTxt.setVisibility(View.INVISIBLE);
-        }else {
+        }
+        else
+        {
             emptyTxt.setVisibility(View.VISIBLE);
         }
     }
@@ -207,8 +223,10 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
      * undo option will be provided in snackbar to restore the item
      */
     @Override
-    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
-        if (viewHolder instanceof MealListAdapter.ViewHolder) {
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position)
+    {
+        if (viewHolder instanceof MealListAdapter.ViewHolder)
+        {
             // get the removed item name to display it in snack bar
             String name = mRecipeList.get(viewHolder.getAdapterPosition()).getName();
 
@@ -221,10 +239,11 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
 
             // showing snack bar with Undo option
             Snackbar snackbar = Snackbar.make(relativeLayout, name + " removed from meal list!", Snackbar.LENGTH_LONG);
-            snackbar.setAction("UNDO", (View v) -> {
-                    // undo is selected, restore the deleted item
-                    adapter.restoreItem(deletedItem, deletedIndex);
-                    toggleEmptyTextVisibility();
+            snackbar.setAction("UNDO", (View v) ->
+            {
+                // undo is selected, restore the deleted item
+                adapter.restoreItem(deletedItem, deletedIndex);
+                toggleEmptyTextVisibility();
             });
             snackbar.setActionTextColor(Color.YELLOW);
             snackbar.show();

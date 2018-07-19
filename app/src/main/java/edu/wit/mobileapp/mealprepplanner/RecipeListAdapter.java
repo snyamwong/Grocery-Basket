@@ -26,7 +26,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
     private Context context;
     // List of recipe(s)
     private List<Recipe> recipeArrayList;
-    private ArrayList<Meal> mRecipeArrayList;
+    private ArrayList<Recipe> mRecipeArrayList;
 
     private MainActivity main;
 
@@ -41,7 +41,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
         this.context = context;
         this.recipeArrayList = recipeArrayList;
         this.mRecipeArrayList = new ArrayList<>();
-        main = ((MainActivity)(context));
+        main = ((MainActivity) (context));
         // recipeArrayList = main.getmMealsList();
     }
 
@@ -105,16 +105,14 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
         holder.name.setText(recipe.getName());
         holder.image.setImageBitmap(recipe.getImage());
 
-        Meal meal = new Meal();
-        meal.setName(recipe.getName());
-
         holder.foreground.setOnClickListener(v ->
         {
-            if(!mRecipeArrayList.contains(meal)){
+            if (!mRecipeArrayList.contains(recipe))
+            {
                 Toast.makeText(context, "Meal:" + recipe.getName() + " added to meal list", Toast.LENGTH_LONG).show();
                 holder.foreground.setBackgroundColor(Color.GREEN);
-                mRecipeArrayList.add(meal);
-                main.setmMealsList(mRecipeArrayList);
+                mRecipeArrayList.add(recipe);
+                main.setmRecipeList(mRecipeArrayList);
             }
 
             // TODO this should transition into MealInfoFragment

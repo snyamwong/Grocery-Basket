@@ -38,7 +38,7 @@ public class ShoppingListFragment extends Fragment
     private ArrayList<RecipeIngredient> mDairyList;
 
     //Meal list from meal fragment
-    private ArrayList<Recipe> mMealsList;
+    private ArrayList<Recipe> mRecipeList;
 
     // Adapter
     private ShoppingListAdapter adapter;
@@ -52,6 +52,7 @@ public class ShoppingListFragment extends Fragment
 
     /**
      * Init data
+     *
      * @param savedInstanceState
      */
     @Override
@@ -64,6 +65,7 @@ public class ShoppingListFragment extends Fragment
 
     /**
      * Renders view
+     *
      * @param inflater
      * @param container
      * @param savedInstanceState
@@ -83,7 +85,7 @@ public class ShoppingListFragment extends Fragment
         mGroceryList = new ArrayList<>();
         mDairyList = new ArrayList<>();
 
-        mMealsList = main.getmMealsList();
+        mRecipeList = main.getmRecipeList();
         setShoppingList();
 
         adapter = new ShoppingListAdapter(mShoppingList, getContext()); //object to update fragment
@@ -121,23 +123,31 @@ public class ShoppingListFragment extends Fragment
     @Override
     public void onPause()
     {
-        main.setmMealsList(mMealsList);
+        main.setmRecipeList(mRecipeList);
         super.onPause();
     }
 
-
-    //take meals list and call addIngredientToSubList w/ correct parameters
+    /**
+     * Takes recipe list and call addIngredientToSubList w/ correct parameters
+     */
     public void setShoppingList()
     {
-        //for each ingredient in each meal
-        for (Meal meal : mMealsList)
+        // For each recipe in recipe list
+        for (Recipe recipe : mRecipeList)
         {
-            for (Ingredient ingredient : meal.getIngredients())
+            // For each ingredient in recipe
+            for (RecipeIngredient recipeIngredient : recipe.getIngredients())
             {
-                //copy ingredient to preserve mMealList
-                Ingredient copy = new Ingredient(ingredient.getName(), ingredient.getAmount(), ingredient.getMeasurement(), ingredient.getCategory());
-                //add to appropriate sub list
-                switch (ingredient.getCategory())
+                // Copies ingredient to preserve mMealList
+                RecipeIngredient copy = new RecipeIngredient(recipeIngredient.getRecipeID(),
+                        recipeIngredient.getRecipeName(),
+                        recipeIngredient.getIngredientName(),
+                        recipeIngredient.getIngredientCategory(),
+                        recipeIngredient.getQuantity(),
+                        recipeIngredient.getUnit());
+
+                // Adds to appropriate sub list
+                switch (recipeIngredient.getIngredientCategory())
                 {
                     case "Produce":
                         addIngredientToSubList(mProduceList, copy);
@@ -165,28 +175,42 @@ public class ShoppingListFragment extends Fragment
         }
     }
 
-    //Add ingredient to sublist, add amounts if ingredient is already there
-    private void addIngredientToSubList(ArrayList<Ingredient> list, Ingredient ingredient)
+    /**
+     * Adds ingredient to sublist, add amounts if ingredient is already there
+     *
+     * @param list
+     * @param recipeIngredient
+     */
+    private void addIngredientToSubList(ArrayList<RecipeIngredient> list, RecipeIngredient recipeIngredient)
     {
-        if (list.contains(ingredient))
+        if (list.contains(recipeIngredient))
         {
-            Ingredient found = list.get(list.indexOf(ingredient));
-            found.setAmount(combineAmounts(found, ingredient));
+            RecipeIngredient found = list.get(list.indexOf(recipeIngredient));
+            found.setQuantity(combineAmounts(found, recipeIngredient));
         }
         else
         {
-            list.add(ingredient);
+            list.add(recipeIngredient);
         }
     }
 
-    //combine listed ingredient amount with new ingredient amount
-    //TODO: convert measurements to be the same as well, might not need to
-    private int combineAmounts(Ingredient i1, Ingredient i2)
+    /**
+     * Combines listed ingredient amount with new ingredient amount
+     * <p>
+     * TODO: convert measurements to be the same as well, might not need to
+     *
+     * @param i1
+     * @param i2
+     * @return
+     */
+    private double combineAmounts(RecipeIngredient i1, RecipeIngredient i2)
     {
-        return i1.getAmount() + i2.getAmount();
+        return i1.getQuantity() + i2.getQuantity();
     }
 
-    //builds shopping list based on sub lists
+    /**
+     * Builds shopping list based on sub lists
+     */
     private void buildShoppingList()
     {
         if (!mProduceList.isEmpty())
