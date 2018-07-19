@@ -180,6 +180,7 @@ public class Database extends SQLiteOpenHelper
             String chef = cursor.getString(cursor.getColumnIndex("chef"));
             Recipe recipe;
 
+            // TODO SCALE DOWN ALL THE PHOTOS by checking its dimens before decoding
             if (blob != null)
             {
                 Bitmap image = BitmapFactory.decodeByteArray(blob, 0, blob.length);
@@ -187,13 +188,10 @@ public class Database extends SQLiteOpenHelper
             }
             else
             {
-                int w = 400, h = 300;
-                Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
-                Bitmap bmp = Bitmap.createBitmap(w, h, conf); // this creates a MUTABLE bitmap
+                Bitmap icon = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_app_icon);
 
-                recipe = new Recipe(recipeID, name, bmp, description, instruction, chef);
+                recipe = new Recipe(recipeID, name, icon, description, instruction, chef);
             }
-
 
             recipes.add(recipe);
         }

@@ -79,7 +79,7 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
         View view;
 
         //inflate fragment
-        view = inflater.inflate(R.layout.fragment_meals, container, false);
+        view = inflater.inflate(R.layout.fragment_meal, container, false);
 
         //getLayout
         relativeLayout = view.findViewById(R.id.meals_layout);

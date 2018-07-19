@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity
 
         // transforms the ArrayLists into JSON Data.
         String recipeJSON = gson.toJson(mRecipeList);
-        preferenceEditor.putString("mealsJSONData", recipeJSON);
+        preferenceEditor.putString("recipeJSONData", recipeJSON);
 
         // selected ==> jason (lol leaving this typo here - Tin)
         String selectedJSON = gson.toJson(mSelectedIngredients);
@@ -146,27 +146,31 @@ public class MainActivity extends AppCompatActivity
     {
         Gson gson = new Gson();
 
-        if (mPrefs.contains("mealsJSONData"))
-        {
-            String mealsJSON = mPrefs.getString("mealsJSONData", "");
-            Type mealType = new TypeToken<Collection<Meal>>() {}.getType();
-            mRecipeList = gson.fromJson(mealsJSON, mealType);
-        }
-        else
-        {
-            mRecipeList = new ArrayList<>();
-        }
+        mRecipeList = new ArrayList<>();
+        mSelectedIngredients = new HashMap<>();
 
-        if (mPrefs.contains("selectedJSONData"))
-        {
-            String selectedJSON = mPrefs.getString("selectedJSONData", "");
-            Type selectedType = new TypeToken<HashMap<String, Integer>>() {}.getType();
-            mSelectedIngredients = gson.fromJson(selectedJSON, selectedType);
-        }
-        else
-        {
-            mSelectedIngredients = new HashMap<>();
-        }
+        // TODO this is broken...
+//        if (mPrefs.contains("recipeJSONData"))
+//        {
+//            String mealsJSON = mPrefs.getString("recipeJSONData", "");
+//            Type mealType = new TypeToken<Collection<Recipe>>() {}.getType();
+//            mRecipeList = gson.fromJson(mealsJSON, mealType);
+//        }
+//        else
+//        {
+//            mRecipeList = new ArrayList<>();
+//        }
+//
+//        if (mPrefs.contains("selectedJSONData"))
+//        {
+//            String selectedJSON = mPrefs.getString("selectedJSONData", "");
+//            Type selectedType = new TypeToken<HashMap<String, Double>>() {}.getType();
+//            mSelectedIngredients = gson.fromJson(selectedJSON, selectedType);
+//        }
+//        else
+//        {
+//            mSelectedIngredients = new HashMap<>();
+//        }
     }
 
 

@@ -68,7 +68,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
     }
 
     /**
-     * NOTE: Using layout recipe_list rather than meals_list
+     * NOTE: Using layout recipe_list rather than meal_list
      * <p>
      * Inflate layout here
      *
@@ -80,7 +80,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
     @Override
     public RecipeListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
-        // Here, using recipe_list instead of meals_list so I avoid using the
+        // Here, using recipe_list instead of meal_list so I avoid using the
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.recipe_list, null);
 
