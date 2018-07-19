@@ -42,8 +42,8 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
     {
         this.context = context;
         this.recipeArrayList = recipeArrayList;
-        this.mRecipeArrayList = new ArrayList<>();
         main = ((MainActivity) (context));
+        this.mRecipeArrayList = main.getmRecipeList();
         // recipeArrayList = main.getmMealsList();
     }
 
@@ -103,7 +103,6 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position)
     {
-        mRecipeArrayList = main.getmRecipeList();
         Recipe recipe = recipeArrayList.get(position);
         holder.name.setText(recipe.getName());
         if (recipe.getImage() != null)

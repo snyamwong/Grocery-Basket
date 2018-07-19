@@ -96,4 +96,9 @@ public class RecipeIngredient
                 ", unit='" + unit + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.getRecipeID() == ((RecipeIngredient)obj).getRecipeID();
+    }
 }
