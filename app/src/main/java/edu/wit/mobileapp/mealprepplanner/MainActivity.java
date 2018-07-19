@@ -13,6 +13,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -97,10 +98,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onPause()
     {
-        //Store meals list and selected map's current state
-
-        storeGlobalData();
         super.onPause();
+
+        //Store meals list and selected map's current state
+        storeGlobalData();
     }
 
     /**
@@ -136,6 +137,7 @@ public class MainActivity extends AppCompatActivity
 
         // commits the changes
         preferenceEditor.commit();
+        preferenceEditor.apply();
     }
 
     /**
@@ -150,11 +152,16 @@ public class MainActivity extends AppCompatActivity
 //        mSelectedIngredients = new HashMap<>();
 
         // TODO this is broken...
+        // EDGE CASE
+        // IF THERE IS ONLY ONE ITEM, IT'S NOT AN ARRAY, IT'S AN OBJECT
+        // NEED TO WATCH OUT FOR THAT CASE
         if (mPrefs.contains("recipeJSONData"))
         {
             String recipeJSON = mPrefs.getString("recipeJSONData", "");
+            Log.v(LOGTAG, recipeJSON);
             Type mealType = new TypeToken<Collection<Recipe>>() {}.getType();
             mRecipeList = gson.fromJson(recipeJSON, mealType);
+            //mRecipeList = new ArrayList<>();
         }
         else
         {
@@ -166,6 +173,7 @@ public class MainActivity extends AppCompatActivity
             String selectedJSON = mPrefs.getString("selectedJSONData", "");
             Type selectedType = new TypeToken<HashMap<String, Double>>() {}.getType();
             mSelectedIngredients = gson.fromJson(selectedJSON, selectedType);
+            //mSelectedIngredients = new HashMap<>();
         }
         else
         {

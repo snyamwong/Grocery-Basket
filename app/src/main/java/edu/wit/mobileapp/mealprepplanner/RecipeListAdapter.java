@@ -1,6 +1,8 @@
 package edu.wit.mobileapp.mealprepplanner;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -103,7 +105,14 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
     {
         Recipe recipe = recipeArrayList.get(position);
         holder.name.setText(recipe.getName());
-        holder.image.setImageBitmap(recipe.getImage());
+        if (recipe.getImage() != null)
+        {
+            holder.image.setImageBitmap(BitmapFactory.decodeByteArray(recipe.getImage(), 0, recipe.getImage().length));
+        }
+        else
+        {
+            holder.image.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_app_icon));
+        }
 
         holder.foreground.setOnClickListener(v ->
         {

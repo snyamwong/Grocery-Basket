@@ -13,7 +13,7 @@ public class Recipe
     private String name;
 
     // image of the recipe
-    private Bitmap image;
+    private byte[] image;
 
     // text of the description
     private String description;
@@ -32,7 +32,7 @@ public class Recipe
 
     public Recipe() {}
 
-    public Recipe(int recipeID, String name, Bitmap image, String description, String instruction, String chef)
+    public Recipe(int recipeID, String name, byte[] image, String description, String instruction, String chef)
     {
         //didn't want to add to constructor
         multiplier = 1;
@@ -119,12 +119,12 @@ public class Recipe
                 '}';
     }
 
-    public Bitmap getImage()
+    public byte[] getImage()
     {
         return image;
     }
 
-    public void setImage(Bitmap image)
+    public void setImage(byte[] image)
     {
         this.image = image;
     }

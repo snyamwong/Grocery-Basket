@@ -178,20 +178,19 @@ public class Database extends SQLiteOpenHelper
             String description = cursor.getString(cursor.getColumnIndex("description"));
             String instruction = cursor.getString(cursor.getColumnIndex("instruction"));
             String chef = cursor.getString(cursor.getColumnIndex("chef"));
-            Recipe recipe;
+            Recipe recipe = new Recipe(recipeID, name, blob, description, instruction, chef);;
 
             // TODO SCALE DOWN ALL THE PHOTOS by checking its dimens before decoding
-            if (blob != null)
-            {
-                Bitmap image = BitmapFactory.decodeByteArray(blob, 0, blob.length);
-                recipe = new Recipe(recipeID, name, image, description, instruction, chef);
-            }
-            else
-            {
-                Bitmap icon = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_app_icon);
-
-                recipe = new Recipe(recipeID, name, icon, description, instruction, chef);
-            }
+//            if (blob != null)
+//            {
+//                Bitmap image = BitmapFactory.decodeByteArray(blob, 0, blob.length);
+//                recipe = new Recipe(recipeID, name, image, description, instruction, chef);
+//            }
+//            else
+//            {
+//                Bitmap icon = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_app_icon);
+//                recipe = new Recipe(recipeID, name, icon, description, instruction, chef);
+//            }
 
             recipes.add(recipe);
         }

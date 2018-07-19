@@ -2,6 +2,7 @@ package edu.wit.mobileapp.mealprepplanner;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -54,7 +55,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
     public void onBindViewHolder(@NonNull SearchListAdapter.ViewHolder holder, int position)
     {
         Recipe recipe = searchList.get(position);
-        holder.image.setImageBitmap(recipe.getImage());
+        holder.image.setImageBitmap(BitmapFactory.decodeByteArray(recipe.getImage(), 0, recipe.getImage().length));
         holder.name.setText(recipe.getName());
 
         holder.foreground.setBackgroundColor(Color.WHITE);
