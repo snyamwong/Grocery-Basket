@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity
     private final String LOGTAG = "MYAPP";
 
     //global lists
-    private ArrayList<Meal> mMealsList;
+    private ArrayList<Recipe> mRecipeList;
     private HashMap<String, Integer> mSelectedIngredients;
 
     //class vars for nav bar and frame
@@ -115,8 +115,8 @@ public class MainActivity extends AppCompatActivity
     public void storeGlobalData(){
         Gson gson = new Gson();
         //Transform the ArrayLists into JSON Data.
-        String mealsJSON = gson.toJson(mMealsList);
-        preferenceEditor.putString("mealsJSONData", mealsJSON);
+        String recipeJSON = gson.toJson(mRecipeList);
+        preferenceEditor.putString("mealsJSONData", recipeJSON);
 
         //selected ==> jason
         String selectedJSON = gson.toJson(mSelectedIngredients);
@@ -133,9 +133,9 @@ public class MainActivity extends AppCompatActivity
         if(mPrefs.contains("mealsJSONData")){
             String mealsJSON = mPrefs.getString("mealsJSONData", "");
             Type mealType = new TypeToken<Collection<Meal>>() {}.getType();
-            mMealsList = gson.fromJson(mealsJSON, mealType);
+            mRecipeList = gson.fromJson(mealsJSON, mealType);
         }else {
-            mMealsList = new ArrayList<>();
+            mRecipeList = new ArrayList<>();
         }
 
         if(mPrefs.contains("selectedJSONData")){
@@ -163,12 +163,12 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public ArrayList<Meal> getmMealsList() {
-        return mMealsList;
+    public ArrayList<Recipe> getmRecipeList() {
+        return mRecipeList;
     }
 
-    public void setmMealsList(ArrayList<Meal> mMealsList) {
-        this.mMealsList = mMealsList;
+    public void setmRecipeList(ArrayList<Recipe> mMealsList) {
+        this.mRecipeList = mMealsList;
     }
 
     public HashMap<String, Integer> getmSelectedIngredients() {

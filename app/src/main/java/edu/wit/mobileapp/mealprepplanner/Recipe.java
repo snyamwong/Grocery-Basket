@@ -27,10 +27,15 @@ public class Recipe
     // all of the ingredients in the recipe
     private ArrayList<RecipeIngredient> ingredients;
 
+    //multiplier for recipe
+    private int multiplier;
+
     public Recipe() {}
 
     public Recipe(int recipeID, String name, Bitmap image, String description, String instruction, String chef)
     {
+        //didn't want to add to constructor
+        multiplier = 1;
         this.recipeID = recipeID;
         this.name = name;
         this.image = image;
@@ -122,5 +127,13 @@ public class Recipe
     public void setImage(Bitmap image)
     {
         this.image = image;
+    }
+
+    public int getMultiplier() {
+        return multiplier;
+    }
+
+    public void setMultiplier(int multiplier) {
+        this.multiplier = multiplier;
     }
 }
