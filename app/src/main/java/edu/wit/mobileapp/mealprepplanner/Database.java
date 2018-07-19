@@ -121,7 +121,7 @@ public class Database extends SQLiteOpenHelper
         // opens the database
         String path = DB_PATH + DB_NAME;
 
-        db = SQLiteDatabase.openOrCreateDatabase(path, null);
+        db = SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READONLY);
     }
 
     /**

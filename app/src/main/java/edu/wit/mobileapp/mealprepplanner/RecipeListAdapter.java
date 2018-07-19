@@ -44,7 +44,6 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
         this.recipeArrayList = recipeArrayList;
         main = ((MainActivity) (context));
         this.mRecipeArrayList = main.getmRecipeList();
-        // recipeArrayList = main.getmMealsList();
     }
 
     /**
