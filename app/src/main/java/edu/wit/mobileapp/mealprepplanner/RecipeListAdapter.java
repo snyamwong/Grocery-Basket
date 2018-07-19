@@ -123,9 +123,6 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
                 mRecipeArrayList.add(recipe);
                 main.setmRecipeList(mRecipeArrayList);
             }
-
-            // TODO this should transition into MealInfoFragment
-            Toast.makeText(context, String.format("Clicked on %s", recipe.getName()), Toast.LENGTH_LONG).show();
         });
     }
 

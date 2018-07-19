@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity
         {
             String recipeJSON = mPrefs.getString("recipeJSONData", "");
             Log.v(LOGTAG, recipeJSON);
-            Type mealType = new TypeToken<Collection<Recipe>>() {}.getType();
+            Type mealType = new TypeToken<ArrayList<Recipe>>() {}.getType();
             mRecipeList = gson.fromJson(recipeJSON, mealType);
             //mRecipeList = new ArrayList<>();
         }
