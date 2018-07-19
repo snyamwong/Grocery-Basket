@@ -146,31 +146,31 @@ public class MainActivity extends AppCompatActivity
     {
         Gson gson = new Gson();
 
-        mRecipeList = new ArrayList<>();
-        mSelectedIngredients = new HashMap<>();
+//        mRecipeList = new ArrayList<>();
+//        mSelectedIngredients = new HashMap<>();
 
         // TODO this is broken...
-//        if (mPrefs.contains("recipeJSONData"))
-//        {
-//            String mealsJSON = mPrefs.getString("recipeJSONData", "");
-//            Type mealType = new TypeToken<Collection<Recipe>>() {}.getType();
-//            mRecipeList = gson.fromJson(mealsJSON, mealType);
-//        }
-//        else
-//        {
-//            mRecipeList = new ArrayList<>();
-//        }
-//
-//        if (mPrefs.contains("selectedJSONData"))
-//        {
-//            String selectedJSON = mPrefs.getString("selectedJSONData", "");
-//            Type selectedType = new TypeToken<HashMap<String, Double>>() {}.getType();
-//            mSelectedIngredients = gson.fromJson(selectedJSON, selectedType);
-//        }
-//        else
-//        {
-//            mSelectedIngredients = new HashMap<>();
-//        }
+        if (mPrefs.contains("recipeJSONData"))
+        {
+            String recipeJSON = mPrefs.getString("recipeJSONData", "");
+            Type mealType = new TypeToken<Collection<Recipe>>() {}.getType();
+            mRecipeList = gson.fromJson(recipeJSON, mealType);
+        }
+        else
+        {
+            mRecipeList = new ArrayList<>();
+        }
+
+        if (mPrefs.contains("selectedJSONData"))
+        {
+            String selectedJSON = mPrefs.getString("selectedJSONData", "");
+            Type selectedType = new TypeToken<HashMap<String, Double>>() {}.getType();
+            mSelectedIngredients = gson.fromJson(selectedJSON, selectedType);
+        }
+        else
+        {
+            mSelectedIngredients = new HashMap<>();
+        }
     }
 
 
