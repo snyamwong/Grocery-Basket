@@ -103,6 +103,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position)
     {
+        mRecipeArrayList = main.getmRecipeList();
         Recipe recipe = recipeArrayList.get(position);
         holder.name.setText(recipe.getName());
         if (recipe.getImage() != null)
@@ -124,6 +125,15 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Vi
                 main.setmRecipeList(mRecipeArrayList);
             }
         });
+
+        if (mRecipeArrayList.contains(recipe))
+        {
+            holder.foreground.setBackgroundColor(Color.GREEN);
+        }
+        else
+        {
+            holder.foreground.setBackgroundColor(Color.WHITE);
+        }
     }
 
     @Override
