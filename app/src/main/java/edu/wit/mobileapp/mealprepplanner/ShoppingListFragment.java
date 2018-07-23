@@ -14,6 +14,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import edu.wit.mobileapp.mealprepplanner.adapter.ShoppingListAdapter;
+import edu.wit.mobileapp.mealprepplanner.helper.Recipe;
+import edu.wit.mobileapp.mealprepplanner.helper.RecipeIngredient;
+
 /**
  *
  */

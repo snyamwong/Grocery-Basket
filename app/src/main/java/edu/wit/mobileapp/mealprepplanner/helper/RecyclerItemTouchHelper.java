@@ -1,9 +1,11 @@
-package edu.wit.mobileapp.mealprepplanner;
+package edu.wit.mobileapp.mealprepplanner.helper;
 
 import android.graphics.Canvas;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
+
+import edu.wit.mobileapp.mealprepplanner.adapter.MealListAdapter;
 
 
 public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {

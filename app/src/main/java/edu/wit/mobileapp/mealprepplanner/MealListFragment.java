@@ -31,6 +31,10 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import edu.wit.mobileapp.mealprepplanner.adapter.MealListAdapter;
+import edu.wit.mobileapp.mealprepplanner.helper.Recipe;
+import edu.wit.mobileapp.mealprepplanner.helper.RecyclerItemTouchHelper;
+
 
 /**
  * MEALS FRAGMENT

@@ -5,8 +5,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import java.io.File;
@@ -15,6 +13,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+
+import edu.wit.mobileapp.mealprepplanner.helper.Recipe;
+import edu.wit.mobileapp.mealprepplanner.helper.RecipeIngredient;
 
 /**
  * A helper class for the database being used in this app.

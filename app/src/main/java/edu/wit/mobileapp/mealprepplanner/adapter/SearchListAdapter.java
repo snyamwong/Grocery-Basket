@@ -1,11 +1,9 @@
-package edu.wit.mobileapp.mealprepplanner;
+package edu.wit.mobileapp.mealprepplanner.adapter;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,15 +13,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import static android.content.Context.MODE_PRIVATE;
+import edu.wit.mobileapp.mealprepplanner.MainActivity;
+import edu.wit.mobileapp.mealprepplanner.R;
+import edu.wit.mobileapp.mealprepplanner.helper.Recipe;
 
 public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.ViewHolder>
 {

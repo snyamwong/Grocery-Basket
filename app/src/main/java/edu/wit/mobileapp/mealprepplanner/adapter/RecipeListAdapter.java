@@ -1,7 +1,6 @@
-package edu.wit.mobileapp.mealprepplanner;
+package edu.wit.mobileapp.mealprepplanner.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -16,6 +15,10 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import edu.wit.mobileapp.mealprepplanner.MainActivity;
+import edu.wit.mobileapp.mealprepplanner.R;
+import edu.wit.mobileapp.mealprepplanner.helper.Recipe;
 
 /**
  * Class for RecipeListAdapter, since Meal class and Recipe class both share different attributes

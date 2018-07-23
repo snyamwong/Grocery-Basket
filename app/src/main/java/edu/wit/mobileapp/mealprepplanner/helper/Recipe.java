@@ -1,4 +1,4 @@
-package edu.wit.mobileapp.mealprepplanner;
+package edu.wit.mobileapp.mealprepplanner.helper;
 
 import android.graphics.Bitmap;
 

@@ -1,10 +1,9 @@
-package edu.wit.mobileapp.mealprepplanner;
+package edu.wit.mobileapp.mealprepplanner.adapter;
 
 import android.content.Context;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +14,10 @@ import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.List;
+
+import edu.wit.mobileapp.mealprepplanner.MainActivity;
+import edu.wit.mobileapp.mealprepplanner.R;
+import edu.wit.mobileapp.mealprepplanner.helper.RecipeIngredient;
 
 
 public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ViewHolder>
