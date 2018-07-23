@@ -26,6 +26,7 @@ import java.util.ArrayList;
 public class Database extends SQLiteOpenHelper
 {
     private static final String LOGTAG = "DATABASE_LOG";
+    // TODO change hard coded value
     private static String DB_PATH = "/data/data/edu.wit.mobileapp.mealprepplanner/";
     private static String DB_NAME = "meal_prep_db.db";
 
@@ -44,7 +45,7 @@ public class Database extends SQLiteOpenHelper
      *
      * @throws IOException
      */
-    public void createDatabase() throws IOException
+    public void createDatabase()
     {
         try
         {
@@ -108,14 +109,7 @@ public class Database extends SQLiteOpenHelper
         // first, checks if database exists in local phone's storage
         if (!this.exists())
         {
-            try
-            {
-                this.createDatabase();
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
+            this.createDatabase();
         }
 
         // opens the database
@@ -178,7 +172,7 @@ public class Database extends SQLiteOpenHelper
             String description = cursor.getString(cursor.getColumnIndex("description"));
             String instruction = cursor.getString(cursor.getColumnIndex("instruction"));
             String chef = cursor.getString(cursor.getColumnIndex("chef"));
-            Recipe recipe = new Recipe(recipeID, name, blob, description, instruction, chef);;
+            Recipe recipe = new Recipe(recipeID, name, blob, description, instruction, chef);
 
             // TODO SCALE DOWN ALL THE PHOTOS by checking its dimens before decoding
 //            if (blob != null)

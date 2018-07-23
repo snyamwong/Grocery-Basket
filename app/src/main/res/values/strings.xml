@@ -12,4 +12,6 @@
     <string name="emptyShoppingList">No Shopping to Do!</string>
 
     <string name="remove">REMOVE</string>
+    <string name="add_meal_change_serving">Add Meal / Change Serving</string>
+    <string name="recipe_goes_here">Recipe Goes Here:</string>
 </resources>
