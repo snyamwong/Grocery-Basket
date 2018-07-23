@@ -59,24 +59,6 @@ public class MainActivity extends AppCompatActivity
         shoppingListFragment = new ShoppingListFragment();
         searchFragment = new SearchFragment();
 
-        // set init fragment (if-else statement required as changing the portrait orientation changes onCreate / onDestroy)
-        // default fragment is the MealList (if it is null)
-        if (MealPrepPlannerApplication.getMainActivityFragment() == null)
-        {
-            Log.v(LOGTAG, "Main Activity Fragment - NULL\n");
-            setFragment(mealListFragment);
-        }
-        if (MealPrepPlannerApplication.getMainActivityFragment().getId() == R.id.nav_meals)
-        {
-            Log.v(LOGTAG, "Main Activity Fragment - MEAL\n");
-            setFragment(mealListFragment);
-        }
-        else if (MealPrepPlannerApplication.getMainActivityFragment().getId() == R.id.nav_shopping_list)
-        {
-            Log.v(LOGTAG, "Main Activity Fragment - SHOPPING LIST\n");
-            setFragment(shoppingListFragment);
-        }
-
         // event listener on nav bar click (either MealsList, or ShoppingList)
         navigationView.setOnNavigationItemSelectedListener(listener ->
         {
@@ -99,9 +81,38 @@ public class MainActivity extends AppCompatActivity
     protected void onPause()
     {
         super.onPause();
-
+        Log.v(LOGTAG, "onPaused.....Called");
         //Store meals list and selected map's current state
         storeGlobalData();
+    }
+
+    @Override
+    protected void onResume()
+    {
+        //Log.v(LOGTAG, "getMAFrag = " + MealPrepPlannerApplication.getMainActivityFragment().toString());
+        if (MealPrepPlannerApplication.getMainActivityFragment() == null)
+        {
+            Log.v(LOGTAG, "Main Activity Fragment - NULL\n");
+            setFragment(mealListFragment);
+        }
+        if (MealPrepPlannerApplication.getMainActivityFragment() instanceof MealListFragment)
+        {
+            Log.v(LOGTAG, "Main Activity Fragment - MEAL\n");
+            setFragment(mealListFragment);
+        }
+        else if (MealPrepPlannerApplication.getMainActivityFragment() instanceof ShoppingListFragment)
+        {
+            Log.v(LOGTAG, "Main Activity Fragment - SHOPPING LIST\n");
+            setFragment(shoppingListFragment);
+        }
+        Log.v(LOGTAG, "onResume......called");
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy(){
+        MealPrepPlannerApplication.setMainActivityFragment(mealListFragment);
+        super.onDestroy();
     }
 
     /**
@@ -151,14 +162,13 @@ public class MainActivity extends AppCompatActivity
 //        mRecipeList = new ArrayList<>();
 //        mSelectedIngredients = new HashMap<>();
 
-        // TODO this is broken...
         // EDGE CASE
         // IF THERE IS ONLY ONE ITEM, IT'S NOT AN ARRAY, IT'S AN OBJECT
         // NEED TO WATCH OUT FOR THAT CASE
         if (mPrefs.contains("recipeJSONData"))
         {
             String recipeJSON = mPrefs.getString("recipeJSONData", "");
-            Log.v(LOGTAG, recipeJSON);
+            //Log.v(LOGTAG, recipeJSON);
             Type mealType = new TypeToken<ArrayList<Recipe>>() {}.getType();
             mRecipeList = gson.fromJson(recipeJSON, mealType);
             //mRecipeList = new ArrayList<>();
@@ -189,10 +199,10 @@ public class MainActivity extends AppCompatActivity
     {
         int count = getSupportFragmentManager().getBackStackEntryCount();
 
-        if (count == 1)
+        if (count <= 2)
         {
             Log.v(LOGTAG, "onBackPressed......Called       COUNT = " + count);
-            this.finishAffinity();
+            this.finish();
         }
         else
         {
