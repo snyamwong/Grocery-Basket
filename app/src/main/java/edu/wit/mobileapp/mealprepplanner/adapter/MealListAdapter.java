@@ -1,4 +1,4 @@
-package edu.wit.mobileapp.mealprepplanner;
+package edu.wit.mobileapp.mealprepplanner.adapter;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
@@ -14,6 +14,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import edu.wit.mobileapp.mealprepplanner.R;
+import edu.wit.mobileapp.mealprepplanner.helper.Recipe;
 
 /**
  * RESPONSIBLE FOR UPDATING mMealList FOR MEAL LIST FRAGMENT
@@ -81,9 +84,9 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder
     {
 
-        ImageView image;
-        TextView name, amount;
-        RelativeLayout foreground, background;
+        public ImageView image;
+        public TextView name, amount;
+        public RelativeLayout foreground, background;
 
         public ViewHolder(View itemView)
         {

@@ -21,6 +21,9 @@ import android.widget.RelativeLayout.LayoutParams;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.wit.mobileapp.mealprepplanner.adapter.RecipeListAdapter;
+import edu.wit.mobileapp.mealprepplanner.helper.Recipe;
+
 
 public class SearchFragment extends Fragment
 {

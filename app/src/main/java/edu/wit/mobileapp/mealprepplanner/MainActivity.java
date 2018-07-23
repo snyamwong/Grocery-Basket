@@ -15,6 +15,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import edu.wit.mobileapp.mealprepplanner.helper.Recipe;
+
 public class MainActivity extends AppCompatActivity
 {
     private final String LOGTAG = "MYAPP";
