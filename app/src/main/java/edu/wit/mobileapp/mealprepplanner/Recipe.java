@@ -1,6 +1,5 @@
 package edu.wit.mobileapp.mealprepplanner;
 
-import android.graphics.Bitmap;
 
 import java.util.ArrayList;
 

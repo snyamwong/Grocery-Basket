@@ -27,8 +27,13 @@
         android:layout_below="@+id/searchTopBar"
         android:drawableStart="@drawable/ic_search_black_24dp"
         android:hint="@string/search_hint"
-        android:textSize="10pt"
+        android:textSize="20sp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginEnd="3dp"
         android:singleLine="true"
+        android:background="@color/colorWhite"
         android:inputType="textVisiblePassword"/>
 
     <android.support.v7.widget.RecyclerView
@@ -36,9 +41,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/searchInput"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:dividerHeight="10dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:dividerHeight="2dp"
         android:divider="#d1d1d1"/>
 </RelativeLayout>

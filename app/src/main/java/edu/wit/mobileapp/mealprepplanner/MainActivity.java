@@ -36,11 +36,18 @@ public class MainActivity extends AppCompatActivity
     private SharedPreferences mPrefs;
     private SharedPreferences.Editor preferenceEditor;
 
+    // database of recipe
+    private Database database;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Set up database
+        database = new Database(getApplicationContext());
+        database.open();
 
         // sets preferences
         mPrefs = getPreferences(MODE_PRIVATE);
@@ -48,6 +55,10 @@ public class MainActivity extends AppCompatActivity
 
         // gets global lists from last time list was destroyed
         retrieveGlobalDataFromStorage();
+
+        //todo: BEFORE YOU RUN MAKE SURE YOU CLEAR YOUR LISTS AS THE STORED DATA HAS CHANGED
+        //mRecipeList = new ArrayList<>();
+        //mSelectedIngredients = new HashMap<>();
 
         // init nav bar and frame
         navigationView = findViewById(R.id.main_nav);
@@ -141,10 +152,14 @@ public class MainActivity extends AppCompatActivity
     public void storeGlobalData()
     {
         Gson gson = new Gson();
+        ArrayList<Integer> recipeIDs = new ArrayList<>();
+        for(Recipe r : mRecipeList){
+            recipeIDs.add(r.getRecipeID());
+        }
 
         // transforms the ArrayLists into JSON Data.
-        String recipeJSON = gson.toJson(mRecipeList);
-        preferenceEditor.putString("recipeJSONData", recipeJSON);
+        String recipeIDsJSON = gson.toJson(recipeIDs);
+        preferenceEditor.putString("recipeIDsJSONData", recipeIDsJSON);
 
         // selected ==> jason (lol leaving this typo here - Tin)
         String selectedJSON = gson.toJson(mSelectedIngredients);
@@ -152,6 +167,7 @@ public class MainActivity extends AppCompatActivity
 
         // commits the changes
         preferenceEditor.commit();
+        database.close();
         preferenceEditor.apply();
     }
 
@@ -163,13 +179,16 @@ public class MainActivity extends AppCompatActivity
     {
         Gson gson = new Gson();
 
-        if (mPrefs.contains("recipeJSONData"))
+        if (mPrefs.contains("recipeIDsJSONData"))
         {
-            String recipeJSON = mPrefs.getString("recipeJSONData", "");
-            //Log.v(LOGTAG, recipeJSON);
-            Type mealType = new TypeToken<ArrayList<Recipe>>() {}.getType();
-            mRecipeList = gson.fromJson(recipeJSON, mealType);
-            //mRecipeList = new ArrayList<>();
+            String recipeIDsJSON = mPrefs.getString("recipeIDsJSONData", "");
+            Type idType = new TypeToken<ArrayList<Integer>>() {}.getType();
+            ArrayList<Integer> recipeIds = gson.fromJson(recipeIDsJSON, idType);
+
+            mRecipeList = new ArrayList<>();
+            for(Integer id: recipeIds){
+                mRecipeList.add(database.getRecipeByID(id));
+            }
         }
         else
         {
@@ -181,7 +200,6 @@ public class MainActivity extends AppCompatActivity
             String selectedJSON = mPrefs.getString("selectedJSONData", "");
             Type selectedType = new TypeToken<HashMap<String, Double>>() {}.getType();
             mSelectedIngredients = gson.fromJson(selectedJSON, selectedType);
-            //mSelectedIngredients = new HashMap<>();
         }
         else
         {
@@ -233,9 +251,14 @@ public class MainActivity extends AppCompatActivity
     {
         return searchFragment;
     }
-
+    
     public MealInfoFragment getMealInfoFragment()
     {
         return mealInfoFragment;
+    }
+    
+    public Database getDatabase()
+    {
+        return database;
     }
 }
