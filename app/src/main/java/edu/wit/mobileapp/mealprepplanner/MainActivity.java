@@ -145,14 +145,14 @@ public class MainActivity extends AppCompatActivity
     public void storeGlobalData()
     {
         Gson gson = new Gson();
-        ArrayList<Integer> mealInts = new ArrayList<>();
+        ArrayList<Integer> recipeIDs = new ArrayList<>();
         for(Recipe r : mRecipeList){
-            mealInts.add(r.getRecipeID());
+            recipeIDs.add(r.getRecipeID());
         }
 
         // transforms the ArrayLists into JSON Data.
-        String recipeJSON = gson.toJson(mealInts);
-        preferenceEditor.putString("recipeJSONData", recipeJSON);
+        String recipeIDsJSON = gson.toJson(recipeIDs);
+        preferenceEditor.putString("recipeIDsJSONData", recipeIDsJSON);
 
         // selected ==> jason (lol leaving this typo here - Tin)
         String selectedJSON = gson.toJson(mSelectedIngredients);
@@ -160,6 +160,7 @@ public class MainActivity extends AppCompatActivity
 
         // commits the changes
         preferenceEditor.commit();
+        database.close();
         preferenceEditor.apply();
     }
 
@@ -170,24 +171,16 @@ public class MainActivity extends AppCompatActivity
     public void retrieveGlobalDataFromStorage()
     {
         Gson gson = new Gson();
-
-//        mRecipeList = new ArrayList<>();
-//        mSelectedIngredients = new HashMap<>();
-
-        // EDGE CASE
-        // IF THERE IS ONLY ONE ITEM, IT'S NOT AN ARRAY, IT'S AN OBJECT
-        // NEED TO WATCH OUT FOR THAT CASE
-        if (mPrefs.contains("recipeJSONData"))
+        if (mPrefs.contains("recipeIDsJSONData"))
         {
-            String recipeJSON = mPrefs.getString("recipeJSONData", "");
-            Type mealType = new TypeToken<ArrayList<Integer>>() {}.getType();
-            ArrayList<Integer> mealInts = gson.fromJson(recipeJSON, mealType);
+            String recipeIDsJSON = mPrefs.getString("recipeIDsJSONData", "");
+            Type idType = new TypeToken<ArrayList<Integer>>() {}.getType();
+            ArrayList<Integer> recipeIds = gson.fromJson(recipeIDsJSON, idType);
 
             mRecipeList = new ArrayList<>();
-            for(Integer id: mealInts){
+            for(Integer id: recipeIds){
                 mRecipeList.add(database.getRecipeByID(id));
             }
-            //mRecipeList = new ArrayList<>();
         }
         else
         {
@@ -199,7 +192,6 @@ public class MainActivity extends AppCompatActivity
             String selectedJSON = mPrefs.getString("selectedJSONData", "");
             Type selectedType = new TypeToken<HashMap<String, Double>>() {}.getType();
             mSelectedIngredients = gson.fromJson(selectedJSON, selectedType);
-            //mSelectedIngredients = new HashMap<>();
         }
         else
         {
