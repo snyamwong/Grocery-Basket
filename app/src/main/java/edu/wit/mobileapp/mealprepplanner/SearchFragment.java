@@ -60,15 +60,15 @@ public class SearchFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
     {
 
-        //inflate layout
+        // inflates layout
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         searchField = view.findViewById(R.id.searchInput);
         recyclerView = view.findViewById(R.id.searchListView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        // initializing searchField // EditText
+        // initializes searchField // EditText
         searchField = view.findViewById(R.id.searchInput);
 
-        //set adapter
+        // sets adapter
         // shows all the results in the database
         this.recipeArrayList = new ArrayList<>();
         recipeListAdapter = new SearchListAdapter(getContext(), recipeArrayList);
