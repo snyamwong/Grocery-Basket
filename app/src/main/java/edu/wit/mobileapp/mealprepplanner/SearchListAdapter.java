@@ -1,11 +1,9 @@
 package edu.wit.mobileapp.mealprepplanner;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,63 +13,117 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import static android.content.Context.MODE_PRIVATE;
-
+/**
+ * Class for SearchListAdapter, since Meal class and Recipe class both share different attributes
+ */
 public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.ViewHolder>
 {
-    //vars
-    private List<Recipe> searchList;
-    private ArrayList<Recipe> mMealsList;
-    private Context mContext;
+
+    private static final String TAG = "SearchListAdapter";
+
+    private Context context;
+    // List of recipe(s)
+    private List<Recipe> recipeArrayList;
+    private ArrayList<Recipe> mRecipeArrayList;
 
     private MainActivity main;
 
-    public SearchListAdapter(Context mContext, List<Recipe> searchList)
+    /**
+     * Constructor
+     *
+     * @param context
+     * @param recipeArrayList
+     */
+    public SearchListAdapter(Context context, List<Recipe> recipeArrayList)
     {
-        this.searchList = searchList;
-        this.mContext = mContext;
-        main = ((MainActivity) (mContext));
-        mMealsList = main.getmRecipeList();
+        this.context = context;
+        this.recipeArrayList = recipeArrayList;
+        main = ((MainActivity) (context));
+        this.mRecipeArrayList = main.getmRecipeList();
     }
 
+    /**
+     * ViewHolder inner class
+     */
+    class ViewHolder extends RecyclerView.ViewHolder
+    {
+
+        ImageView image;
+        TextView name;
+        RelativeLayout foreground, background;
+
+        ViewHolder(View itemView)
+        {
+            super(itemView);
+
+            image = itemView.findViewById(R.id.meal_picture);
+            name = itemView.findViewById(R.id.meal_name);
+
+            foreground = itemView.findViewById(R.id.view_foreground);
+            background = itemView.findViewById(R.id.view_background);
+        }
+    }
+
+    /**
+     * NOTE: Using layout search_list rather than meal_list
+     * <p>
+     * Inflate layout here
+     *
+     * @param parent
+     * @param viewType
+     * @return
+     */
     @NonNull
     @Override
     public SearchListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
-        LayoutInflater inflater = LayoutInflater.from(mContext);
+        // Here, using search_list instead of meal_list so I avoid using the
+        LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.search_list, null);
+
         return new SearchListAdapter.ViewHolder(view);
     }
 
+    /**
+     * At the moment, only two things are certained with SearchActivity / RecipeList
+     * <p>
+     * 1) image
+     * 2) name
+     * <p>
+     * If needed, add attributes here.
+     *
+     * @param holder
+     * @param position
+     */
     @Override
-    public void onBindViewHolder(@NonNull SearchListAdapter.ViewHolder holder, int position)
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position)
     {
-        Recipe recipe = searchList.get(position);
-        holder.image.setImageBitmap(BitmapFactory.decodeByteArray(recipe.getImage(), 0, recipe.getImage().length));
+        Recipe recipe = recipeArrayList.get(position);
         holder.name.setText(recipe.getName());
-
-        holder.foreground.setBackgroundColor(Color.WHITE);
-
-        holder.foreground.setOnClickListener((View v) ->
+        if (recipe.getImage() != null)
         {
-            if (!mMealsList.contains(recipe))
+            holder.image.setImageBitmap(BitmapFactory.decodeByteArray(recipe.getImage(), 0, recipe.getImage().length));
+        }
+        else
+        {
+            holder.image.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_app_icon));
+        }
+
+        holder.foreground.setOnClickListener(v ->
+        {
+            if (!mRecipeArrayList.contains(recipe))
             {
-                Toast.makeText(mContext, "Meal:" + recipe.getName() + " added to meal list", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Meal:" + recipe.getName() + " added to meal list", Toast.LENGTH_LONG).show();
                 holder.foreground.setBackgroundColor(Color.GREEN);
-                mMealsList.add(recipe);
-                main.setmRecipeList(mMealsList);
+                mRecipeArrayList.add(recipe);
+                main.setmRecipeList(mRecipeArrayList);
             }
         });
 
-        if (mMealsList.contains(recipe))
+        if (mRecipeArrayList.contains(recipe))
         {
             holder.foreground.setBackgroundColor(Color.GREEN);
         }
@@ -84,30 +136,48 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
     @Override
     public int getItemCount()
     {
-        return searchList.size();
+        return recipeArrayList.size();
     }
 
-    //ViewHolder
-    public class ViewHolder extends RecyclerView.ViewHolder
+    /**
+     * Used to remove recipe
+     *
+     * @param position
+     */
+    public void removeRecipe(int position)
     {
+        recipeArrayList.remove(position);
 
-        ImageView image;
-        TextView name;
-        RelativeLayout foreground;
-
-        public ViewHolder(View itemView)
-        {
-            super(itemView);
-            image = itemView.findViewById(R.id.meal_picture);
-            name = itemView.findViewById(R.id.meal_name);
-
-            foreground = itemView.findViewById(R.id.view_foreground);
-        }
+        // notify the item removed by position
+        // to perform recycler view delete animations
+        // NOTE: don't call notifyDataSetChanged()
+        notifyItemRemoved(position);
     }
 
-    public void updateList(List<Recipe> list)
+    /**
+     * Used to restore recipe
+     *
+     * @param item
+     * @param position
+     */
+    public void restoreRecipe(Recipe item, int position)
     {
-        searchList = list;
+        recipeArrayList.add(position, item);
+
+        // notify item added by position
+        notifyItemInserted(position);
+    }
+
+    /**
+     * Used to update recipe
+     *
+     * @param list
+     */
+    public void updateRecipeList(List<Recipe> list)
+    {
+        recipeArrayList = list;
+
         notifyDataSetChanged();
     }
+
 }

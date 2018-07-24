@@ -28,7 +28,7 @@ public class SearchFragment extends Fragment
 
     // recipe list
     private List<Recipe> recipeArrayList;
-    private RecipeListAdapter recipeListAdapter;
+    private SearchListAdapter recipeListAdapter;
     private RecyclerView recyclerView;
 
     // user input
@@ -71,7 +71,7 @@ public class SearchFragment extends Fragment
         //set adapter
         // shows all the results in the database
         this.recipeArrayList = new ArrayList<>();
-        recipeListAdapter = new RecipeListAdapter(getContext(), recipeArrayList);
+        recipeListAdapter = new SearchListAdapter(getContext(), recipeArrayList);
         recyclerView.setAdapter(recipeListAdapter);
         searchDatabase("");
 
@@ -131,7 +131,7 @@ public class SearchFragment extends Fragment
     /**
      * Given userInput, searches database for recipes with userInput
      * <p>
-     * Updates RecipeListAdapter with results from query
+     * Updates SearchListAdapter with results from query
      *
      * @param userInput
      */
