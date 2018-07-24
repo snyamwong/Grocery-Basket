@@ -26,11 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bg_row_background"
-        android:orientation="horizontal"
-        android:paddingBottom="7dp"
-        android:paddingLeft="7dp"
-        android:paddingRight="7dp"
-        android:paddingTop="7dp">
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/delete_icon"
@@ -68,21 +64,23 @@
 
         <ImageView
             android:id="@+id/meal_picture"
-            android:layout_width="125dp"
-            android:layout_height="70dp"
+            android:layout_width="135dp"
+            android:layout_height="90dp"
             android:layout_alignParentStart="true"
             android:contentDescription="@string/meals"
             android:background="@drawable/recipe_image_border"
-            app:srcCompat="@drawable/food" />
+            app:srcCompat="@drawable/food"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"/>
 
         <TextView
             android:id="@+id/meal_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:text="@string/app_name"
             android:layout_centerVertical="true"
-            android:paddingStart="135dp" />
+            android:paddingStart="145dp" />
 
     </RelativeLayout>
 
