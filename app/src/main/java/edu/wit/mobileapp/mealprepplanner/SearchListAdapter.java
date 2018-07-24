@@ -103,6 +103,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
     {
         Recipe recipe = recipeArrayList.get(position);
         holder.name.setText(recipe.getName());
+
         if (recipe.getImage() != null)
         {
             holder.image.setImageBitmap(BitmapFactory.decodeByteArray(recipe.getImage(), 0, recipe.getImage().length));
@@ -120,6 +121,9 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
                 holder.foreground.setBackgroundColor(Color.GREEN);
                 mRecipeArrayList.add(recipe);
                 main.setmRecipeList(mRecipeArrayList);
+
+                // sets fragment to the meal info
+                main.setFragment(main.getMealInfoFragment());
             }
         });
 

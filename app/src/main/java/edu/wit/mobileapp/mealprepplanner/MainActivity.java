@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity
     private MealListFragment mealListFragment;
     private ShoppingListFragment shoppingListFragment;
     private SearchFragment searchFragment;
+    private MealInfoFragment mealInfoFragment;
 
     // preferences for json storage
     private SharedPreferences mPrefs;
@@ -62,10 +63,11 @@ public class MainActivity extends AppCompatActivity
         // init nav bar and frame
         navigationView = findViewById(R.id.main_nav);
 
-        // init all three fragments
+        // init all four fragments
         mealListFragment = new MealListFragment();
         shoppingListFragment = new ShoppingListFragment();
         searchFragment = new SearchFragment();
+        mealInfoFragment = new MealInfoFragment();
 
         // event listener on nav bar click (either MealsList, or ShoppingList)
         navigationView.setOnNavigationItemSelectedListener(listener ->
@@ -138,6 +140,11 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
+    public void setFragment(Fragment fragment, Recipe recipe)
+    {
+
+    }
+
     /**
      * Stores meal list into JSON
      * Stores selected items into JSON
@@ -171,6 +178,7 @@ public class MainActivity extends AppCompatActivity
     public void retrieveGlobalDataFromStorage()
     {
         Gson gson = new Gson();
+
         if (mPrefs.contains("recipeIDsJSONData"))
         {
             String recipeIDsJSON = mPrefs.getString("recipeIDsJSONData", "");
@@ -243,8 +251,14 @@ public class MainActivity extends AppCompatActivity
     {
         return searchFragment;
     }
-
-    public Database getDatabase() {
+    
+    public MealInfoFragment getMealInfoFragment()
+    {
+        return mealInfoFragment;
+    }
+    
+    public Database getDatabase()
+    {
         return database;
     }
 }
