@@ -44,13 +44,13 @@ public class SearchFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
 
-        // Set up database
-        database = new Database(getContext());
-        database.open();
-
         //hide bottom nav bar, make frame fill that space
         main = (MainActivity) (getActivity());
         main.findViewById(R.id.main_nav).setVisibility(View.INVISIBLE);
+
+        // Set up database
+        database = main.getDatabase();
+
         FrameLayout fl = getActivity().findViewById(R.id.main_frame);
         fl.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
     }
@@ -152,14 +152,13 @@ public class SearchFragment extends Fragment
         params.addRule(RelativeLayout.ABOVE, R.id.main_nav);
         main.findViewById(R.id.main_frame).setLayoutParams(params);
 
-        // closes the database when not in search activity to prevent corruption
-        database.close();
     }
 
     @Override
     public void onResume()
     {
         super.onResume();
+
         // opens the database when navigating to search activity
         database.open();
     }

@@ -5,8 +5,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import java.io.File;
@@ -202,7 +200,7 @@ public class Database extends SQLiteOpenHelper
         }
 
         // XXX logging result of the recipe, delete during production / non testing
-        Log.v(LOGTAG, recipes.toString());
+        //Log.v(LOGTAG, recipes.toString());
 
         return recipes.get(0);
     }
@@ -292,7 +290,7 @@ public class Database extends SQLiteOpenHelper
         }
 
         // XXX logging result of the recipe, delete during production / non testing
-        Log.v(LOGTAG, recipes.toString());
+        //Log.v(LOGTAG, recipes.toString());
 
         return recipes;
     }

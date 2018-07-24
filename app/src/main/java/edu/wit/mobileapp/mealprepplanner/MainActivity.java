@@ -243,4 +243,8 @@ public class MainActivity extends AppCompatActivity
     {
         return searchFragment;
     }
+
+    public Database getDatabase() {
+        return database;
+    }
 }
