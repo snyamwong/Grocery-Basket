@@ -160,7 +160,6 @@ public class SearchFragment extends Fragment
     public void onResume()
     {
         super.onResume();
-
         // opens the database when navigating to search activity
         database.open();
     }
