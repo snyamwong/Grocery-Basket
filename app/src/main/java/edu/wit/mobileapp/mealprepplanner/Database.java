@@ -144,10 +144,9 @@ public class Database extends SQLiteOpenHelper
 
 
         ArrayList<Recipe> recipes = new ArrayList<>();
-        Cursor cursor;
 
         // here, queries the Recipe database for all recipes that are LIKE userInputRecipeName
-        cursor = this.getDb().query("Recipe", recipeColumns, where, where_args, group_by, having, order_by);
+        Cursor cursor = this.getDb().query("Recipe", recipeColumns, where, where_args, group_by, having, order_by);
         while (cursor.moveToNext())
         {
             Integer recipeID = cursor.getInt(cursor.getColumnIndex("recipe_id"));
@@ -204,6 +203,7 @@ public class Database extends SQLiteOpenHelper
         // XXX logging result of the recipe, delete during production / non testing
         //Log.v(LOGTAG, recipes.toString());
 
+        cursor.close();
         return recipes.get(0);
     }
 
@@ -294,6 +294,7 @@ public class Database extends SQLiteOpenHelper
         // XXX logging result of the recipe, delete during production / non testing
         //Log.v(LOGTAG, recipes.toString());
 
+        cursor.close();
         return recipes;
     }
 
@@ -326,11 +327,9 @@ public class Database extends SQLiteOpenHelper
 
             getDb().insert(TABLE_NAME,null, values);
         }
-
-
     }
 
-    public ArrayList<Recipe> getUserRecipies(){
+    public ArrayList<Recipe> getUserRecipes(){
         ArrayList<Recipe> recipes = new ArrayList<>();
 
         String[] userRecipeColumns = {"recipe_id", "multiplier"};
@@ -350,6 +349,7 @@ public class Database extends SQLiteOpenHelper
             recipes.add(r);
         }
 
+        cursor.close();
         return recipes;
     }
 
@@ -371,6 +371,7 @@ public class Database extends SQLiteOpenHelper
             selected.put(name, amount);
         }
 
+        cursor.close();
         return selected;
     }
 

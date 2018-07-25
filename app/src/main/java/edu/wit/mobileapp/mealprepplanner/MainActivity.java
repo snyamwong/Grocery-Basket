@@ -38,15 +38,6 @@ public class MainActivity extends AppCompatActivity
 
         // Set up database
         database = new Database(getApplicationContext());
-        database.open();
-
-        // gets global lists from last time list was destroyed
-        mRecipeList = database.getUserRecipies();
-        mSelectedIngredients = database.getUserSelectedIngredients();
-
-        //todo: BEFORE YOU RUN MAKE SURE YOU CLEAR YOUR LISTS AS THE STORED DATA HAS CHANGED
-        //mRecipeList = new ArrayList<>();
-        //mSelectedIngredients = new HashMap<>();
 
         // init nav bar and frame
         navigationView = findViewById(R.id.main_nav);
@@ -96,20 +87,21 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
     }
 
-
     @Override
-    protected void onPause()
-    {
-        Log.v(LOGTAG, "onPaused.....Called");
-        //Store meals list and selected map's current state
-        database.updateUserDB(mRecipeList, mSelectedIngredients);
-        super.onPause();
+    protected void onStart() {
+        database.open();
+        // gets global lists from last time list was destroyed
+        mRecipeList = database.getUserRecipes();
+        mSelectedIngredients = database.getUserSelectedIngredients();
+        super.onStart();
     }
 
     @Override
-    protected void onDestroy(){
+    protected void onStop() {
         MealPrepPlannerApplication.setMainActivityFragment(mealListFragment);
-        super.onDestroy();
+        database.updateUserDB(mRecipeList, mSelectedIngredients);
+        database.close();
+        super.onStop();
     }
 
     /**
