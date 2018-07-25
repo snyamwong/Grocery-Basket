@@ -74,13 +74,24 @@
             android:layout_marginBottom="5dp"/>
 
         <TextView
+            android:id="@+id/meal_serves"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:textSize="18sp"
+            android:text="@string/app_name" />
+
+        <TextView
             android:id="@+id/meal_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:text="@string/app_name"
             android:layout_centerVertical="true"
+            android:textColor="#3a3a3a"
             android:paddingStart="145dp" />
+
 
     </RelativeLayout>
 

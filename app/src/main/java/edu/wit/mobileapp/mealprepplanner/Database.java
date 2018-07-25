@@ -134,7 +134,7 @@ public class Database extends SQLiteOpenHelper
     }
 
     public Recipe getRecipeByID(int id){
-        String[] recipeColumns = {"recipe_id, name, image, description, instruction, chef"};
+        String[] recipeColumns = {"recipe_id, name, image, description, instruction, chef, serves"};
         // using LIKE clause here so the user can just request for any recipe that has just the ingredient/name
         String where = "recipe_id = ?";
         String[] where_args = new String[]{Integer.toString(id)};
@@ -155,7 +155,8 @@ public class Database extends SQLiteOpenHelper
             String description = cursor.getString(cursor.getColumnIndex("description"));
             String instruction = cursor.getString(cursor.getColumnIndex("instruction"));
             String chef = cursor.getString(cursor.getColumnIndex("chef"));
-            Recipe recipe = new Recipe(recipeID, name, blob, description, instruction, chef);
+            String serves = cursor.getString(cursor.getColumnIndex("serves"));
+            Recipe recipe = new Recipe(recipeID, name, blob, description, instruction, chef, serves);
 
             // TODO SCALE DOWN ALL THE PHOTOS by checking its dimens before decoding
 //            if (blob != null)
@@ -225,7 +226,7 @@ public class Database extends SQLiteOpenHelper
      */
     public ArrayList<Recipe> getRecipes(String userInputRecipeName)
     {
-        String[] recipeColumns = {"recipe_id, name, image, description, instruction, chef"};
+        String[] recipeColumns = {"recipe_id, name, image, description, instruction, chef, serves"};
         // using LIKE clause here so the user can just request for any recipe that has just the ingredient/name
         String where = "name LIKE ?";
         String[] where_args = new String[]{"%" + userInputRecipeName + "%"};
@@ -246,7 +247,8 @@ public class Database extends SQLiteOpenHelper
             String description = cursor.getString(cursor.getColumnIndex("description"));
             String instruction = cursor.getString(cursor.getColumnIndex("instruction"));
             String chef = cursor.getString(cursor.getColumnIndex("chef"));
-            Recipe recipe = new Recipe(recipeID, name, blob, description, instruction, chef);
+            String serves = cursor.getString(cursor.getColumnIndex("serves"));
+            Recipe recipe = new Recipe(recipeID, name, blob, description, instruction, chef, serves);
 
             // TODO SCALE DOWN ALL THE PHOTOS by checking its dimens before decoding
 //            if (blob != null)
