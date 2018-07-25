@@ -1,5 +1,6 @@
 package edu.wit.mobileapp.mealprepplanner;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * A helper class for the database being used in this app.
@@ -113,7 +115,7 @@ public class Database extends SQLiteOpenHelper
         // opens the database
         String path = DB_PATH + DB_NAME;
 
-        db = SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READONLY);
+        db = SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READWRITE);
     }
 
     /**
@@ -295,6 +297,83 @@ public class Database extends SQLiteOpenHelper
         return recipes;
     }
 
+    public void updateUserDB(ArrayList<Recipe> recipes, HashMap<String, Double> selected){
+        //remove old data
+        getDb().execSQL("DELETE FROM UserRecipe");
+        getDb().execSQL("DELETE FROM UserSelectedIngredient");
+
+        for(Recipe recipe: recipes){
+            int id = recipe.getRecipeID();
+            int mul = recipe.getMultiplier();
+
+            String TABLE_NAME = "UserRecipe";
+            ContentValues values = new ContentValues();
+            values.put("recipe_id", id);
+            values.put("multiplier", mul);
+
+            getDb().insert(TABLE_NAME,null, values);
+        }
+
+        for(String key: selected.keySet()){
+            String TABLE_NAME = "UserSelectedIngredient";
+            ContentValues values = new ContentValues();
+
+            String name = key;
+            double amount = selected.get(key);
+
+            values.put("ingredient_name", name);
+            values.put("amount", amount);
+
+            getDb().insert(TABLE_NAME,null, values);
+        }
+
+
+    }
+
+    public ArrayList<Recipe> getUserRecipies(){
+        ArrayList<Recipe> recipes = new ArrayList<>();
+
+        String[] userRecipeColumns = {"recipe_id", "multiplier"};
+        String where = null;
+        String[] where_args = null;
+        String having = null;
+        String group_by = null;
+        String order_by = null;
+
+        Cursor cursor = getDb().query("UserRecipe", userRecipeColumns, where, where_args, having, group_by, order_by);
+        while(cursor.moveToNext()){
+            int id = cursor.getInt(cursor.getColumnIndex("recipe_id"));
+            int mul = cursor.getInt(cursor.getColumnIndex("multiplier"));
+
+            Recipe r = getRecipeByID(id);
+            r.setMultiplier(mul);
+            recipes.add(r);
+        }
+
+        return recipes;
+    }
+
+    public HashMap<String, Double> getUserSelectedIngredients(){
+        HashMap<String, Double> selected = new HashMap<>();
+
+        String[] userSelectedIngredientColumns = {"ingredient_name", "amount"};
+        String where = null;
+        String[] where_args = null;
+        String having = null;
+        String group_by = null;
+        String order_by = null;
+
+        Cursor cursor = getDb().query("UserSelectedIngredient", userSelectedIngredientColumns, where, where_args, having, group_by, order_by);
+        while(cursor.moveToNext()){
+            String name = cursor.getString(cursor.getColumnIndex("ingredient_name"));
+            double amount = cursor.getDouble(cursor.getColumnIndex("amount"));
+
+            selected.put(name, amount);
+        }
+
+        return selected;
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db)
     {
@@ -312,8 +391,4 @@ public class Database extends SQLiteOpenHelper
         return db;
     }
 
-    public void setDb(SQLiteDatabase db)
-    {
-        this.db = db;
-    }
 }
