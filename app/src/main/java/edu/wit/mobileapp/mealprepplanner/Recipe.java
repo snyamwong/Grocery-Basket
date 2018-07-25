@@ -34,7 +34,7 @@ public class Recipe
     public Recipe(int recipeID, String name, byte[] image, String description, String instruction, String chef)
     {
         //didn't want to add to constructor
-        multiplier = 100;
+        multiplier = 0;
         this.recipeID = recipeID;
         this.name = name;
         this.image = image;

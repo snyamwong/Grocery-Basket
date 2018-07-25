@@ -100,11 +100,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onPause()
     {
-        database.getUserRecipies();
-        super.onPause();
         Log.v(LOGTAG, "onPaused.....Called");
         //Store meals list and selected map's current state
         database.updateUserDB(mRecipeList, mSelectedIngredients);
+        super.onPause();
     }
 
     @Override
