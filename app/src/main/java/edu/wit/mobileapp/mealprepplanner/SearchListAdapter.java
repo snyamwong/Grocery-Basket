@@ -123,7 +123,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
                 main.setmRecipeList(mRecipeArrayList);
 
                 // sets fragment to the meal info
-                main.setFragment(main.getMealInfoFragment());
+                main.setFragment(main.getMealInfoFragment(), recipe);
             }
         });
 

@@ -152,6 +152,7 @@ public class SearchFragment extends Fragment
         params.addRule(RelativeLayout.ABOVE, R.id.main_nav);
         main.findViewById(R.id.main_frame).setLayoutParams(params);
 
+        database.close();
     }
 
     @Override

@@ -36,6 +36,9 @@ public class MainActivity extends AppCompatActivity
     private SharedPreferences mPrefs;
     private SharedPreferences.Editor preferenceEditor;
 
+    // temp reference to the Recipe in MealInfoFragment
+    private Recipe mealInfoFragmentRecipe;
+
     // database of recipe
     private Database database;
 
@@ -140,9 +143,25 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
+    /**
+     * Overload previous setFragment method, same functionality
+     *
+     * Recipe is for MealInfoFragment, to store the reference in MainActivity
+     *
+     * TODO Bundle the Recipe into MealInfoFragment
+     * @param fragment
+     * @param recipe
+     */
     public void setFragment(Fragment fragment, Recipe recipe)
     {
+        this.setMealInfoFragmentRecipe(recipe);
 
+        MealPrepPlannerApplication.setMainActivityFragment(fragment);
+
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.main_frame, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     /**
@@ -260,5 +279,15 @@ public class MainActivity extends AppCompatActivity
     public Database getDatabase()
     {
         return database;
+    }
+
+    public Recipe getMealInfoFragmentRecipe()
+    {
+        return mealInfoFragmentRecipe;
+    }
+
+    public void setMealInfoFragmentRecipe(Recipe mealInfoFragmentRecipe)
+    {
+        this.mealInfoFragmentRecipe = mealInfoFragmentRecipe;
     }
 }
