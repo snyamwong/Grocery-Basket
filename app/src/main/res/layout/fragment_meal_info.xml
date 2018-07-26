@@ -13,6 +13,7 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/meal_info_fragment_recipe_add_meal_change_serving_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/add_meal_change_serving" />
@@ -29,12 +30,21 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
+            <ImageView
+                android:id="@+id/meal_info_fragment_recipe_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|center_horizontal"
+                android:paddingTop="2dp" />
+
+            <TextView
+                android:id="@+id/meal_info_fragment_recipe_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:gravity="center"
                 android:text="@string/recipe_goes_here"
-                android:textSize="12sp" />
+                android:textSize="18dp" />
 
         </LinearLayout>
     </ScrollView>

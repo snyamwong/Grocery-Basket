@@ -46,19 +46,18 @@ public class SearchFragment extends Fragment
 
         //hide bottom nav bar, make frame fill that space
         main = (MainActivity) (getActivity());
-        main.findViewById(R.id.main_nav).setVisibility(View.INVISIBLE);
 
         // Set up database
         database = main.getDatabase();
-
-        FrameLayout fl = getActivity().findViewById(R.id.main_frame);
-        fl.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
     {
+        main.findViewById(R.id.main_nav).setVisibility(View.INVISIBLE);
+        FrameLayout fl = getActivity().findViewById(R.id.main_frame);
+        fl.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
         // inflates layout
         View view = inflater.inflate(R.layout.fragment_search, container, false);
@@ -73,6 +72,9 @@ public class SearchFragment extends Fragment
         this.recipeArrayList = new ArrayList<>();
         recipeListAdapter = new SearchListAdapter(getContext(), recipeArrayList);
         recyclerView.setAdapter(recipeListAdapter);
+
+        // FIXME     java.lang.IllegalStateException: attempt to re-open an already-closed object: SQLiteDatabase: /data/data/edu.wit.mobileapp.mealprepplanner/meal_prep_db.db
+
         searchDatabase("");
 
         //top bar setup
@@ -143,24 +145,9 @@ public class SearchFragment extends Fragment
     }
 
     @Override
-    public void onDestroy()
-    {
-        super.onDestroy();
-        //Show bottom nav bar / change frame to only fill space above it
-        main.findViewById(R.id.main_nav).setVisibility(View.VISIBLE);
-        LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-        params.addRule(RelativeLayout.ABOVE, R.id.main_nav);
-        main.findViewById(R.id.main_frame).setLayoutParams(params);
-
-    }
-
-    @Override
     public void onResume()
     {
         super.onResume();
-
-        // opens the database when navigating to search activity
-        database.open();
     }
 
     //pass onto main activity on back press

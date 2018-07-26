@@ -116,7 +116,7 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
         MainActivity main = (MainActivity) getActivity();
         mRecipeList = main.getmRecipeList();
         //Retrieve saved array list then set adapter
-        adapter = new MealListAdapter(getActivity().getApplicationContext(), mRecipeList); //object to update fragment
+        adapter = new MealListAdapter(getContext(), mRecipeList); //object to update fragment
         //update list
         mealListView.setAdapter(adapter); //Update display with new list
         mealListView.getLayoutManager().scrollToPosition(mRecipeList.size() - 1); //Nav to end of list
@@ -127,6 +127,11 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
         BottomNavigationView bot = main.findViewById(R.id.main_nav);
         bot.setVisibility(View.VISIBLE);
         bot.setSelectedItemId(R.id.nav_meals);
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        params.addRule(RelativeLayout.ABOVE, R.id.main_nav);
+        main.findViewById(R.id.main_frame).setLayoutParams(params);
+
         super.onStart();
         Log.v(LOGTAG, "onStart.....finished");
     }

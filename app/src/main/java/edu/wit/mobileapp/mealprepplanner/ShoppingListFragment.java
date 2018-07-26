@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -116,6 +118,10 @@ public class ShoppingListFragment extends Fragment
         BottomNavigationView bot = main.findViewById(R.id.main_nav);
         bot.setVisibility(View.VISIBLE);
         bot.setSelectedItemId(R.id.nav_shopping_list);
+
+        FrameLayout fl = getActivity().findViewById(R.id.main_frame);
+        fl.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
+
         super.onStart();
         Log.v(TAG, "onStart.....finished");
     }
@@ -194,15 +200,6 @@ public class ShoppingListFragment extends Fragment
         }
     }
 
-    /**
-     * Combines listed ingredient amount with new ingredient amount
-     * <p>
-     * TODO: convert measurements to be the same as well, might not need to
-     *
-     * @param i1
-     * @param i2
-     * @return
-     */
     private double combineAmounts(RecipeIngredient i1, RecipeIngredient i2)
     {
         return i1.getQuantity() + i2.getQuantity();

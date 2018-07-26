@@ -3,18 +3,33 @@ package edu.wit.mobileapp.mealprepplanner;
 import android.app.Application;
 import android.support.v4.app.Fragment;
 
+import java.util.LinkedList;
+
+/**
+ * This class is mainly used for keeping track of the current fragment
+ * It fills the void of how getSupportFragmentManager() has a void return
+ */
 public class MealPrepPlannerApplication extends Application
 {
-    private static Fragment MainActivityFragment;
+    private static LinkedList<Fragment> MainActivityFragmentStack = new LinkedList<>();
 
-    public static Fragment getMainActivityFragment()
+    public static Fragment peekMainActivityFragmentStack()
     {
-        return MainActivityFragment;
+        return MainActivityFragmentStack.peek();
     }
 
-    public static void setMainActivityFragment(Fragment mainActivityFragment)
+    public static void pushMainActivityFragmentStack(Fragment mainActivityFragment)
     {
-        MainActivityFragment = mainActivityFragment;
+        MainActivityFragmentStack.push(mainActivityFragment);
     }
 
+    public static Fragment popPrevMainActivityFragmentStack()
+    {
+        return MainActivityFragmentStack.pop();
+    }
+
+    public static void clearMainActivityFragmentStack()
+    {
+        MainActivityFragmentStack.clear();
+    }
 }
