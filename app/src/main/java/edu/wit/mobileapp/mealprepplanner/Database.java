@@ -107,6 +107,7 @@ public class Database extends SQLiteOpenHelper
      */
     public void open() throws SQLException
     {
+        //createDatabase();
         // first, checks if database exists in local phone's storage
         if (!this.exists())
         {
@@ -304,8 +305,9 @@ public class Database extends SQLiteOpenHelper
 
     public void updateUserDB(ArrayList<Recipe> recipes, HashMap<String, Double> selected){
         //remove old data
-        getDb().delete("UserRecipe", null, null);
-        getDb().delete("UserSelectedIngredient", null, null);
+        getDb().execSQL("DELETE FROM UserRecipe");
+        getDb().execSQL("DELETE FROM UserSelectedIngredient");
+
 
         for(Recipe recipe: recipes){
             int id = recipe.getRecipeID();
