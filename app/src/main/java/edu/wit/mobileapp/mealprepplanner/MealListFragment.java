@@ -127,6 +127,11 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
         BottomNavigationView bot = main.findViewById(R.id.main_nav);
         bot.setVisibility(View.VISIBLE);
         bot.setSelectedItemId(R.id.nav_meals);
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        params.addRule(RelativeLayout.ABOVE, R.id.main_nav);
+        main.findViewById(R.id.main_frame).setLayoutParams(params);
+
         super.onStart();
         Log.v(LOGTAG, "onStart.....finished");
     }
