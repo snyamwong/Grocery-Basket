@@ -75,6 +75,7 @@
             android:textSize="20sp"
             android:text="@string/app_name"
             android:layout_centerVertical="true"
+            android:textColor="#3a3a3a"
             android:paddingStart="145dp"
             />
 

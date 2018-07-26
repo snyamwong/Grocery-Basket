@@ -1,6 +1,5 @@
 package edu.wit.mobileapp.mealprepplanner;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -8,10 +7,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -32,9 +27,6 @@ public class MainActivity extends AppCompatActivity
     private SearchFragment searchFragment;
     private MealInfoFragment mealInfoFragment;
 
-    // preferences for json storage
-    private SharedPreferences mPrefs;
-    private SharedPreferences.Editor preferenceEditor;
 
     // temp reference to the Recipe in MealInfoFragment
     private Recipe mealInfoFragmentRecipe;
@@ -50,18 +42,6 @@ public class MainActivity extends AppCompatActivity
 
         // Set up database
         database = new Database(getApplicationContext());
-        database.open();
-
-        // sets preferences
-        mPrefs = getPreferences(MODE_PRIVATE);
-        preferenceEditor = mPrefs.edit();
-
-        // gets global lists from last time list was destroyed
-        retrieveGlobalDataFromStorage();
-
-        //todo: BEFORE YOU RUN MAKE SURE YOU CLEAR YOUR LISTS AS THE STORED DATA HAS CHANGED
-        //mRecipeList = new ArrayList<>();
-        //mSelectedIngredients = new HashMap<>();
 
         // init nav bar and frame
         navigationView = findViewById(R.id.main_nav);
@@ -89,16 +69,6 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-
-    @Override
-    protected void onPause()
-    {
-        super.onPause();
-        Log.v(LOGTAG, "onPaused.....Called");
-        //Store meals list and selected map's current state
-        storeGlobalData();
-    }
-
     @Override
     protected void onResume()
     {
@@ -123,6 +93,24 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onStart()
+    {
+        database.open();
+        // gets global lists from last time list was destroyed
+        mRecipeList = database.getUserRecipes();
+        mSelectedIngredients = database.getUserSelectedIngredients();
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop()
+    {
+        MealPrepPlannerApplication.pushMainActivityFragmentStack(mealListFragment);
+        database.updateUserDB(mRecipeList, mSelectedIngredients);
+        database.close();
+        super.onStop();
+    }
+
     protected void onDestroy()
     {
         MealPrepPlannerApplication.clearMainActivityFragmentStack();
@@ -164,71 +152,6 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
-
-    /**
-     * Stores meal list into JSON
-     * Stores selected items into JSON
-     */
-    public void storeGlobalData()
-    {
-        Gson gson = new Gson();
-        ArrayList<Integer> recipeIDs = new ArrayList<>();
-        for (Recipe r : mRecipeList)
-        {
-            recipeIDs.add(r.getRecipeID());
-        }
-
-        // transforms the ArrayLists into JSON Data.
-        String recipeIDsJSON = gson.toJson(recipeIDs);
-        preferenceEditor.putString("recipeIDsJSONData", recipeIDsJSON);
-
-        // selected ==> jason (lol leaving this typo here - Tin)
-        String selectedJSON = gson.toJson(mSelectedIngredients);
-        preferenceEditor.putString("selectedJSONData", selectedJSON);
-
-        // commits the changes
-        preferenceEditor.commit();
-        database.close();
-        preferenceEditor.apply();
-    }
-
-    /**
-     * Retrieves ArrayList from JSON
-     * Retrieves selected items from JSON
-     */
-    public void retrieveGlobalDataFromStorage()
-    {
-        Gson gson = new Gson();
-
-        if (mPrefs.contains("recipeIDsJSONData"))
-        {
-            String recipeIDsJSON = mPrefs.getString("recipeIDsJSONData", "");
-            Type idType = new TypeToken<ArrayList<Integer>>() {}.getType();
-            ArrayList<Integer> recipeIds = gson.fromJson(recipeIDsJSON, idType);
-
-            mRecipeList = new ArrayList<>();
-            for (Integer id : recipeIds)
-            {
-                mRecipeList.add(database.getRecipeByID(id));
-            }
-        }
-        else
-        {
-            mRecipeList = new ArrayList<>();
-        }
-
-        if (mPrefs.contains("selectedJSONData"))
-        {
-            String selectedJSON = mPrefs.getString("selectedJSONData", "");
-            Type selectedType = new TypeToken<HashMap<String, Double>>() {}.getType();
-            mSelectedIngredients = gson.fromJson(selectedJSON, selectedType);
-        }
-        else
-        {
-            mSelectedIngredients = new HashMap<>();
-        }
-    }
-
 
     // back button pressed = trace back
     // on first fragment = close app

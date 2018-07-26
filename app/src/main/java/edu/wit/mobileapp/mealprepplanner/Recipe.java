@@ -23,6 +23,9 @@ public class Recipe
     // name of the chef (credits)
     private String chef;
 
+    // # of people recipe serves
+    private String serves;
+
     // all of the ingredients in the recipe
     private ArrayList<RecipeIngredient> ingredients;
 
@@ -31,16 +34,17 @@ public class Recipe
 
     public Recipe() {}
 
-    public Recipe(int recipeID, String name, byte[] image, String description, String instruction, String chef)
+    public Recipe(int recipeID, String name, byte[] image, String description, String instruction, String chef, String serves)
     {
         //didn't want to add to constructor
-        multiplier = 100;
+        multiplier = 0;
         this.recipeID = recipeID;
         this.name = name;
         this.image = image;
         this.description = description;
         this.instruction = instruction;
         this.chef = chef;
+        this.serves = serves;
         // XXX this is to avoid headaches - each instances of Recipe will have automatically have an ArrayList for ingredients created
         this.ingredients = new ArrayList<>();
     }
@@ -134,5 +138,13 @@ public class Recipe
 
     public void setMultiplier(int multiplier) {
         this.multiplier = multiplier;
+    }
+
+    public String getServes() {
+        return serves;
+    }
+
+    public void setServes(String serves) {
+        this.serves = serves;
     }
 }

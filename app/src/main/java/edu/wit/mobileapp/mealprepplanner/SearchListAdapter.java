@@ -3,6 +3,7 @@ package edu.wit.mobileapp.mealprepplanner;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -52,7 +53,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
     {
 
         ImageView image;
-        TextView name;
+        TextView name, serves;
         RelativeLayout foreground, background;
 
         ViewHolder(View itemView)
@@ -61,6 +62,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
 
             image = itemView.findViewById(R.id.meal_picture);
             name = itemView.findViewById(R.id.meal_name);
+            serves = itemView.findViewById(R.id.meal_serves);
 
             foreground = itemView.findViewById(R.id.view_foreground);
             background = itemView.findViewById(R.id.view_background);
@@ -103,6 +105,9 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
     {
         Recipe recipe = recipeArrayList.get(position);
         holder.name.setText(recipe.getName());
+        String serves = "Serves: " + recipe.getServes();
+        holder.serves.setText(serves);
+        holder.serves.setTypeface(null, Typeface.ITALIC);
 
         if (recipe.getImage() != null)
         {
