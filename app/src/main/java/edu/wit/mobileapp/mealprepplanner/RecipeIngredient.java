@@ -99,6 +99,7 @@ public class RecipeIngredient
 
     @Override
     public boolean equals(Object obj) {
-        return this.getRecipeID() == ((RecipeIngredient)obj).getRecipeID();
+        String name2 = ((RecipeIngredient)obj).getIngredientName();
+        return this.getIngredientName().equals(name2);
     }
 }

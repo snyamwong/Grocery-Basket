@@ -194,15 +194,6 @@ public class ShoppingListFragment extends Fragment
         }
     }
 
-    /**
-     * Combines listed ingredient amount with new ingredient amount
-     * <p>
-     * TODO: convert measurements to be the same as well, might not need to
-     *
-     * @param i1
-     * @param i2
-     * @return
-     */
     private double combineAmounts(RecipeIngredient i1, RecipeIngredient i2)
     {
         return i1.getQuantity() + i2.getQuantity();

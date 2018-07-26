@@ -223,8 +223,8 @@ public class Database extends SQLiteOpenHelper
      * searches for all ingredients for each recipe that has Bagel in the name
      * returns an ArrayList<Recipe>, which contains all recipes with Bagel in the name
      * <p>
-     * TODO
-     * clean up code, separate operations in the method
+     * TODO clean up code, separate operations in the method
+     *
      *
      * @param userInputRecipeName
      * @return ArrayList<Recipe>
