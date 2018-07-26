@@ -6,8 +6,14 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -140,6 +146,7 @@ public class Database extends SQLiteOpenHelper
 
     public Recipe getRecipeByID(int id){
         String[] recipeColumns = {"recipe_id, name, image, description, instruction, chef, serves"};
+
         // using LIKE clause here so the user can just request for any recipe that has just the ingredient/name
         String where = "recipe_id = ?";
         String[] where_args = new String[]{Integer.toString(id)};
@@ -161,20 +168,20 @@ public class Database extends SQLiteOpenHelper
             String instruction = cursor.getString(cursor.getColumnIndex("instruction"));
             String chef = cursor.getString(cursor.getColumnIndex("chef"));
             String serves = cursor.getString(cursor.getColumnIndex("serves"));
-            Recipe recipe = new Recipe(recipeID, name, blob, description, instruction, chef, serves);
-
+           
+            // if the blob == null, it means there isn't an image in the database
+            // therefore, it is then replaced with the app icon
             // TODO SCALE DOWN ALL THE PHOTOS by checking its dimens before decoding
-//            if (blob != null)
-//            {
-//                Bitmap image = BitmapFactory.decodeByteArray(blob, 0, blob.length);
-//                recipe = new Recipe(recipeID, name, image, description, instruction, chef);
-//            }
-//            else
-//            {
-//                Bitmap icon = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_app_icon);
-//                recipe = new Recipe(recipeID, name, icon, description, instruction, chef);
-//            }
+            if (blob == null)
+            {
+                Drawable drawable = ContextCompat.getDrawable(context, R.drawable.ic_app_icon);
+                Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                blob = stream.toByteArray();
+            }
 
+            Recipe recipe = new Recipe(recipeID, name, blob, description, instruction, chef, serves);
             recipes.add(recipe);
         }
 
@@ -255,18 +262,20 @@ public class Database extends SQLiteOpenHelper
             String serves = cursor.getString(cursor.getColumnIndex("serves"));
             Recipe recipe = new Recipe(recipeID, name, blob, description, instruction, chef, serves);
 
-            // TODO SCALE DOWN ALL THE PHOTOS by checking its dimens before decoding
-//            if (blob != null)
-//            {
-//                Bitmap image = BitmapFactory.decodeByteArray(blob, 0, blob.length);
-//                recipe = new Recipe(recipeID, name, image, description, instruction, chef);
-//            }
-//            else
-//            {
-//                Bitmap icon = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_app_icon);
-//                recipe = new Recipe(recipeID, name, icon, description, instruction, chef);
-//            }
+            // if the blob == null, it means there isn't an image in the database
+            // therefore, it is then replaced with the app icon
+            if (blob == null)
+            {
+                Drawable drawable = ContextCompat.getDrawable(context, R.drawable.ic_app_icon);
+                Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                blob = stream.toByteArray();
+            }
 
+            // TODO SCALE DOWN ALL THE PHOTOS by checking its dimens before decoding
+
+            Recipe recipe = new Recipe(recipeID, name, blob, description, instruction, chef);
             recipes.add(recipe);
         }
 

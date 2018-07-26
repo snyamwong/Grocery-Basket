@@ -126,6 +126,9 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
                 holder.foreground.setBackgroundColor(Color.GREEN);
                 mRecipeArrayList.add(recipe);
                 main.setmRecipeList(mRecipeArrayList);
+
+                // sets fragment to the meal info
+                main.setFragment(main.getMealInfoFragment(), recipe);
             }
         });
 

@@ -30,11 +30,15 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
     private List<Recipe> mealsList;
     private Context mContext;
 
+    private MainActivity mainActivity;
+
     //constructor
     public MealListAdapter(Context mContext, ArrayList<Recipe> mealsList)
     {
         this.mealsList = mealsList;
         this.mContext = mContext;
+
+        mainActivity = (MainActivity) mContext;
     }
 
     //set layout inflater & inflate layout
@@ -69,6 +73,8 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         {
             //Meal clicked = mealsList.get(holder.getAdapterPosition());
             Toast.makeText(mContext, "Clicked Meal:    " + recipe.getName() + " x" + recipe.getMultiplier(), Toast.LENGTH_LONG).show();
+
+            mainActivity.setFragment(mainActivity.getMealInfoFragment(), recipe);
         });
     }
 

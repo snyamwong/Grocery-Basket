@@ -116,7 +116,7 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
         MainActivity main = (MainActivity) getActivity();
         mRecipeList = main.getmRecipeList();
         //Retrieve saved array list then set adapter
-        adapter = new MealListAdapter(getActivity().getApplicationContext(), mRecipeList); //object to update fragment
+        adapter = new MealListAdapter(getContext(), mRecipeList); //object to update fragment
         //update list
         mealListView.setAdapter(adapter); //Update display with new list
         mealListView.getLayoutManager().scrollToPosition(mRecipeList.size() - 1); //Nav to end of list

@@ -25,7 +25,11 @@ public class MainActivity extends AppCompatActivity
     private MealListFragment mealListFragment;
     private ShoppingListFragment shoppingListFragment;
     private SearchFragment searchFragment;
+    private MealInfoFragment mealInfoFragment;
 
+
+    // temp reference to the Recipe in MealInfoFragment
+    private Recipe mealInfoFragmentRecipe;
 
     // database of recipe
     private Database database;
@@ -42,10 +46,11 @@ public class MainActivity extends AppCompatActivity
         // init nav bar and frame
         navigationView = findViewById(R.id.main_nav);
 
-        // init all three fragments
+        // init all four fragments
         mealListFragment = new MealListFragment();
         shoppingListFragment = new ShoppingListFragment();
         searchFragment = new SearchFragment();
+        mealInfoFragment = new MealInfoFragment();
 
         // event listener on nav bar click (either MealsList, or ShoppingList)
         navigationView.setOnNavigationItemSelectedListener(listener ->
@@ -67,18 +72,18 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume()
     {
-        //Log.v(LOGTAG, "getMAFrag = " + MealPrepPlannerApplication.getMainActivityFragment().toString());
-        if (MealPrepPlannerApplication.getMainActivityFragment() == null)
+        //Log.v(LOGTAG, "getMAFrag = " + MealPrepPlannerApplication.peekMainActivityFragmentStack().toString());
+        if (MealPrepPlannerApplication.peekMainActivityFragmentStack() == null)
         {
             Log.v(LOGTAG, "Main Activity Fragment - NULL\n");
             setFragment(mealListFragment);
         }
-        if (MealPrepPlannerApplication.getMainActivityFragment() instanceof MealListFragment)
+        if (MealPrepPlannerApplication.peekMainActivityFragmentStack() instanceof MealListFragment)
         {
             Log.v(LOGTAG, "Main Activity Fragment - MEAL\n");
             setFragment(mealListFragment);
         }
-        else if (MealPrepPlannerApplication.getMainActivityFragment() instanceof ShoppingListFragment)
+        else if (MealPrepPlannerApplication.peekMainActivityFragmentStack() instanceof ShoppingListFragment)
         {
             Log.v(LOGTAG, "Main Activity Fragment - SHOPPING LIST\n");
             setFragment(shoppingListFragment);
@@ -88,7 +93,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onStart() {
+    protected void onStart() 
+    {
         database.open();
         // gets global lists from last time list was destroyed
         mRecipeList = database.getUserRecipes();
@@ -97,11 +103,18 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onStop() {
+    protected void onStop() 
+    {
         MealPrepPlannerApplication.setMainActivityFragment(mealListFragment);
         database.updateUserDB(mRecipeList, mSelectedIngredients);
         database.close();
         super.onStop();
+    }
+    
+    protected void onDestroy()
+    {
+        MealPrepPlannerApplication.clearMainActivityFragmentStack();
+        super.onDestroy();
     }
 
     /**
@@ -111,7 +124,28 @@ public class MainActivity extends AppCompatActivity
      */
     public void setFragment(Fragment fragment)
     {
-        MealPrepPlannerApplication.setMainActivityFragment(fragment);
+        MealPrepPlannerApplication.pushMainActivityFragmentStack(fragment);
+
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.main_frame, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    /**
+     * Overload previous setFragment method, same functionality
+     * <p>
+     * Recipe is for MealInfoFragment, to store the reference in MainActivity
+     * <p>
+     * TODO Bundle the Recipe into MealInfoFragment
+     *
+     * @param fragment
+     * @param recipe
+     */
+    public void setFragment(Fragment fragment, Recipe recipe)
+    {
+        MealPrepPlannerApplication.pushMainActivityFragmentStack(fragment);
+        this.setMealInfoFragmentRecipe(recipe);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_frame, fragment);
@@ -124,6 +158,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed()
     {
+        MealPrepPlannerApplication.popPrevMainActivityFragmentStack();
+
         int count = getSupportFragmentManager().getBackStackEntryCount();
 
         if (count <= 2)
@@ -163,7 +199,23 @@ public class MainActivity extends AppCompatActivity
         return searchFragment;
     }
 
-    public Database getDatabase() {
+    public MealInfoFragment getMealInfoFragment()
+    {
+        return mealInfoFragment;
+    }
+
+    public Database getDatabase()
+    {
         return database;
+    }
+
+    public Recipe getMealInfoFragmentRecipe()
+    {
+        return mealInfoFragmentRecipe;
+    }
+
+    public void setMealInfoFragmentRecipe(Recipe mealInfoFragmentRecipe)
+    {
+        this.mealInfoFragmentRecipe = mealInfoFragmentRecipe;
     }
 }
