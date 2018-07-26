@@ -9,15 +9,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Layout;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.style.AlignmentSpan;
-import android.text.style.ImageSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -26,7 +25,7 @@ import android.widget.TextView;
  * TODO: change font sizes
  * TODO: refactor - separation of concerns, very bad code design atm
  * TODO: figure out how to do the buttons (check MainActivity's current fragment)
- *
+ * <p>
  * TODO: not needed, but figure out why default image doesn't show up/work
  */
 public class MealInfoFragment extends Fragment
@@ -54,6 +53,8 @@ public class MealInfoFragment extends Fragment
     {
         View view = inflater.inflate(R.layout.fragment_meal_info, container, false);
 
+        // Recipe's Image
+        ImageView imageView = view.findViewById(R.id.meal_info_fragment_recipe_image);
         // Recipe's info
         TextView textView = view.findViewById(R.id.meal_info_fragment_recipe_textview);
         // Add the Recipe || Change Servings
@@ -70,8 +71,15 @@ public class MealInfoFragment extends Fragment
 
         SpannableString recipeName = new SpannableString(recipe.getName());
         SpannableString recipeDescription = new SpannableString(recipe.getDescription());
-        SpannableStringBuilder recipeImage = new SpannableStringBuilder(" ");
-        SpannableString recipeIngredients = new SpannableString(recipe.getIngredients().toString());
+
+        StringBuilder builder = new StringBuilder();
+
+        for (RecipeIngredient r : recipe.getIngredients())
+        {
+            builder.append("\u2022 " + r.getIngredientName() + " - " + r.getQuantity() + " " + r.getUnit() + "\n");
+        }
+
+        SpannableString recipeIngredients = new SpannableString(builder.toString());
         SpannableString recipeInstruction = new SpannableString(recipe.getInstruction());
         SpannableString recipeChef = new SpannableString(recipe.getChef());
 
@@ -83,7 +91,8 @@ public class MealInfoFragment extends Fragment
 
         RelativeSizeSpan titleSpan = new RelativeSizeSpan(2f);
 
-        AlignmentSpan centerAlignment = new AlignmentSpan.Standard((Layout.Alignment.ALIGN_CENTER));
+        AlignmentSpan centerAlignment = new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER);
+        AlignmentSpan leftAlignment = new AlignmentSpan.Standard(Layout.Alignment.ALIGN_NORMAL);
 
         // recipe name
         recipeName.setSpan(boldSpan, 0, recipeName.length(), 0);
@@ -94,16 +103,17 @@ public class MealInfoFragment extends Fragment
         recipeDescription.setSpan(italicSpan, 0, recipeDescription.length(), 0);
         recipeDescription.setSpan(centerAlignment, 0, recipeDescription.length(), 0);
 
-        // recipe image
-        recipeImage.setSpan(new ImageSpan(drawable), recipeImage.length() - 1, recipeImage.length(), 0);
         // recipe ingredients
+        recipeIngredients.setSpan(centerAlignment, 0, recipeIngredients.length(), 0);
 
         // recipe instruction
-        recipeInstruction.setSpan(centerAlignment, 0, recipeInstruction.length(), 0);
+        recipeInstruction.setSpan(leftAlignment, 0, recipeInstruction.length(), 0);
 
         // recipe chef
         recipeChef.setSpan(italicSpan, 0, recipeChef.length(), 0);
         recipeChef.setSpan(centerAlignment, 0, recipeChef.length(), 0);
+
+        imageView.setImageDrawable(drawable);
 
         // Clears the TextView first
         textView.setText(null);
@@ -113,13 +123,13 @@ public class MealInfoFragment extends Fragment
 
         // Append the text into TextView
         textView.append(recipeName);
-        textView.append("\n\n");
+        textView.append("\n\n\n");
         textView.append(recipeDescription);
-        textView.append("\n\n");
-        textView.append(recipeImage);
-        textView.append("\n\n");
+        textView.append("\n\n\n");
+        textView.append(recipeIngredients);
+        textView.append("\n\n\n");
         textView.append(recipeInstruction);
-        textView.append("\n\n");
+        textView.append("\n\n\n");
         textView.append(recipeChef);
 
         // add or change

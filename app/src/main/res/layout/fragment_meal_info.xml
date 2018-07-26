@@ -30,11 +30,19 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <ImageView
+                android:id="@+id/meal_info_fragment_recipe_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:paddingTop="2dp" />
+
             <TextView
                 android:id="@+id/meal_info_fragment_recipe_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|center_horizontal"
+                android:gravity="center"
                 android:text="@string/recipe_goes_here"
                 android:textSize="12sp" />
 

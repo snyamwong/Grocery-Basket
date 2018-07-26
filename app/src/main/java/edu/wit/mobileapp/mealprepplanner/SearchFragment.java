@@ -73,6 +73,9 @@ public class SearchFragment extends Fragment
         this.recipeArrayList = new ArrayList<>();
         recipeListAdapter = new SearchListAdapter(getContext(), recipeArrayList);
         recyclerView.setAdapter(recipeListAdapter);
+
+        // FIXME     java.lang.IllegalStateException: attempt to re-open an already-closed object: SQLiteDatabase: /data/data/edu.wit.mobileapp.mealprepplanner/meal_prep_db.db
+
         searchDatabase("");
 
         //top bar setup
