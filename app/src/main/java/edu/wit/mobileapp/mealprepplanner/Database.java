@@ -123,7 +123,7 @@ public class Database extends SQLiteOpenHelper
      * synchronized is if we want to get fancy and do multithreading (not for this project lmao)
      */
     @Override
-    public synchronized void close()
+    public void close()
     {
         if (db != null)
         {
@@ -302,8 +302,8 @@ public class Database extends SQLiteOpenHelper
 
     public void updateUserDB(ArrayList<Recipe> recipes, HashMap<String, Double> selected){
         //remove old data
-        getDb().execSQL("DELETE FROM UserRecipe");
-        getDb().execSQL("DELETE FROM UserSelectedIngredient");
+        getDb().delete("UserRecipe", null, null);
+        getDb().delete("UserSelectedIngredient", null, null);
 
         for(Recipe recipe: recipes){
             int id = recipe.getRecipeID();
@@ -314,7 +314,8 @@ public class Database extends SQLiteOpenHelper
             values.put("recipe_id", id);
             values.put("multiplier", mul);
 
-            getDb().insert(TABLE_NAME,null, values);
+            long res = getDb().insert(TABLE_NAME,null, values);
+            Log.v(LOGTAG, "insert code: " + res);
         }
 
         for(String key: selected.keySet()){
