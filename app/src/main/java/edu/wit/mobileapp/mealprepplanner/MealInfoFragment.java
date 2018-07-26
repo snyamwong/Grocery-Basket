@@ -16,17 +16,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**
  * TODO: documentation
- * TODO: fix ImageSpan alignment
  * TODO: change font sizes
  * TODO: refactor - separation of concerns, very bad code design atm
- * TODO: figure out how to do the buttons (check MainActivity's current fragment)
- * <p>
- * TODO: not needed, but figure out why default image doesn't show up/work
  */
 public class MealInfoFragment extends Fragment
 {
@@ -62,28 +60,52 @@ public class MealInfoFragment extends Fragment
         // Recipe from SearchFragment
         Recipe recipe = this.getMainActivity().getMealInfoFragmentRecipe();
 
-        // Create SpannableString for every attributes in Recipe object
-        // if the blob == null, it means there isn't an image in the database
-        // therefore, it is then replaced with the app icon
+        Fragment temp = MealPrepPlannerApplication.popPrevMainActivityFragmentStack();
 
+        // if the previous Fragment is MealListFragment, then the user will "Change Servings"
+        if (MealPrepPlannerApplication.peekMainActivityFragmentStack() instanceof MealListFragment)
+        {
+            button.setText("Change Servings");
+
+            // Hide nav bar
+            mainActivity.findViewById(R.id.main_nav).setVisibility(View.INVISIBLE);
+            FrameLayout fl = getActivity().findViewById(R.id.main_frame);
+            fl.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
+
+            MealPrepPlannerApplication.pushMainActivityFragmentStack(temp);
+        }
+        // if the previous Fragment is MealListFragment, then the user will "Add Meal"
+        else if (MealPrepPlannerApplication.peekMainActivityFragmentStack() instanceof SearchFragment)
+        {
+            button.setText("Add Meal");
+
+            MealPrepPlannerApplication.pushMainActivityFragmentStack(temp);
+        }
+
+        // Get the Drawable of the Recipe's image
         Drawable drawable = new BitmapDrawable(getResources(), BitmapFactory.decodeByteArray(recipe.getImage(), 0, recipe.getImage().length));
         drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
 
+        // SpannableString of the Recipe's Name
         SpannableString recipeName = new SpannableString(recipe.getName());
+        // SpannableString of the Recipe's Description
         SpannableString recipeDescription = new SpannableString(recipe.getDescription());
 
+        // The StringBuilder here is to build a presentable and readable display of the Recipe's ingredients
         StringBuilder builder = new StringBuilder();
 
         for (RecipeIngredient r : recipe.getIngredients())
         {
+            // \u2022 is unicode for a bullet
             builder.append("\u2022 " + r.getIngredientName() + " - " + r.getQuantity() + " " + r.getUnit() + "\n");
         }
 
+        // SpannableString of the Recipe's Ingredient, built from the previous loop
         SpannableString recipeIngredients = new SpannableString(builder.toString());
+        // SpannableString of the Recipe's instructions
         SpannableString recipeInstruction = new SpannableString(recipe.getInstruction());
+        // SpannableString of the chef
         SpannableString recipeChef = new SpannableString(recipe.getChef());
-
-        // Apply XXX_Span to the SpannableString objects
 
         // Spans
         StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
@@ -104,7 +126,7 @@ public class MealInfoFragment extends Fragment
         recipeDescription.setSpan(centerAlignment, 0, recipeDescription.length(), 0);
 
         // recipe ingredients
-        recipeIngredients.setSpan(centerAlignment, 0, recipeIngredients.length(), 0);
+        recipeIngredients.setSpan(leftAlignment, 0, recipeIngredients.length(), 0);
 
         // recipe instruction
         recipeInstruction.setSpan(leftAlignment, 0, recipeInstruction.length(), 0);

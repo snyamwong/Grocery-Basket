@@ -44,7 +44,7 @@
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:gravity="center"
                 android:text="@string/recipe_goes_here"
-                android:textSize="12sp" />
+                android:textSize="18dp" />
 
         </LinearLayout>
     </ScrollView>

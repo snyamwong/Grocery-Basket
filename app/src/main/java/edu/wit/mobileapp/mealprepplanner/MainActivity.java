@@ -102,18 +102,18 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume()
     {
-        //Log.v(LOGTAG, "getMAFrag = " + MealPrepPlannerApplication.getMainActivityFragment().toString());
-        if (MealPrepPlannerApplication.getMainActivityFragment() == null)
+        //Log.v(LOGTAG, "getMAFrag = " + MealPrepPlannerApplication.peekMainActivityFragmentStack().toString());
+        if (MealPrepPlannerApplication.peekMainActivityFragmentStack() == null)
         {
             Log.v(LOGTAG, "Main Activity Fragment - NULL\n");
             setFragment(mealListFragment);
         }
-        if (MealPrepPlannerApplication.getMainActivityFragment() instanceof MealListFragment)
+        if (MealPrepPlannerApplication.peekMainActivityFragmentStack() instanceof MealListFragment)
         {
             Log.v(LOGTAG, "Main Activity Fragment - MEAL\n");
             setFragment(mealListFragment);
         }
-        else if (MealPrepPlannerApplication.getMainActivityFragment() instanceof ShoppingListFragment)
+        else if (MealPrepPlannerApplication.peekMainActivityFragmentStack() instanceof ShoppingListFragment)
         {
             Log.v(LOGTAG, "Main Activity Fragment - SHOPPING LIST\n");
             setFragment(shoppingListFragment);
@@ -123,8 +123,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onDestroy(){
-        MealPrepPlannerApplication.setMainActivityFragment(mealListFragment);
+    protected void onDestroy()
+    {
+        MealPrepPlannerApplication.clearMainActivityFragmentStack();
         super.onDestroy();
     }
 
@@ -135,7 +136,7 @@ public class MainActivity extends AppCompatActivity
      */
     public void setFragment(Fragment fragment)
     {
-        MealPrepPlannerApplication.setMainActivityFragment(fragment);
+        MealPrepPlannerApplication.pushMainActivityFragmentStack(fragment);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_frame, fragment);
@@ -145,18 +146,18 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * Overload previous setFragment method, same functionality
-     *
+     * <p>
      * Recipe is for MealInfoFragment, to store the reference in MainActivity
-     *
+     * <p>
      * TODO Bundle the Recipe into MealInfoFragment
+     *
      * @param fragment
      * @param recipe
      */
     public void setFragment(Fragment fragment, Recipe recipe)
     {
+        MealPrepPlannerApplication.pushMainActivityFragmentStack(fragment);
         this.setMealInfoFragmentRecipe(recipe);
-
-        MealPrepPlannerApplication.setMainActivityFragment(fragment);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_frame, fragment);
@@ -172,7 +173,8 @@ public class MainActivity extends AppCompatActivity
     {
         Gson gson = new Gson();
         ArrayList<Integer> recipeIDs = new ArrayList<>();
-        for(Recipe r : mRecipeList){
+        for (Recipe r : mRecipeList)
+        {
             recipeIDs.add(r.getRecipeID());
         }
 
@@ -205,7 +207,8 @@ public class MainActivity extends AppCompatActivity
             ArrayList<Integer> recipeIds = gson.fromJson(recipeIDsJSON, idType);
 
             mRecipeList = new ArrayList<>();
-            for(Integer id: recipeIds){
+            for (Integer id : recipeIds)
+            {
                 mRecipeList.add(database.getRecipeByID(id));
             }
         }
@@ -232,6 +235,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed()
     {
+        MealPrepPlannerApplication.popPrevMainActivityFragmentStack();
+
         int count = getSupportFragmentManager().getBackStackEntryCount();
 
         if (count <= 2)
@@ -270,12 +275,12 @@ public class MainActivity extends AppCompatActivity
     {
         return searchFragment;
     }
-    
+
     public MealInfoFragment getMealInfoFragment()
     {
         return mealInfoFragment;
     }
-    
+
     public Database getDatabase()
     {
         return database;
