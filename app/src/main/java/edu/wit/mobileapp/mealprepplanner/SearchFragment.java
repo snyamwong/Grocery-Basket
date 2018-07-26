@@ -154,17 +154,12 @@ public class SearchFragment extends Fragment
         LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.ABOVE, R.id.main_nav);
         main.findViewById(R.id.main_frame).setLayoutParams(params);
-
-        database.close();
     }
 
     @Override
     public void onResume()
     {
         super.onResume();
-
-        // opens the database when navigating to search activity
-        database.open();
     }
 
     //pass onto main activity on back press

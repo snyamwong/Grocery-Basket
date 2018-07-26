@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onStart() 
+    protected void onStart()
     {
         database.open();
         // gets global lists from last time list was destroyed
@@ -103,14 +103,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onStop() 
+    protected void onStop()
     {
-        MealPrepPlannerApplication.setMainActivityFragment(mealListFragment);
+        MealPrepPlannerApplication.pushMainActivityFragmentStack(mealListFragment);
         database.updateUserDB(mRecipeList, mSelectedIngredients);
         database.close();
         super.onStop();
     }
-    
+
     protected void onDestroy()
     {
         MealPrepPlannerApplication.clearMainActivityFragmentStack();
