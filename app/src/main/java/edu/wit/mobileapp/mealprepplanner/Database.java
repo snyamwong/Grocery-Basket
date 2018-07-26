@@ -64,7 +64,8 @@ public class Database extends SQLiteOpenHelper
      */
     private boolean exists()
     {
-        File dbFile = context.getDatabasePath(DB_NAME);
+        File dbFile = new File(DB_PATH + DB_NAME);
+        Log.v(LOGTAG, "db path " + DB_PATH + DB_NAME);
 
         return dbFile.exists();
     }
@@ -110,6 +111,7 @@ public class Database extends SQLiteOpenHelper
         if (!this.exists())
         {
             this.createDatabase();
+            Log.v(LOGTAG, "Database doesn't exist");
         }
 
         // opens the database
