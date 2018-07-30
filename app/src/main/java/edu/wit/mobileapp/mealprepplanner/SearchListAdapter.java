@@ -120,21 +120,26 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
 
         holder.foreground.setOnClickListener(v ->
         {
-            if (mRecipeArrayList.contains(recipe))
+            if (!main.getmRecipeList().contains(recipe))
             {
-                holder.foreground.setBackgroundColor(Color.WHITE);
-
+                holder.foreground.setBackgroundColor(Color.GREEN);
             }
             else
             {
-                // sets fragment to the meal info
-                main.setFragment(main.getMealInfoFragment(), recipe);
+                holder.foreground.setBackgroundColor(Color.WHITE);
             }
+
+            main.setFragment(main.getMealInfoFragment(), recipe);
+
         });
 
-        if (mRecipeArrayList.contains(recipe))
+        if (main.getmRecipeList().contains(recipe))
         {
             holder.foreground.setBackgroundColor(Color.GREEN);
+        }
+        else
+        {
+            holder.foreground.setBackgroundColor(Color.WHITE);
         }
     }
 

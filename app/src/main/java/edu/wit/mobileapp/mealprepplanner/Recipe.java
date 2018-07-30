@@ -2,6 +2,7 @@ package edu.wit.mobileapp.mealprepplanner;
 
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Recipe
 {
@@ -122,6 +123,21 @@ public class Recipe
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
+        Recipe recipe = (Recipe) o;
+        return recipeID == recipe.recipeID;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(recipeID);
+    }
+
     public byte[] getImage()
     {
         return image;
@@ -132,19 +148,23 @@ public class Recipe
         this.image = image;
     }
 
-    public int getMultiplier() {
+    public int getMultiplier()
+    {
         return multiplier;
     }
 
-    public void setMultiplier(int multiplier) {
+    public void setMultiplier(int multiplier)
+    {
         this.multiplier = multiplier;
     }
 
-    public String getServes() {
+    public String getServes()
+    {
         return serves;
     }
 
-    public void setServes(String serves) {
+    public void setServes(String serves)
+    {
         this.serves = serves;
     }
 }

@@ -214,14 +214,28 @@ public class MealInfoFragment extends Fragment
         numberPicker.setMinValue(1);   // min value 1
         numberPicker.setWrapSelectorWheel(false);
 
+        // FIXME
         setButton.setOnClickListener(v ->
         {
-            recipe.setMultiplier(numberPicker.getValue());
+            if (!mainActivity.getmRecipeList().contains(recipe))
+            {
+                recipe.setMultiplier(numberPicker.getValue());
 
-            mRecipeArrayList.add(recipe);
-            mainActivity.setmRecipeList(mRecipeArrayList);
+                mRecipeArrayList.add(recipe);
+                mainActivity.setmRecipeList(mRecipeArrayList);
+            }
+            else
+            {
+                for (Recipe target : mainActivity.getmRecipeList())
+                {
+                    if (recipe.equals(target))
+                    {
+                        target.setMultiplier(numberPicker.getValue() + target.getMultiplier());
+                    }
+                }
+            }
+
             mainActivity.onBackPressed();
-
             dialog.dismiss();
         });
 
