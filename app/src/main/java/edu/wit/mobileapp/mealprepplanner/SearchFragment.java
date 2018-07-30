@@ -154,8 +154,6 @@ public class SearchFragment extends Fragment
         LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.ABOVE, R.id.main_nav);
         main.findViewById(R.id.main_frame).setLayoutParams(params);
-
-        database.close();
     }
 
     @Override

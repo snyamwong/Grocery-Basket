@@ -260,7 +260,6 @@ public class Database extends SQLiteOpenHelper
             String instruction = cursor.getString(cursor.getColumnIndex("instruction"));
             String chef = cursor.getString(cursor.getColumnIndex("chef"));
             String serves = cursor.getString(cursor.getColumnIndex("serves"));
-            Recipe recipe = new Recipe(recipeID, name, blob, description, instruction, chef, serves);
 
             // if the blob == null, it means there isn't an image in the database
             // therefore, it is then replaced with the app icon
@@ -275,7 +274,7 @@ public class Database extends SQLiteOpenHelper
 
             // TODO SCALE DOWN ALL THE PHOTOS by checking its dimens before decoding
 
-            Recipe recipe = new Recipe(recipeID, name, blob, description, instruction, chef);
+            Recipe recipe = new Recipe(recipeID, name, blob, description, instruction, chef, serves);
             recipes.add(recipe);
         }
 

@@ -105,7 +105,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStop() 
     {
-        MealPrepPlannerApplication.setMainActivityFragment(mealListFragment);
         database.updateUserDB(mRecipeList, mSelectedIngredients);
         database.close();
         super.onStop();
