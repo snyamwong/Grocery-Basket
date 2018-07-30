@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_width="200dp"
+    android:layout_height="300dp">
+
+    <TextView
+        android:id="@+id/number_pick_dialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:text="@string/number_picker_dialog_title"
+        android:textSize="36sp" />
 
     <NumberPicker
-        android:id="@+id/numberPicker"
+        android:id="@+id/number_pick_dialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -15,8 +26,10 @@
         android:id="@+id/number_picker_dialog_set_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/numberPicker"
-        android:layout_alignBottom="@id/numberPicker"
-        android:text="Set" />
+        android:layout_alignBaseline="@id/number_pick_dialog"
+        android:layout_alignBottom="@id/number_pick_dialog"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/number_picker_dialog_button" />
 
 </RelativeLayout>

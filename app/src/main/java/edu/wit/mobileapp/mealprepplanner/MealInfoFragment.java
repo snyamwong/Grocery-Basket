@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Layout;
@@ -52,7 +53,7 @@ public class MealInfoFragment extends Fragment
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_meal_info, container, false);
 
@@ -77,11 +78,8 @@ public class MealInfoFragment extends Fragment
 
             MealPrepPlannerApplication.pushMainActivityFragmentStack(temp);
 
-            // add or change
-            button.setOnClickListener(v ->
-            {
-                // TODO get recipe from ArrayList
-            });
+            // change servings
+            button.setOnClickListener(v -> showChangeServingsDialog(recipe));
         }
         // if the previous Fragment is MealListFragment, then the user will "Add Meal"
         else if (MealPrepPlannerApplication.peekMainActivityFragmentStack() instanceof SearchFragment)
@@ -90,11 +88,8 @@ public class MealInfoFragment extends Fragment
 
             MealPrepPlannerApplication.pushMainActivityFragmentStack(temp);
 
-            // add or change
-            button.setOnClickListener(v ->
-            {
-                showDialog(recipe);
-            });
+            // add meal
+            button.setOnClickListener(v -> showAddMealDialog(recipe));
         }
 
         // Get the Drawable of the Recipe's image
@@ -182,28 +177,62 @@ public class MealInfoFragment extends Fragment
         this.mainActivity = mainActivity;
     }
 
-    public void showDialog(Recipe recipe)
+    public void showAddMealDialog(Recipe recipe)
     {
 
-        final Dialog dialog = new Dialog(getContext());
-        dialog.setTitle("NumberPicker");
+        final Dialog dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.number_picker_dialog);
+        dialog.setTitle("Servings");
+
         Button setButton = dialog.findViewById(R.id.number_picker_dialog_set_button);
-        final NumberPicker numberPicker = dialog.findViewById(R.id.numberPicker1);
-        numberPicker.setMaxValue(20); // max value 20
+
+        final NumberPicker numberPicker = dialog.findViewById(R.id.number_pick_dialog);
+        numberPicker.setMaxValue(100); // max value 100 (why?)
         numberPicker.setMinValue(1);   // min value 1
         numberPicker.setWrapSelectorWheel(false);
-        // numberPicker.setOnValueChangedListener(getContext());
+
         setButton.setOnClickListener(v ->
         {
-            dialog.dismiss();
-
             recipe.setMultiplier(numberPicker.getValue());
 
             mRecipeArrayList.add(recipe);
             mainActivity.setmRecipeList(mRecipeArrayList);
-
             mainActivity.onBackPressed();
+
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
+
+    public void showChangeServingsDialog(Recipe recipe)
+    {
+
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.setContentView(R.layout.number_picker_dialog);
+        dialog.setTitle("Servings");
+
+        final NumberPicker numberPicker = dialog.findViewById(R.id.number_pick_dialog);
+        numberPicker.setMaxValue(100); // max value 100 (why?)
+        numberPicker.setMinValue(1);   // min value 1
+        numberPicker.setWrapSelectorWheel(false);
+
+        Button setButton = dialog.findViewById(R.id.number_picker_dialog_set_button);
+
+        // FIXME Needs improvements big time
+        setButton.setOnClickListener(v ->
+        {
+            for (Recipe target : mainActivity.getmRecipeList())
+            {
+                if (recipe.equals(target))
+                {
+                    target.setMultiplier(numberPicker.getValue());
+
+                    mainActivity.onBackPressed();
+                }
+            }
+
+            dialog.dismiss();
         });
 
         dialog.show();
