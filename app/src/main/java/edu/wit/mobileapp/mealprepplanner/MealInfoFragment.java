@@ -25,9 +25,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
- * TODO: documentation
- * TODO: change font sizes
- * TODO: refactor - separation of concerns, very bad code design atm
+ * Fragment for MealInfo, which appears when user taps on a Recipe in either MealListFragment or SearchFragment
+ * <p>
+ * Allows the user to either add a recipe or update a recipe
  */
 public class MealInfoFragment extends Fragment
 {
@@ -51,6 +51,15 @@ public class MealInfoFragment extends Fragment
 
     }
 
+    /**
+     * FIXME really need to clean up code
+     * TODO change the aesthetics (white background, better typography, etc).
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState)
@@ -107,7 +116,14 @@ public class MealInfoFragment extends Fragment
         for (RecipeIngredient r : recipe.getIngredients())
         {
             // \u2022 is unicode for a bullet
-            builder.append("\u2022 " + r.getIngredientName() + " - " + r.getQuantity() + " " + r.getUnit() + "\n");
+            // Appending everything to StringBuilder to save memory
+            builder.append("\u2022 ")
+                    .append(r.getIngredientName())
+                    .append(" - ")
+                    .append(r.getQuantity())
+                    .append(" ")
+                    .append(r.getUnit())
+                    .append("\n");
         }
 
         // SpannableString of the Recipe's Ingredient, built from the previous loop
@@ -177,6 +193,13 @@ public class MealInfoFragment extends Fragment
         this.mainActivity = mainActivity;
     }
 
+    /**
+     * Adds Recipe to Meal List
+     * <p>
+     * Difference between this and showChangeServingsDialog is that this listener adds recipe
+     *
+     * @param recipe
+     */
     public void showAddMealDialog(Recipe recipe)
     {
 
@@ -205,6 +228,13 @@ public class MealInfoFragment extends Fragment
         dialog.show();
     }
 
+    /**
+     * Changes servings for the Recipe
+     * <p>
+     * Difference between this and showAddMealDialog is that this listeners updates recipe
+     *
+     * @param recipe
+     */
     public void showChangeServingsDialog(Recipe recipe)
     {
 
