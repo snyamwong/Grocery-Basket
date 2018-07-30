@@ -1,5 +1,6 @@
 package edu.wit.mobileapp.mealprepplanner;
 
+import android.app.Dialog;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
@@ -16,10 +17,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.NumberPicker;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 /**
  * TODO: documentation
@@ -29,11 +31,14 @@ import android.widget.TextView;
 public class MealInfoFragment extends Fragment
 {
 
+    private ArrayList<Recipe> mRecipeArrayList;
+
     private MainActivity mainActivity;
 
     public MealInfoFragment()
     {
         // Required empty public constructor
+        mRecipeArrayList = new ArrayList<>();
     }
 
     @Override
@@ -68,11 +73,15 @@ public class MealInfoFragment extends Fragment
             button.setText("Change Servings");
 
             // Hide nav bar
-            mainActivity.findViewById(R.id.main_nav).setVisibility(View.INVISIBLE);
-            FrameLayout fl = getActivity().findViewById(R.id.main_frame);
-            fl.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
+            mainActivity.hideNavigationBar();
 
             MealPrepPlannerApplication.pushMainActivityFragmentStack(temp);
+
+            // add or change
+            button.setOnClickListener(v ->
+            {
+                // TODO get recipe from ArrayList
+            });
         }
         // if the previous Fragment is MealListFragment, then the user will "Add Meal"
         else if (MealPrepPlannerApplication.peekMainActivityFragmentStack() instanceof SearchFragment)
@@ -80,6 +89,12 @@ public class MealInfoFragment extends Fragment
             button.setText("Add Meal");
 
             MealPrepPlannerApplication.pushMainActivityFragmentStack(temp);
+
+            // add or change
+            button.setOnClickListener(v ->
+            {
+                showDialog(recipe);
+            });
         }
 
         // Get the Drawable of the Recipe's image
@@ -154,12 +169,6 @@ public class MealInfoFragment extends Fragment
         textView.append("\n\n\n");
         textView.append(recipeChef);
 
-        // add or change
-        button.setOnClickListener(v ->
-        {
-
-        });
-
         return view;
     }
 
@@ -171,5 +180,32 @@ public class MealInfoFragment extends Fragment
     public void setMainActivity(MainActivity mainActivity)
     {
         this.mainActivity = mainActivity;
+    }
+
+    public void showDialog(Recipe recipe)
+    {
+
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setTitle("NumberPicker");
+        dialog.setContentView(R.layout.number_picker_dialog);
+        Button setButton = dialog.findViewById(R.id.number_picker_dialog_set_button);
+        final NumberPicker numberPicker = dialog.findViewById(R.id.numberPicker1);
+        numberPicker.setMaxValue(20); // max value 20
+        numberPicker.setMinValue(1);   // min value 1
+        numberPicker.setWrapSelectorWheel(false);
+        // numberPicker.setOnValueChangedListener(getContext());
+        setButton.setOnClickListener(v ->
+        {
+            dialog.dismiss();
+
+            recipe.setMultiplier(numberPicker.getValue());
+
+            mRecipeArrayList.add(recipe);
+            mainActivity.setmRecipeList(mRecipeArrayList);
+
+            mainActivity.onBackPressed();
+        });
+
+        dialog.show();
     }
 }
