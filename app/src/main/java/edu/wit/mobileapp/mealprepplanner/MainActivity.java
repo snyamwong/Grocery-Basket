@@ -9,6 +9,8 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         // Set up database
