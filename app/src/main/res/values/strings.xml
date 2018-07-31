@@ -14,6 +14,6 @@
     <string name="remove">REMOVE</string>
     <string name="add_meal_change_serving">Add Meal / Change Serving</string>
     <string name="recipe_goes_here">Recipe Goes Here:</string>
-    <string name="number_picker_dialog_title">Servings</string>
+    <string name="number_picker_dialog_title">Multiplier</string>
     <string name="number_picker_dialog_button">Set</string>
 </resources>

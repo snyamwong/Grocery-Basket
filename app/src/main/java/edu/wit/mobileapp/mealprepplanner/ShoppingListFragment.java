@@ -150,7 +150,7 @@ public class ShoppingListFragment extends Fragment
                         recipeIngredient.getRecipeName(),
                         recipeIngredient.getIngredientName(),
                         recipeIngredient.getIngredientCategory(),
-                        recipeIngredient.getQuantity(),
+                        recipeIngredient.getQuantity() * recipe.getMultiplier(), //this is where the multiplier is applied
                         recipeIngredient.getUnit());
 
                 // Adds to appropriate sub list

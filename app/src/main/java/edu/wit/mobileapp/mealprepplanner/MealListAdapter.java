@@ -66,7 +66,8 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
             holder.image.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_app_icon));
         }
         holder.name.setText(recipe.getName());
-        String amount = "x" + Integer.toString(recipe.getMultiplier());
+        int servings = Integer.parseInt(recipe.getServes()) * recipe.getMultiplier();
+        String amount = "Servings: " + Integer.toString(servings);
         holder.amount.setText(amount);
 
         holder.foreground.setOnClickListener((View v) ->
