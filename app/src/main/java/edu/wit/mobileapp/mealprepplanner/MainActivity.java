@@ -6,6 +6,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +31,6 @@ public class MainActivity extends AppCompatActivity
     private ShoppingListFragment shoppingListFragment;
     private SearchFragment searchFragment;
     private MealInfoFragment mealInfoFragment;
-
 
     // temp reference to the Recipe in MealInfoFragment
     private Recipe mealInfoFragmentRecipe;
@@ -175,6 +177,13 @@ public class MainActivity extends AppCompatActivity
             Log.v(LOGTAG, "onBackPressed......Called       COUNT = " + count);
             getSupportFragmentManager().popBackStack();
         }
+    }
+
+    public void hideNavigationBar()
+    {
+        this.findViewById(R.id.main_nav).setVisibility(View.INVISIBLE);
+        FrameLayout fl = this.findViewById(R.id.main_frame);
+        fl.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
     }
 
     public ArrayList<Recipe> getmRecipeList()

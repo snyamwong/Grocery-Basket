@@ -120,19 +120,20 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Vi
 
         holder.foreground.setOnClickListener(v ->
         {
-            if (!mRecipeArrayList.contains(recipe))
+            if (!main.getmRecipeList().contains(recipe))
             {
-                Toast.makeText(context, "Meal:" + recipe.getName() + " added to meal list", Toast.LENGTH_LONG).show();
                 holder.foreground.setBackgroundColor(Color.GREEN);
-                mRecipeArrayList.add(recipe);
-                main.setmRecipeList(mRecipeArrayList);
-
-                // sets fragment to the meal info
-                main.setFragment(main.getMealInfoFragment(), recipe);
             }
+            else
+            {
+                holder.foreground.setBackgroundColor(Color.WHITE);
+            }
+
+            main.setFragment(main.getMealInfoFragment(), recipe);
+
         });
 
-        if (mRecipeArrayList.contains(recipe))
+        if (main.getmRecipeList().contains(recipe))
         {
             holder.foreground.setBackgroundColor(Color.GREEN);
         }
