@@ -114,7 +114,7 @@ public class Database extends SQLiteOpenHelper
     public void open() throws SQLException
     {
         //TODO uncomment to update DB
-        createDatabase();
+        //createDatabase();
 
         // first, checks if database exists in local phone's storage
         if (!this.exists())

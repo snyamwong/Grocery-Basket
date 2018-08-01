@@ -2,7 +2,19 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorWhite">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/mealInfoTopBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:layout_alignParentTop="true"
+        app:titleTextColor="@color/colorWhite"
+        app:title="Meal Info"
+        />
 
     <LinearLayout
         android:id="@+id/buttons"
@@ -16,14 +28,20 @@
             android:id="@+id/meal_info_fragment_recipe_add_meal_change_serving_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/add_meal_change_serving" />
+            android:text="@string/add_meal_change_serving"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/colorWhite"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"/>
 
     </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/buttons">
+        android:layout_above="@id/buttons"
+        android:layout_below="@+id/mealInfoTopBar">
 
         <LinearLayout
             android:layout_width="match_parent"

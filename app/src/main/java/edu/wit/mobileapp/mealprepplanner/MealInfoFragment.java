@@ -9,11 +9,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Layout;
 import android.text.SpannableString;
 import android.text.style.AlignmentSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -180,6 +183,15 @@ public class MealInfoFragment extends Fragment
         textView.append("\n\n\n");
         textView.append(recipeChef);
 
+        Toolbar toolbar = view.findViewById(R.id.mealInfoTopBar);
+        mainActivity.setSupportActionBar(toolbar);
+
+        mainActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mainActivity.getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        toolbar.setNavigationOnClickListener((View v) -> onBackPressed());
+
+
         return view;
     }
 
@@ -280,5 +292,11 @@ public class MealInfoFragment extends Fragment
         });
 
         dialog.show();
+    }
+    //pass onto main activity on back press
+
+    public void onBackPressed()
+    {
+        mainActivity.onBackPressed();
     }
 }
