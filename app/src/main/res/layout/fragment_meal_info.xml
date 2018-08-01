@@ -27,13 +27,14 @@
         <Button
             android:id="@+id/meal_info_fragment_recipe_add_meal_change_serving_button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:text="@string/add_meal_change_serving"
             android:background="@color/colorPrimary"
             android:textColor="@color/colorWhite"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
-            android:layout_marginBottom="5dp"/>
+            android:layout_marginBottom="2dp"
+            android:textSize="20dp" />
 
     </LinearLayout>
 
