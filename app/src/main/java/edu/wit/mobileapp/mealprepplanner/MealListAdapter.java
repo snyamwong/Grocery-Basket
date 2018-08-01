@@ -73,7 +73,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.ViewHo
         holder.foreground.setOnClickListener((View v) ->
         {
             //Meal clicked = mealsList.get(holder.getAdapterPosition());
-            Toast.makeText(mContext, "Clicked Meal:    " + recipe.getName() + " x" + recipe.getMultiplier(), Toast.LENGTH_LONG).show();
+            //Toast.makeText(mContext, "Clicked Meal:    " + recipe.getName() + " x" + recipe.getMultiplier(), Toast.LENGTH_LONG).show();
 
             mainActivity.setFragment(mainActivity.getMealInfoFragment(), recipe);
         });

@@ -119,7 +119,7 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
                     TextView name = r.findViewById(R.id.ingredient_name);
                     TextView amount = r.findViewById(R.id.ingredient_amount);
 
-                    Toast.makeText(mContext, "cb clicked: " + ingredient.toString(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext, "cb clicked: " + ingredient.toString(), Toast.LENGTH_SHORT).show();
                     //change ingredient set value and change text views accordingly
                     //if unchecked -> checked
                     if (cb.isChecked())

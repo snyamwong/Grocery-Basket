@@ -171,9 +171,9 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
                     {
                         case DialogInterface.BUTTON_POSITIVE:
                             //Yes is pressed
-                            Toast toast = Toast.makeText(getActivity().getApplicationContext(), "All Meals Deleted ", Toast.LENGTH_SHORT);
-                            toast.setGravity(Gravity.CENTER, 0, 0);
-                            toast.show();
+                            //Toast toast = Toast.makeText(getActivity().getApplicationContext(), "All Meals Deleted ", Toast.LENGTH_SHORT);
+                            //toast.setGravity(Gravity.CENTER, 0, 0);
+                            //toast.show();
 
                             //clear meal list
                             mRecipeList.clear();
