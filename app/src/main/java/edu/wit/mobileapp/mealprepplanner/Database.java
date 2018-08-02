@@ -35,13 +35,14 @@ public class Database extends SQLiteOpenHelper
     // TODO change hard coded value
     private static String DB_PATH = "/data/data/edu.wit.mobileapp.mealprepplanner/";
     private static String DB_NAME = "meal_prep_db.db";
+    private int version;
 
     private Context context;
     private SQLiteDatabase db;
 
-    public Database(Context context)
-    {
-        super(context, DB_NAME, null, 1);
+    public Database(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+        super(context, name, factory, version);
+        this.version = version;
         this.context = context;
     }
 
@@ -113,9 +114,6 @@ public class Database extends SQLiteOpenHelper
      */
     public void open() throws SQLException
     {
-        //TODO uncomment to update DB
-        createDatabase();
-
         // first, checks if database exists in local phone's storage
         if (!this.exists())
         {
@@ -127,6 +125,10 @@ public class Database extends SQLiteOpenHelper
         String path = DB_PATH + DB_NAME;
 
         db = SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READWRITE);
+
+        if(db.getVersion() != version){
+            onUpgrade(db, db.getVersion(), version);
+        }
     }
 
     /**
@@ -401,7 +403,13 @@ public class Database extends SQLiteOpenHelper
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
+        Log.v(LOGTAG, "upgrade db from " + oldVersion + " to " + newVersion);
 
+        ArrayList<Recipe> saveUserRecipes = getUserRecipes();
+        HashMap<String, Double> saveUserSelectedIngredients = getUserSelectedIngredients();
+        createDatabase();
+        updateUserDB(saveUserRecipes, saveUserSelectedIngredients);
+        db.setVersion(newVersion);
     }
 
     public SQLiteDatabase getDb()

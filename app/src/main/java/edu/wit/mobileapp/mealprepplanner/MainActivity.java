@@ -18,6 +18,7 @@ import java.util.TreeMap;
 public class MainActivity extends AppCompatActivity
 {
     private final String LOGTAG = "MYAPP";
+    private final int DB_VERSION = 3;
 
     // global lists
     private ArrayList<Recipe> mRecipeList;
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         // Set up database
-        database = new Database(getApplicationContext());
+        database = new Database(getApplicationContext(), null, null, DB_VERSION);
 
         // init nav bar and frame
         navigationView = findViewById(R.id.main_nav);

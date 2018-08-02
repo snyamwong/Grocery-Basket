@@ -217,7 +217,7 @@ public class MealInfoFragment extends Fragment
 
         final Dialog dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.number_picker_dialog);
-        dialog.setTitle("Servings");
+        dialog.setTitle("Servings Multiplier");
 
         Button setButton = dialog.findViewById(R.id.number_picker_dialog_set_button);
 
