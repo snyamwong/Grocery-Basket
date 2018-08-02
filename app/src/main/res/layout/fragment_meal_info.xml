@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorWhite">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/mealInfoTopBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
         android:layout_alignParentTop="true"
-        app:titleTextColor="@color/colorWhite"
+        android:background="@color/colorPrimary"
         app:title="Meal Info"
-        />
+        app:titleTextColor="@color/colorWhite" />
 
     <LinearLayout
         android:id="@+id/buttons"
@@ -28,13 +27,14 @@
             android:id="@+id/meal_info_fragment_recipe_add_meal_change_serving_button"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:text="@string/add_meal_change_serving"
-            android:background="@color/colorPrimary"
-            android:textColor="@color/colorWhite"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
             android:layout_marginBottom="2dp"
-            android:textSize="20dp" />
+            android:layout_marginEnd="6dp"
+            android:layout_marginStart="6dp"
+            android:background="@color/colorPrimary"
+            android:paddingTop="10dp"
+            android:text="@string/add_meal_change_serving"
+            android:textColor="@color/colorWhite"
+            android:textSize="20sp" />
 
     </LinearLayout>
 
@@ -54,16 +54,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|center_horizontal"
-                android:paddingTop="2dp" />
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp" />
 
             <TextView
                 android:id="@+id/meal_info_fragment_recipe_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|center_horizontal"
-                android:gravity="center"
+                android:lineSpacingExtra="10dp"
                 android:text="@string/recipe_goes_here"
-                android:textSize="18dp" />
+                android:textSize="20sp" />
 
         </LinearLayout>
     </ScrollView>

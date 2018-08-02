@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="200dp"
-    android:layout_height="300dp">
+    android:layout_width="300dp"
+    android:layout_height="400dp">
 
     <TextView
         android:id="@+id/number_pick_dialog_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:background="@color/colorPrimary"
         android:gravity="center"
         android:text="@string/number_picker_dialog_title"
-        android:textSize="36sp" />
+        android:textColor="@color/colorWhite"
+        android:textSize="24sp" />
 
     <NumberPicker
         android:id="@+id/number_pick_dialog"
@@ -20,16 +22,23 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="64dp" />
+        android:layout_centerVertical="true"
+        android:layout_marginTop="96dp"/>
 
     <Button
         android:id="@+id/number_picker_dialog_set_button"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/number_pick_dialog"
         android:layout_alignBottom="@id/number_pick_dialog"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/number_picker_dialog_button" />
+        android:layout_marginBottom="2dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginStart="6dp"
+        android:background="@color/colorPrimary"
+        android:text="@string/number_picker_dialog_button"
+        android:textColor="@color/colorWhite"
+        android:textSize="20sp" />
 
 </RelativeLayout>
