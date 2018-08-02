@@ -136,33 +136,24 @@ public class MealInfoFragment extends Fragment
         // SpannableString of the chef
         SpannableString recipeChef = new SpannableString(recipe.getChef());
 
-        // Spans
-        StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
-        StyleSpan italicSpan = new StyleSpan(Typeface.ITALIC);
-
-        RelativeSizeSpan titleSpan = new RelativeSizeSpan(2f);
-
-        AlignmentSpan centerAlignment = new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER);
-        AlignmentSpan leftAlignment = new AlignmentSpan.Standard(Layout.Alignment.ALIGN_NORMAL);
-
         // recipe name
-        recipeName.setSpan(boldSpan, 0, recipeName.length(), 0);
-        recipeName.setSpan(titleSpan, 0, recipeName.length(), 0);
-        recipeName.setSpan(centerAlignment, 0, recipeName.length(), 0);
+        recipeName.setSpan(new StyleSpan(Typeface.BOLD), 0, recipeName.length(), 0);
+        recipeName.setSpan(new RelativeSizeSpan(2f), 0, recipeName.length(), 0);
+        recipeName.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, recipeName.length(), 0);
 
         // recipe description
-        recipeDescription.setSpan(italicSpan, 0, recipeDescription.length(), 0);
-        recipeDescription.setSpan(centerAlignment, 0, recipeDescription.length(), 0);
+        recipeDescription.setSpan(new StyleSpan(Typeface.ITALIC), 0, recipeDescription.length(), 0);
+        recipeDescription.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, recipeDescription.length(), 0);
 
         // recipe ingredients
-        recipeIngredients.setSpan(leftAlignment, 0, recipeIngredients.length(), 0);
+        recipeIngredients.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_NORMAL), 0, recipeIngredients.length(), 0);
 
         // recipe instruction
-        recipeInstruction.setSpan(leftAlignment, 0, recipeInstruction.length(), 0);
+        recipeInstruction.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_NORMAL), 0, recipeInstruction.length(), 0);
 
         // recipe chef
-        recipeChef.setSpan(italicSpan, 0, recipeChef.length(), 0);
-        recipeChef.setSpan(centerAlignment, 0, recipeChef.length(), 0);
+        recipeChef.setSpan(new StyleSpan(Typeface.ITALIC), 0, recipeChef.length(), 0);
+        recipeChef.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, recipeChef.length(), 0);
 
         imageView.setImageDrawable(drawable);
 
