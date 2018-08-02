@@ -223,7 +223,7 @@ public class MealInfoFragment extends Fragment
             if (!mainActivity.getmRecipeList().contains(recipe))
             {
                 recipe.setMultiplier(numberPicker.getValue());
-
+                mRecipeArrayList = mainActivity.getmRecipeList();
                 mRecipeArrayList.add(recipe);
                 mainActivity.setmRecipeList(mRecipeArrayList);
             }

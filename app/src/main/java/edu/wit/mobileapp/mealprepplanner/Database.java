@@ -115,6 +115,7 @@ public class Database extends SQLiteOpenHelper
     public void open() throws SQLException
     {
         // first, checks if database exists in local phone's storage
+        //createDatabase();
         if (!this.exists())
         {
             this.createDatabase();
@@ -125,6 +126,10 @@ public class Database extends SQLiteOpenHelper
         String path = DB_PATH + DB_NAME;
 
         db = SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READWRITE);
+
+        if(db.getVersion() == 0){
+            createDatabase();
+        }
 
         if(db.getVersion() != version){
             onUpgrade(db, db.getVersion(), version);
