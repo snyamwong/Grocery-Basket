@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity
     // global lists
     private ArrayList<Recipe> mRecipeList;
     private HashMap<String, Double> mSelectedIngredients;
+    private ArrayList<Recipe> mAllRecipe;
 
     // class vars for nav bar and frame
     private BottomNavigationView navigationView;
@@ -103,6 +104,7 @@ public class MainActivity extends AppCompatActivity
         database.open();
         // gets global lists from last time list was destroyed
         mRecipeList = database.getUserRecipes();
+        mAllRecipe = database.getRecipes("");
         mSelectedIngredients = database.getUserSelectedIngredients();
         super.onStart();
     }
@@ -230,4 +232,6 @@ public class MainActivity extends AppCompatActivity
     {
         this.mealInfoFragmentRecipe = mealInfoFragmentRecipe;
     }
+
+    public ArrayList<Recipe> getmAllRecipe(){return mAllRecipe;}
 }
