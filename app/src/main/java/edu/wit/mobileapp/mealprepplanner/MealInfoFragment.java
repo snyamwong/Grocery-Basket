@@ -180,6 +180,8 @@ public class MealInfoFragment extends Fragment
         mainActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mainActivity.getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+
         toolbar.setNavigationOnClickListener((View v) -> onBackPressed());
 
 

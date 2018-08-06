@@ -160,7 +160,6 @@ public class MealListFragment extends Fragment implements RecyclerItemTouchHelpe
         //Redundant, only button is delete button
         if (res_id == R.id.deleteAll)
         {
-
             //Are you sure? box class
             DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener()
             {

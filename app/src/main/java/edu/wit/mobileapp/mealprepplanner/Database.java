@@ -129,6 +129,7 @@ public class Database extends SQLiteOpenHelper
 
         if(db.getVersion() == 0){
             createDatabase();
+            
         }
 
         if(db.getVersion() != version){

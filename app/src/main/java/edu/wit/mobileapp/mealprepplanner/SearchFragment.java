@@ -74,16 +74,14 @@ public class SearchFragment extends Fragment
         recipeListAdapter = new SearchListAdapter(getContext(), recipeArrayList);
         recyclerView.setAdapter(recipeListAdapter);
 
-        // FIXME     java.lang.IllegalStateException: attempt to re-open an already-closed object: SQLiteDatabase: /data/data/edu.wit.mobileapp.mealprepplanner/meal_prep_db.db
-
-        //searchDatabase("");
-
         //top bar setup
         Toolbar toolbar = view.findViewById(R.id.searchTopBar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
 
         toolbar.setNavigationOnClickListener((View v) -> onBackPressed());
 
