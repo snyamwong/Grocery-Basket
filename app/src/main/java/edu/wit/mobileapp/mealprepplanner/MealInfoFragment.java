@@ -110,6 +110,7 @@ public class MealInfoFragment extends Fragment
 
         // SpannableString of the Recipe's Name
         SpannableString recipeName = new SpannableString(recipe.getName());
+        SpannableString recipeServes = new SpannableString("Serves: " + recipe.getServes());
         // SpannableString of the Recipe's Description
         SpannableString recipeDescription = new SpannableString(recipe.getDescription());
 
@@ -141,6 +142,10 @@ public class MealInfoFragment extends Fragment
         recipeName.setSpan(new RelativeSizeSpan(2f), 0, recipeName.length(), 0);
         recipeName.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, recipeName.length(), 0);
 
+        recipeServes.setSpan(new StyleSpan(Typeface.BOLD), 0, recipeServes.length(), 0);
+        //recipeServes.setSpan(new RelativeSizeSpan(2f), 0, recipeServes.length(), 0);
+        recipeServes.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, recipeServes.length(), 0);
+
         // recipe description
         recipeDescription.setSpan(new StyleSpan(Typeface.ITALIC), 0, recipeDescription.length(), 0);
         recipeDescription.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, recipeDescription.length(), 0);
@@ -165,6 +170,8 @@ public class MealInfoFragment extends Fragment
 
         // Append the text into TextView
         textView.append(recipeName);
+        textView.append("\n");
+        textView.append(recipeServes);
         textView.append("\n\n\n");
         textView.append(recipeDescription);
         textView.append("\n\n\n");

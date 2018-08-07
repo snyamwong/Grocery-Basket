@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MealPrepPlanner</string>
+    <string name="app_name">Grocery Basket</string>
     <string name="action_settings">Settings</string>
     <string name="meals">Meals</string>
     <string name="shopping_list">Shopping List</string>
