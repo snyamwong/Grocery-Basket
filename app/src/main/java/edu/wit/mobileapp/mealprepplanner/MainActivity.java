@@ -18,7 +18,7 @@ import java.util.TreeMap;
 public class MainActivity extends AppCompatActivity
 {
     private final String LOGTAG = "MYAPP";
-    private final int DB_VERSION = 3;
+    private final int DB_VERSION = 4;
 
     // global lists
     private ArrayList<Recipe> mRecipeList;
