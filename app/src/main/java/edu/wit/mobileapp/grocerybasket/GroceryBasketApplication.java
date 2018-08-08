@@ -1,4 +1,4 @@
-package edu.wit.mobileapp.mealprepplanner;
+package edu.wit.mobileapp.grocerybasket;
 
 import android.app.Application;
 import android.support.v4.app.Fragment;
@@ -9,7 +9,7 @@ import java.util.LinkedList;
  * This class is mainly used for keeping track of the current fragment
  * It fills the void of how getSupportFragmentManager() has a void return
  */
-public class MealPrepPlannerApplication extends Application
+public class GroceryBasketApplication extends Application
 {
     private static LinkedList<Fragment> MainActivityFragmentStack = new LinkedList<>();
 

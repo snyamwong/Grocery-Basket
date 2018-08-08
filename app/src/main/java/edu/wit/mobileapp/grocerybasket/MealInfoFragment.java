@@ -1,4 +1,4 @@
-package edu.wit.mobileapp.mealprepplanner;
+package edu.wit.mobileapp.grocerybasket;
 
 import android.app.Dialog;
 import android.graphics.BitmapFactory;
@@ -9,14 +9,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Layout;
 import android.text.SpannableString;
 import android.text.style.AlignmentSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,27 +76,27 @@ public class MealInfoFragment extends Fragment
         // Recipe from SearchFragment
         Recipe recipe = this.getMainActivity().getMealInfoFragmentRecipe();
 
-        Fragment temp = MealPrepPlannerApplication.popPrevMainActivityFragmentStack();
+        Fragment temp = GroceryBasketApplication.popPrevMainActivityFragmentStack();
 
         // if the previous Fragment is MealListFragment, then the user will "Change Servings"
-        if (MealPrepPlannerApplication.peekMainActivityFragmentStack() instanceof MealListFragment)
+        if (GroceryBasketApplication.peekMainActivityFragmentStack() instanceof MealListFragment)
         {
-            button.setText("Change Servings");
+            button.setText("Change Servings Multiplier");
 
             // Hide nav bar
             mainActivity.hideNavigationBar();
 
-            MealPrepPlannerApplication.pushMainActivityFragmentStack(temp);
+            GroceryBasketApplication.pushMainActivityFragmentStack(temp);
 
             // change servings
             button.setOnClickListener(v -> showChangeServingsDialog(recipe));
         }
         // if the previous Fragment is MealListFragment, then the user will "Add Meal"
-        else if (MealPrepPlannerApplication.peekMainActivityFragmentStack() instanceof SearchFragment)
+        else if (GroceryBasketApplication.peekMainActivityFragmentStack() instanceof SearchFragment)
         {
             button.setText("Add Meal");
 
-            MealPrepPlannerApplication.pushMainActivityFragmentStack(temp);
+            GroceryBasketApplication.pushMainActivityFragmentStack(temp);
 
             // add meal
             button.setOnClickListener(v -> showAddMealDialog(recipe));

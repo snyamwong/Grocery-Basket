@@ -1,4 +1,4 @@
-package edu.wit.mobileapp.mealprepplanner;
+package edu.wit.mobileapp.grocerybasket;
 
 import org.junit.Test;
 

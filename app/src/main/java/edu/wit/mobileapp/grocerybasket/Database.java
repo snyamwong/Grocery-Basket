@@ -1,4 +1,4 @@
-package edu.wit.mobileapp.mealprepplanner;
+package edu.wit.mobileapp.grocerybasket;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,7 +10,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
@@ -33,7 +32,7 @@ public class Database extends SQLiteOpenHelper
 {
     private static final String LOGTAG = "DATABASE_LOG";
     // TODO change hard coded value
-    private static String DB_PATH = "/data/data/edu.wit.mobileapp.mealprepplanner/";
+    private static String DB_PATH = "/data/data/edu.wit.mobileapp.grocerybasket/";
     private static String DB_NAME = "meal_prep_db.db";
     private int version;
 

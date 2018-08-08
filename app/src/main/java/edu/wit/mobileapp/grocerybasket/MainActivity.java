@@ -1,4 +1,4 @@
-package edu.wit.mobileapp.mealprepplanner;
+package edu.wit.mobileapp.grocerybasket;
 
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
@@ -12,8 +12,6 @@ import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -79,18 +77,18 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume()
     {
-        //Log.v(LOGTAG, "getMAFrag = " + MealPrepPlannerApplication.peekMainActivityFragmentStack().toString());
-        if (MealPrepPlannerApplication.peekMainActivityFragmentStack() == null)
+        //Log.v(LOGTAG, "getMAFrag = " + GroceryBasketApplication.peekMainActivityFragmentStack().toString());
+        if (GroceryBasketApplication.peekMainActivityFragmentStack() == null)
         {
             Log.v(LOGTAG, "Main Activity Fragment - NULL\n");
             setFragment(mealListFragment);
         }
-        if (MealPrepPlannerApplication.peekMainActivityFragmentStack() instanceof MealListFragment)
+        if (GroceryBasketApplication.peekMainActivityFragmentStack() instanceof MealListFragment)
         {
             Log.v(LOGTAG, "Main Activity Fragment - MEAL\n");
             setFragment(mealListFragment);
         }
-        else if (MealPrepPlannerApplication.peekMainActivityFragmentStack() instanceof ShoppingListFragment)
+        else if (GroceryBasketApplication.peekMainActivityFragmentStack() instanceof ShoppingListFragment)
         {
             Log.v(LOGTAG, "Main Activity Fragment - SHOPPING LIST\n");
             setFragment(shoppingListFragment);
@@ -113,7 +111,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStop()
     {
-        MealPrepPlannerApplication.pushMainActivityFragmentStack(mealListFragment);
+        GroceryBasketApplication.pushMainActivityFragmentStack(mealListFragment);
         database.updateUserDB(mRecipeList, mSelectedIngredients);
         database.close();
         super.onStop();
@@ -121,7 +119,7 @@ public class MainActivity extends AppCompatActivity
 
     protected void onDestroy()
     {
-        MealPrepPlannerApplication.clearMainActivityFragmentStack();
+        GroceryBasketApplication.clearMainActivityFragmentStack();
         super.onDestroy();
     }
 
@@ -132,7 +130,7 @@ public class MainActivity extends AppCompatActivity
      */
     public void setFragment(Fragment fragment)
     {
-        MealPrepPlannerApplication.pushMainActivityFragmentStack(fragment);
+        GroceryBasketApplication.pushMainActivityFragmentStack(fragment);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_frame, fragment);
@@ -152,7 +150,7 @@ public class MainActivity extends AppCompatActivity
      */
     public void setFragment(Fragment fragment, Recipe recipe)
     {
-        MealPrepPlannerApplication.pushMainActivityFragmentStack(fragment);
+        GroceryBasketApplication.pushMainActivityFragmentStack(fragment);
         this.setMealInfoFragmentRecipe(recipe);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -166,7 +164,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed()
     {
-        MealPrepPlannerApplication.popPrevMainActivityFragmentStack();
+        GroceryBasketApplication.popPrevMainActivityFragmentStack();
 
         int count = getSupportFragmentManager().getBackStackEntryCount();
 

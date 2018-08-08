@@ -1,4 +1,4 @@
-package edu.wit.mobileapp.mealprepplanner;
+package edu.wit.mobileapp.grocerybasket;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,10 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
